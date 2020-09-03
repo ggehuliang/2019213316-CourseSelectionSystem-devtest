@@ -7,6 +7,9 @@
 #include <time.h>
 #pragma comment (lib, "libmysql.lib")
 
+void config_init();				// 若配置文件存在则读取，否则进行首次运行配置程序
+void readCFG();
+
 int check_stuId(char* str);
 int showinfo();
 void student_login();
@@ -43,7 +46,14 @@ void cm_edit();     //  改课选单
 void cm_delete();    //  未开课前删课
 void personal_managemenu();  // 个人信息管理选单-2个小功能
 void pm_edit();   //  改密码
-int  getState_selecting();  // 获取选课状态
+int getState_selecting();		// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
+int getState_starting(char*, char*);		// 获取选课状态 0为未开课，1为已开课
+int check_password(int, char*, char*);	// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
+void sql();
+int check_phone(char*);
+int check_classId(char*);
+int check_teachId(char*);
+int check_timeClash(char*, char*, char*, char*, char*, char*);
 
 MYSQL mysql;     //创造一个MYSQL句柄
 MYSQL_RES* result;
@@ -61,7 +71,6 @@ MYSQL_ROW Row1;
 MYSQL_ROW Row2;
 MYSQL_ROW Row3;
 MYSQL_ROW Row4;
-//void teacher_login();
 char stuID[11];
 time_t convert_dateToTT(int, int, int, int, int, int);
 
@@ -1527,42 +1536,6 @@ int check_teachId(char* str)
 	return b;
 }
 
-// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
-int check_password(int who, char* ID, char* password)
-{
-	char query[200] = "SELECT * FROM ";
-	if (who) {
-		strcat(query, "teachers WHERE teachID='");
-		strcat(query, ID);
-		strcat(query, "'");
-	}
-	else {
-		strcat(query, "students WHERE stuID='");
-		strcat(query, ID);
-		strcat(query, "'");
-	}
-	strcat(query, " AND passwd=");
-	strcat(query, "'");
-	strcat(query, password);
-	strcat(query, "'");
-	mysql_query(&mysql, query);		// 同时匹配用户名和密码查询
-	result = mysql_store_result(&mysql);
-	if (result) {					// 防止数据为空造成崩溃
-		if (mysql_num_rows(result) != 1) // 若非有且仅有一行数据则登录失败
-		{
-			mysql_free_result(result);
-			return 0;
-		}
-		else {
-			mysql_free_result(result);
-			return 1;
-		}
-	}
-	else {
-		return 0;
-	}
-}
-
 
 //快捷验证sql语句能否查出现有课与之有冲突，有则返回1
 int check_classClash(char* query) {
@@ -1575,77 +1548,6 @@ int check_classClash(char* query) {
 	}
 	return 0;
 }
-
-//快捷判断两个课时间重叠与否，输入格式：一课的开课时间、结课时间、具体上课时间段、二课的开课时间、结课时间、具体上课时间段；有冲突返回1
-int check_timeClash(char* time1_sweek, char* time1_eweek
-	, char* time1_day, char* time2_sweek, char* time2_eweek, char* time2_day) {
-	char term1[10], term2[10], sweek1[5], sweek2[5]
-		, eweek1[5], eweek2[5], day1[10], day2[10];
-	int s1i, e1i, s2i, e2i;  // 一课的开课周数，结课周数，二课的开课，结课周数
-
-	if (strcmp(time1_day, time2_day)) {		//上课时间段不一样直接pass
-		return 0;
-	}
-
-	if (time1_sweek[3] != time2_sweek[3]) {	//开课年份不一样直接pass
-		return 0;
-	}
-	else {
-		sprintf(term1, "%c%c", time1_sweek[15], time1_sweek[16]);
-		sprintf(term2, "%c%c", time2_sweek[15], time2_sweek[16]);
-		if (strcmp(term1, term2)) {			//开课年份一样学期不一样也pass
-			return 0;
-		}
-	}
-
-	if (time1_sweek[24] > 127) {			//取出开课周数
-		sprintf(sweek1, "%c", time1_sweek[23]);
-	}
-	else {
-		sprintf(sweek1, "%c%c", time1_sweek[23], time1_sweek[24]);
-	}
-	if (time2_sweek[24] > 127) {
-		sprintf(sweek2, "%c", time2_sweek[23]);
-	}
-	else {
-		sprintf(sweek2, "%c%c", time2_sweek[23], time2_sweek[24]);
-	}
-	s1i = atoi(sweek1);
-	s2i = atoi(sweek2);
-
-	if (time1_eweek[24] > 127) {			//取出开课周数
-		sprintf(eweek1, "%c", time1_eweek[23]);
-	}
-	else {
-		sprintf(eweek1, "%c%c", time1_eweek[23], time1_eweek[24]);
-	}
-	if (time2_eweek[24] > 127) {
-		sprintf(eweek2, "%c", time2_eweek[23]);
-	}
-	else {
-		sprintf(eweek2, "%c%c", time2_eweek[23], time2_eweek[24]);
-	}
-	e1i = atoi(eweek1);
-	e2i = atoi(eweek2);
-
-	if (s1i < s2i) {					//若课1开得比课2早，必须先比课1结束
-		if (e1i < s2i) {
-			return 0;
-		}
-		else {
-			return 1;
-		}
-	}
-	else {
-		if (e2i < s1i) {				//若课1开得比课2早，课1必须先比课2结束
-			return 0;
-		}
-		else {
-			return 1;
-		}
-	}
-}
-
 //加课
 void cm_add() {
 	char classId[20], name[50], credit[10], learnTime[20], property[10]
