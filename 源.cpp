@@ -56,11 +56,11 @@ void pm_edit();					//  改信息
 int check_password(int who, char* ID, char* password);
 int check_classId(char* str);
 void select_class(char* query);
-void teacher_login();		// 教师登录模块
-void teacher_reg();			//教师注册模块
-void teacher_mainmenu();	// 教师主菜单-3个大功能选单
-void select_managemenu();	// 选课管理选单-5个小功能
-void sm_mycourse();			//  查询查询教师自己开设过的课程的选课情况
+void teacher_login();	// 教师登录模块
+void teacher_reg();		//教师注册模块
+void teacher_mainmenu();  // 教师主菜单-3个大功能选单
+void select_managemenu();  // 选课管理选单-5个小功能
+void sm_mycourse();    //  查询查询教师自己开设过的课程的选课情况
 void sm_findcourse();   //  查询选择某门课程的学生信息
 void sm_lessthan30delete();  //  选课人数少于30则删除
 void sm_sortcourse();   //  统计选课信息
