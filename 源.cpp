@@ -76,7 +76,7 @@ time_t convert_dateToTT(int, int, int, int, int, int);
 
 char teachID[100] = "2019222222";
 char nowName[20], nowSchool[20];			//登录进来先获取自己的名字和学院方便后续使用
-char password[100];
+
 
 char dbIP[50] = "", dbUser[50] = "", dbPassWd[50] = "", dbName[50] = "";
 int dbPort = 3306;
@@ -89,8 +89,11 @@ time_t currStart, selecStart, selecEnd;		// 当前学期开课时间、选课始
 
 int main()
 {
-	mysql_init(&mysql);
+	mysql_init(&mysql);		// 初始化mysql
+	config_init();
+
 	sql();
+	
 
 	switch (showinfo())
 	{
@@ -100,6 +103,7 @@ int main()
 		break;
 	case 2:
 		system("cls");
+		teacher_login();
 		break;
 	case 3:
 		exit(0);
@@ -229,17 +233,12 @@ int check_stuId(char* str)
 
 void sql()
 {
-	char yon[1];
-	int YesOrNo = 1;
-	MYSQL_RES* res;  //查询结果集
-	MYSQL_FIELD* field;  //包含字段信息的结构指针
-	MYSQL_ROW nextRow;  //存放查询sql语句字符串数组
-	int ret;  //执行sql语句后返回是否成功查询
-	int i, j;
-
-	mysql_init(&mysql);//分配对象 p4302
-	if (!(mysql_real_connect(&mysql, "localhost", "root", "123456", "courseselectionsystem", 3306, NULL, 0))) {
-		printf("Failed to access to the database...Error: %s\n", mysql_error(&mysql));
+	
+	
+	if (!(mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd, dbName, dbPort, NULL, 0))) {
+		printf("无法连接到数据库，错误代码: %s\n", mysql_error(&mysql));
+		getchar();
+		exit(1);
 	}
 	if (!mysql_set_character_set(&mysql, "gbk"))
 	{
@@ -248,7 +247,8 @@ void sql()
 	}
 }
 
-int check_password(int who, char* ID, char* password) // 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
+// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
+int check_password(int who, char* ID, char* password) 
 {
 	char query[200] = "SELECT * FROM ";
 	if (who) {
@@ -1567,6 +1567,9 @@ void course_managemenu()
 	case 5:
 		teacher_mainmenu();
 		break;
+	}
+}
+
 // 将可读时间转为time_t
 time_t convert_dateToTT(int yyyy, int mm, int dd, int hh, int min, int ss)
 {
@@ -1956,6 +1959,7 @@ void readCFG() {
 
 void teacher_login() {
 	char query[100];
+	char password[100];
 	if (mysql_query(&mysql, "select * from `teachers`"))
 	{
 		printf("\n教师数据表查询失败！请确认数据表是否存在\n");
@@ -1964,7 +1968,7 @@ void teacher_login() {
 	{
 		mysql_store_result(&mysql);
 		do {
-			system("cls");			// 清屏，保证重复输入时美观
+			//system("cls");			// 清屏，保证重复输入时美观
 			system("title 学生选课管理系统 - 教师登录");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
@@ -1973,6 +1977,7 @@ void teacher_login() {
 			scanf("%s", teachID);
 			printf("请输入密码：");
 			scanf("%s", password);
+			printf("%d", check_password(0, teachID, password));
 		} while (!check_password(0, teachID, password));
 		mysql_store_result(&mysql);
 		sprintf(query, "select school,name from teachers where teachID='%s'", teachID);
