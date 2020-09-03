@@ -372,7 +372,7 @@ void student_reg()
 	strcat(query, "'");
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
-	while (result)
+	while (mysql_num_rows(result) != 0)
 	{
 		printf("此学号已注册!请更换学号:");
 		scanf("%s", stuID);
@@ -772,7 +772,7 @@ void student_delete_course()
 	printf("\n请输入课程编号以删除课程:");
 	scanf("%s", classID);
 	check_class_exist(classID);
-	//取出学生想删除课的开课时间和上课时间段======================================================================================================
+	//取出学生想删除课的开课时间和上课时间段
 	char query12[100] = "select 开课时间,上课时间段 from classes where 课程编号='";
 	strcat(query12, classID);
 	strcat(query12, "'");
@@ -783,7 +783,7 @@ void student_delete_course()
 	{
 		Row5 = mysql_fetch_row(result7);
 	}
-	//===========================================================================================
+	
 	while (getState_starting(Row5[0], Row5[1]) == 1)
 	{
 		printf("此课程已开课，无法删除！\n");
