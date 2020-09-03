@@ -115,7 +115,7 @@ int main()
 int showinfo()
 {
 	int option;
-	system("title 学生选课管理系统");
+	system("title 学生选课管理系统 - 入口");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -140,6 +140,7 @@ int showinfo()
 void student_login()
 {
 	int option1;
+	system("title 学生选课管理系统 - 学生登录");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--学生 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -168,7 +169,7 @@ void student_login()
 		printf("\n请输入学号：");
 		scanf("%s", stuID);
 
-		char query[100] = "select * from students where stuID='";
+		char query[100] = "select name,school from students where stuID='";
 		strcat(query, stuID);
 		strcat(query, "'");
 		mysql_store_result(&mysql);
@@ -177,7 +178,10 @@ void student_login()
 		if (result)
 		{
 			nextRow = mysql_fetch_row(result);
+			sprintf(nowName, nextRow[0]);
+			sprintf(nowSchool, nextRow[1]);
 		}
+		
 		while (mysql_num_rows(result) == 0 || check_stuId(stuID) == 0)
 		{
 			if (check_stuId(stuID) == 0)
@@ -185,7 +189,7 @@ void student_login()
 			else if (mysql_num_rows(result) == 0)
 				printf("此学号未注册，请重新输入！\n");
 			scanf("%s", stuID);
-			char query1[100] = "select * from students where stuID='";
+			char query1[100] = "select name,school from students where stuID='";
 			strcat(query1, stuID);
 			strcat(query1, "'");
 			mysql_store_result(&mysql);
@@ -194,6 +198,8 @@ void student_login()
 			if (result)
 			{
 				nextRow = mysql_fetch_row(result);
+				sprintf(nowName, nextRow[0]);
+				sprintf(nowSchool, nextRow[1]);
 			}
 		}
 
@@ -243,8 +249,8 @@ void sql()
 	}
 	if (!mysql_set_character_set(&mysql, "gbk"))
 	{
-		printf("New client character set: %s\n",
-			mysql_character_set_name(&mysql));
+		
+		mysql_character_set_name(&mysql);
 	}
 }
 
@@ -288,10 +294,11 @@ void student_mainmenu()
 {
 	system("cls");
 	int a;
+	system("title 学生选课管理系统 - 学生主菜单");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 功能界面--学生 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\n登陆成功！\n");
+	printf("\n登录成功，欢迎您，\n%s 的 %s 同学。\n", nowSchool, nowName);
 	printf("\n请选择你需要的操作：\n");
 	printf("  ① - 学生选课\n");
 	printf("  ② - 查询课程 \n");
@@ -360,6 +367,7 @@ void student_reg()
 {
 	system("cls");
 	char stuID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
+	system("title 学生选课管理系统 - 学生注册");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 注册 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -475,6 +483,7 @@ void student_reg()
 	printf("\n注册成功！\n");
 
 }
+
 int check_phone(char* str)
 {
 	int b = 1, y = 0;
@@ -493,6 +502,7 @@ int check_phone(char* str)
 void student_select_course()
 {
 	system("cls");
+	system("title 学生选课管理系统 - 学生选课");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 学生选课 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -651,6 +661,7 @@ void student_query_course()
 {
 	system("cls");
 	int a;
+	system("title 学生选课管理系统 - 学生查课");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 查询课程 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -762,6 +773,7 @@ void student_delete_course()
 {
 	system("cls");
 	char classID[100];
+	system("title 学生选课管理系统 - 学生删课");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 删除选课结果 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -829,6 +841,7 @@ void student_manage_course()
 	char passwd[20];
 	char passwd1[20];
 	char email[50];
+	system("title 学生选课管理系统 - 学生个人信息管理");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 个人信息管理--学生 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1135,10 +1148,11 @@ void teacher_mainmenu()
 {
 	system("cls");
 	int option2 = 0;
-	system("title 教师主菜单");
+	system("title 学生选课管理系统 - 教师主菜单");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 教师主菜单 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\n登录成功，欢迎您，\n%s 的 %s 老师。\n",nowSchool,nowName);
 	printf("\n请选择您需要的服务:\n");
 	printf("  ① - 选课管理\n");
 	printf("  ② - 课程管理\n");
@@ -1172,7 +1186,7 @@ void teacher_mainmenu()
 void select_managemenu() {
 	system("cls");
 	int option2 = 0;
-	system("title 选课菜单");
+	system("title 学生选课管理系统 - 教师选课管理");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 选课菜单 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1232,8 +1246,8 @@ void sm_findcourse()
 	int row;
 	int flag = 0;
 	int option2 = 0;
-	char courseName[200] = "niconiconi";
-	char studentName[200] = "niconiconi";
+	char courseName[200] = "";
+	char studentName[200] = "";
 	char query[200];
 
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1570,7 +1584,7 @@ void course_managemenu()
 {
 	system("cls");
 	int option2 = 0;
-	system("title 课程管理菜单");
+	system("title 学生选课管理系统 - 教师课程管理");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 课程管理菜单 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -2016,7 +2030,7 @@ void teacher_login() {
 			printf("请输入密码：");
 			scanf("%s", password);
 			printf("%d", check_password(0, teachID, password));
-		} while (!check_password(0, teachID, password));
+		} while (!check_password(1, teachID, password));
 		mysql_store_result(&mysql);
 		sprintf(query, "select school,name from teachers where teachID='%s'", teachID);
 		mysql_query(&mysql, query);
@@ -2516,6 +2530,7 @@ void pm_edit()
 	char passwd[20];
 	char passwd1[20];
 	char email[50];
+	system("title 学生选课管理系统 - 教师信息修改");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 信息修改界面--教师 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
