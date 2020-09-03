@@ -1642,12 +1642,17 @@ void sm_lessthan30delete() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+				
+				int ret1 = scanf("%d", &option2);
+				while (ret1 != 1 || option2 > 2 || option2 < 1)
 				{
-					printf("无效，请重新输入!\n");
-					fflush(stdin);
+					while (getchar() != '\n');
+					{
+						printf("输入无效！请重新输入：");
+						ret1 = scanf("%d", &option2);
+					}
 				}
-				/*printf("===============%s===============", courseName);*/
+			
 				switch (option2)
 				{
 				case 1:
@@ -1720,15 +1725,12 @@ void sm_lessthan30delete() {
 			system("pause>nul");
 			cm_delete();
 		}
-
 		break;
 	case 2:
 		select_managemenu();
 		break;
 	default:
 		printf("无效，请重新输入!\n");
-
-
 	}
 }
 
@@ -1743,8 +1745,6 @@ void sm_sortcourse() {
 	select_managemenu();
 }
 
-
-
 void sm_rankcourse() {
 	char query4[100];
 	sprintf(query4, "select * from `classes` where `开课教师` = '%s' order by `已选人数` "
@@ -1753,7 +1753,6 @@ void sm_rankcourse() {
 	printf("按任意键返回上一菜单...\n");
 	system("pause>nul");
 	select_managemenu();
-
 }
 
 void course_managemenu()
@@ -1772,29 +1771,33 @@ void course_managemenu()
 	printf("  ⑤ - 返回上一个菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1,2,3,4或5:");
-	while (scanf("%d", &option2) != 1 || option2 > 5 || option2 < 1)
+	int ret1 = scanf("%d", &option2);
+	while (ret1 != 1 || option2 > 5 || option2 < 1)
 	{
-		printf("无效，请重新输入!\n");
-		fflush(stdin);
+		while (getchar() != '\n');
+		{
+			printf("输入无效！请重新输入：");
+			ret1 = scanf("%d", &option2);
+		}
 	}
 	char query1[200] = "SELECT * FROM `classes` LIMIT 0, 1000";
 	switch (option2)
 	{
-	case 1:
-		cm_list1();
-		break;
-	case 2:
-		/*cm_add;*/
-		break;
-	case 3:
-		cm_edit();
-		break;
-	case 4:
-		cm_delete();
-		break;
-	case 5:
-		teacher_mainmenu();
-		break;
+		case 1:
+			cm_list1();
+			break;
+		case 2:
+			cm_add();
+			break;
+		case 3:
+			cm_edit();
+			break;
+		case 4:
+			cm_delete();
+			break;
+		case 5:
+			teacher_mainmenu();
+			break;
 	}
 }
 
