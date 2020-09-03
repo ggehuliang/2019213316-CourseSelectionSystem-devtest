@@ -100,6 +100,7 @@ int main()
 	
 	main_entrance();
 	
+	return 0;
 }
 
 int main_entrance()
@@ -178,7 +179,7 @@ void student_login()
 		mysql_store_result(&mysql);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
-		if (result)
+		if (mysql_num_rows(result) != 0)
 		{
 			nextRow = mysql_fetch_row(result);
 			sprintf(nowName, nextRow[0]);
@@ -188,9 +189,28 @@ void student_login()
 		while (mysql_num_rows(result) == 0 || check_stuId(stuID) == 0)
 		{
 			if (check_stuId(stuID) == 0)
-				printf("无效输入！请输入10位数字\n");
+			{
+				if (stuID[0]==17)//输入ctrl+q返回上一级
+				{
+					system("cls");
+					student_login();
+				}
+				else
+					printf("无效输入！请输入10位数字(若返回上一级，请按ctrl+q)\n");
+			}
 			else if (mysql_num_rows(result) == 0)
-				printf("此学号未注册，请重新输入！\n");
+			{
+				if(stuID[0] == 17)//返回上一级
+				{
+					system("cls");
+					student_login();
+				}
+				else
+				{
+					printf("此学号未注册，请重新输入！(若返回上一级，请按ctrl+q)\n");
+				}
+			}
+
 			scanf("%s", stuID);
 			char query1[100] = "select name,school from students where stuID='";
 			strcat(query1, stuID);
@@ -198,7 +218,7 @@ void student_login()
 			mysql_store_result(&mysql);
 			mysql_query(&mysql, query1);
 			result = mysql_store_result(&mysql);
-			if (result)
+			if (mysql_num_rows(result) != 0)
 			{
 				nextRow = mysql_fetch_row(result);
 				sprintf(nowName, nextRow[0]);
@@ -245,8 +265,6 @@ int check_stuId(char* str)
 
 void sql()
 {
-	
-	
 	if (!(mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd, dbName, dbPort, NULL, 0))) {
 		printf("无法连接到数据库，错误代码: %s\n", mysql_error(&mysql));
 		getchar();
@@ -254,7 +272,6 @@ void sql()
 	}
 	if (!mysql_set_character_set(&mysql, "gbk"))
 	{
-		
 		mysql_character_set_name(&mysql);
 	}
 }
@@ -387,20 +404,31 @@ void student_reg()
 	result = mysql_store_result(&mysql);
 	while (mysql_num_rows(result) != 0)
 	{
-		printf("此学号已注册!请更换学号:");
+		printf("此学号已注册!请更换学号:（若返回上一级，请按ctrl+q）");
 		scanf("%s", stuID);
-		char query11[100] = "select * from students where stuID='";
-		strcat(query11, stuID);
-		strcat(query11, "'");
-		mysql_query(&mysql, query11);
-		result = mysql_store_result(&mysql);
+		if (stuID[0] == 17)//返回上一级
+		{
+			system("cls");
+			student_reg();
+		}
+		else
+		{
+			char query11[100] = "select * from students where stuID='";
+			strcat(query11, stuID);
+			strcat(query11, "'");
+			mysql_query(&mysql, query11);
+			result = mysql_store_result(&mysql);
+		}
 	}
-
-
 	while (check_stuId(stuID) == 0)//检查输入是否符合规范 
 	{
-		printf("无效输入！请输入10位数字:");
+		printf("无效输入！请输入10位数字:（若返回上一级，请按ctrl+q）");
 		scanf("%s", stuID);
+		if (stuID[0] == 17)//返回上一级
+		{
+			system("cls");
+			student_reg();
+		}
 	}
 	char query1[200] = "insert into students(stuID) values(  ";
 	strcat(query1, "'");
@@ -454,8 +482,13 @@ void student_reg()
 	scanf("%s", phone);
 	while (check_phone(phone) == 0)
 	{
-		printf("无效输入！请输入11位电话号:");
+		printf("无效输入！请输入11位电话号:（若返回上一级，请按ctrl+q）");
 		scanf("%s", phone);
+		if (phone[0] == 17)//返回上一级
+		{
+			system("cls");
+			student_reg();
+		}
 	}
 	char query6[200] = "update students set phone=' ";
 	strcat(query6, phone);
@@ -477,8 +510,13 @@ void student_reg()
 	scanf("%s", email);
 	while (check_email(email) == 0)
 	{
-		printf("无效输入！请按照***@***.***格式输入:");
+		printf("无效输入！请按照***@***.***格式输入:（若返回上一级，请按ctrl+q）");
 		scanf("%s", email);
+		if (email[0] == 17)//返回上一级
+		{
+			system("cls");
+			student_reg();
+		}
 	}
 	char query8[200] = "update students set email=' ";
 	strcat(query8, email);
@@ -805,9 +843,14 @@ void student_delete_course()
 	while (getState_starting(Row5[0], Row5[1]) == 1)
 	{
 		printf("此课程已开课，无法删除！\n");
-		printf("请重新输入课程编号：\n");
+		printf("请重新输入课程编号：（若返回上一级，请按ctrl+q）\n");
 		scanf("%s", classID);
 		check_class_exist(classID);
+		if (classID[0] == 17)//返回上一级
+		{
+			system("cls");
+			student_delete_course();
+		}
 		char query12[100] = "select 开课时间,上课时间段 from classes where 课程编号='";
 		strcat(query12, classID);
 		strcat(query12, "'");
@@ -913,8 +956,13 @@ void student_manage_course()
 			scanf("%s", &phone);
 			while (check_phone(phone) == 0)
 			{
-				printf("输入无效！请输入11位电话号：");
+				printf("输入无效！请输入11位电话号：(若返回上一级，请按ctrl+q)");
 				scanf("%s", &phone);
+				if (phone[0] == 17)//若返回上一级，请按ctrl+q
+				{
+					system("cls");
+					student_manage_course();
+				}
 			}
 			char query[200] = "update students set phone=' ";
 			strcat(query, phone);
@@ -940,8 +988,13 @@ void student_manage_course()
 			scanf("%s", passwd1);
 			while (strcmp(passwd, passwd1) != 0)
 			{
-				printf("两次输入的密码不一致，请重新确认：");
+				printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按ctrl+q）");
 				scanf("%s", passwd1);
+				if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
+				{
+					system("cls");
+					student_manage_course();
+				}
 			}
 			char query1[200] = "update students set passwd=' ";
 			strcat(query1, passwd);
@@ -965,8 +1018,13 @@ void student_manage_course()
 			scanf("%s", email);
 			while (check_email(email) == 0)
 			{
-				printf("无效输入！请按照***@***.***格式输入：");
+				printf("无效输入！请按照***@***.***格式输入：（若返回上一级，请按ctrl+q）");
 				scanf("%s", email);
+				if (email[0] == 17)//若返回上一级，请按ctrl+q
+				{
+					system("cls");
+					student_manage_course();
+				}
 			}
 			char query2[200] = "update students set email=' ";
 			strcat(query2, email);
@@ -1100,14 +1158,17 @@ int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char*
 	char term1[10], term2[10], sweek1[5], sweek2[5], eweek1[5], eweek2[5], day1[10], day2[10];
 	int s1i, e1i, s2i, e2i;  // 一课的开课周数，结课周数，二课的开课，结课周数
 
-	if (strcmp(time1_day, time2_day)) {  //上课时间段不一样直接pass
+	if (strcmp(time1_day, time2_day)) 
+	{  //上课时间段不一样直接pass
 		return 0;
 	}
 
-	if (time1_sweek[3] != time2_sweek[3]) { //开课年份不一样直接pass
+	if (time1_sweek[3] != time2_sweek[3]) 
+	{ //开课年份不一样直接pass
 		return 0;
 	}
-	else {
+	else 
+	{
 		sprintf(term1, "%c%c", time1_sweek[15], time1_sweek[16]);
 		sprintf(term2, "%c%c", time2_sweek[15], time2_sweek[16]);
 		if (strcmp(term1, term2)) {   //开课年份一样学期不一样也pass
@@ -1115,51 +1176,57 @@ int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char*
 		}
 	}
 
-	if (time1_sweek[24] > 127) {     //取出开课周数
+	if (time1_sweek[24] > 127)
+	{     //取出开课周数
 		sprintf(sweek1, "%c", time1_sweek[23]);
 	}
-	else {
+	else 
+	{
 		sprintf(sweek1, "%c%c", time1_sweek[23], time1_sweek[24]);
 	}
-	if (time2_sweek[24] > 127) {
+	if (time2_sweek[24] > 127) 
+	{
 		sprintf(sweek2, "%c", time2_sweek[23]);
 	}
-	else {
+	else
+	{
 		sprintf(sweek2, "%c%c", time2_sweek[23], time2_sweek[24]);
 	}
 	s1i = atoi(sweek1);
 	s2i = atoi(sweek2);
 
-	if (time1_eweek[24] > 127) {     //取出开课周数
+	if (time1_eweek[24] > 127) 
+	{     //取出开课周数
 		sprintf(eweek1, "%c", time1_eweek[23]);
 	}
-	else {
+	else 
+	{
 		sprintf(eweek1, "%c%c", time1_eweek[23], time1_eweek[24]);
 	}
-	if (time2_eweek[24] > 127) {
+	if (time2_eweek[24] > 127) 
+	{
 		sprintf(eweek2, "%c", time2_eweek[23]);
 	}
-	else {
+	else
+	{
 		sprintf(eweek2, "%c%c", time2_eweek[23], time2_eweek[24]);
 	}
 	e1i = atoi(eweek1);
 	e2i = atoi(eweek2);
 
-	if (s1i < s2i) {     //若课1开得比课2早，必须先比课1结束
-		if (e1i < s2i) {
+	if (s1i < s2i) 
+	{     //若课1开得比课2早，必须先比课1结束
+		if (e1i < s2i) 
 			return 0;
-		}
-		else {
+		else 
 			return 1;
-		}
 	}
-	else {
-		if (e2i < s1i) {    //若课1开得比课2早，课1必须先比课2结束
+	else 
+	{
+		if (e2i < s1i)  //若课1开得比课2早，课1必须先比课2结束
 			return 0;
-		}
-		else {
+		else 
 			return 1;
-		}
 	}
 }
 
@@ -1184,6 +1251,7 @@ void check_class_exist(char * classID)
 		result8 = mysql_store_result(&mysql);
 	}
 }
+
 void teacher_mainmenu()
 {
 	system("cls");
@@ -1200,25 +1268,30 @@ void teacher_mainmenu()
 	printf("  ④ - 退出登录\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1，2，3或4:");
-	while (scanf("%d", &option2) != 1 || option2 > 4 || option2 < 1)
+	//===============================================================================================================================
+	int ret1 = scanf("%d", &option2);
+	while (ret1 != 1 || option2 > 4 || option2 < 1)
 	{
-		printf("无效，请重新输入!\n");
-		fflush(stdin);
+		while (getchar() != '\n');
+		{
+			printf("输入无效！请重新输入：");
+			ret1 = scanf("%d", &option2);
+		}
 	}
 	switch (option2)
 	{
-	case 1:
-		select_managemenu();
-		break;
-	case 2:
-		course_managemenu();
-		break;
-	case 3:
-		pm_edit();
-		break;
-	case 4:
-		main_entrance();
-		break;
+		case 1:
+			select_managemenu();
+			break;
+		case 2:
+			course_managemenu();
+			break;
+		case 3:
+			pm_edit();
+			break;
+		case 4:
+			main_entrance();
+			break;
 	}
 
 }
@@ -1239,31 +1312,36 @@ void select_managemenu() {
 	printf("  ⑥ - 返回上一个菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1,2,3,4,5或6:");
-	while (scanf("%d", &option2) != 1 || option2 > 6 || option2 < 1)
+	int ret1 = scanf("%d", &option2);
+	while (ret1 != 1 || option2 > 6 || option2 < 1)
 	{
-		printf("无效，请重新输入!\n");
-		fflush(stdin);
+		while (getchar() != '\n');
+		{
+			printf("输入无效！请重新输入：");
+			ret1 = scanf("%d", &option2);
+		}
 	}
+	
 	switch (option2)
 	{
-	case 1:
-		sm_mycourse();
-		break;
-	case 2:
-		sm_findcourse();
-		break;
-	case 3:
-		sm_lessthan30delete();
-		break;
-	case 4:
-		sm_sortcourse();
-		break;
-	case 5:
-		sm_rankcourse();
-		break;
-	case 6:
-		teacher_mainmenu();
-		break;
+		case 1:
+			sm_mycourse();
+			break;
+		case 2:
+			sm_findcourse();
+			break;
+		case 3:
+			sm_lessthan30delete();
+			break;
+		case 4:
+			sm_sortcourse();
+			break;
+		case 5:
+			sm_rankcourse();
+			break;
+		case 6:
+			teacher_mainmenu();
+			break;
 	}
 }
 
@@ -1297,17 +1375,27 @@ void sm_findcourse()
 	printf("  ③ - 返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1，2或3:");
-	while (scanf("%d", &option2) != 1 || option2 > 3 || option2 < 1)
+	int ret1 = scanf("%d", &option2);
+	while (ret1 != 1 || option2 > 3 || option2 < 1)
 	{
-		printf("无效，请重新输入!\n");
-		fflush(stdin);
+		while (getchar() != '\n');
+		{
+			printf("输入无效！请重新输入：");
+			ret1 = scanf("%d", &option2);
+		}
 	}
 	switch (option2)
 	{
 	case 1:
-		do {
+		do 
+		{
 			printf("请输入您想要查询的课程名称：");
 			scanf("%s", courseName);
+			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				sm_findcourse();
+			}
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程名称 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
@@ -1315,10 +1403,11 @@ void sm_findcourse()
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
-				printf("无结果，请重新输入\n");
+				printf("无结果，请重新输入（若返回上一级，请按ctrl+q）\n");
 				mysql_free_result(result);
 			}
-			else {
+			else 
+			{
 				flag = 0;
 			}
 		} while (flag == 1);
@@ -1341,6 +1430,11 @@ void sm_findcourse()
 		do {
 			printf("请输入您想要查询相应学生信息的课程编号：");
 			scanf("%s", courseName);
+			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				sm_findcourse();
+			}
 			sprintf(query, "SELECT * FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
 				, courseName, courseName, courseName);
 			mysql_query(&mysql, query);
@@ -1349,7 +1443,7 @@ void sm_findcourse()
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
-				printf("无结果，请重新输入\n");
+				printf("无结果，请重新输入（若返回上一级，请按ctrl+q）\n");
 				mysql_free_result(result);
 			}
 			else {
@@ -1380,6 +1474,11 @@ void sm_findcourse()
 		do {
 			printf("请输入您想要查询的学生名称：");
 			scanf("%s", studentName);
+			if (studentName[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				sm_findcourse();
+			}
 			char query[200] = "SELECT * FROM `students`WHERE name = '";
 			strcat(query, studentName);
 			strcat(query, "'");
@@ -1390,7 +1489,7 @@ void sm_findcourse()
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
-				printf("无结果，请重新输入\n");
+				printf("无结果，请重新输入（若返回上一级，请按ctrl+q）\n");
 				mysql_free_result(result);
 			}
 			else {
