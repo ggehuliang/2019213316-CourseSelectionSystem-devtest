@@ -20,6 +20,7 @@ void student_query_course();
 void student_query_result();
 void student_delete_course();
 void student_manage_course();
+void student_search_specific_imformation();
 void select_class(char* query);
 int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char* time2_sweek, char* time2_eweek, char* time2_day);
 
@@ -30,6 +31,7 @@ MYSQL_RES* result2;
 MYSQL_RES* result3;
 MYSQL_RES* result4;
 MYSQL_RES* result5;
+MYSQL_RES* result6;
 
 MYSQL_FIELD* field;
 MYSQL_ROW nextRow;
@@ -116,11 +118,36 @@ void student_login()
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\n请输入学号：");
 		scanf("%s", stuID);
-		while (check_stuId(stuID) == 0)//检查输入是否符合规范 
+
+		char query[100] = "select * from students where stuID='";
+		strcat(query, stuID);
+		strcat(query, "'");
+		mysql_store_result(&mysql);
+		mysql_query(&mysql, query);
+		result = mysql_store_result(&mysql);
+		if (result)
 		{
-			printf("无效输入！请输入10位数字:");
-			scanf("%s", stuID);
+			nextRow = mysql_fetch_row(result);
 		}
+		while (mysql_num_rows(result) == 0 || check_stuId(stuID) == 0)
+		{
+			if (check_stuId(stuID) == 0)
+				printf("无效输入！请输入10位数字\n");
+			else if (mysql_num_rows(result) == 0)
+				printf("此学号未注册，请重新输入！\n");
+			scanf("%s", stuID);
+			char query1[100] = "select * from students where stuID='";
+			strcat(query1, stuID);
+			strcat(query1, "'");
+			mysql_store_result(&mysql);
+			mysql_query(&mysql, query1);
+			result = mysql_store_result(&mysql);
+			if (result)
+			{
+				nextRow = mysql_fetch_row(result);
+			}
+		}
+
 		printf("请输入密码：");
 		scanf("%s", stu_passwd);
 		while (check_password(0, stuID, stu_passwd) == 0)
@@ -158,7 +185,6 @@ int check_stuId(char* str)
 
 void sql()
 {
-	//int yon;
 	char yon[1];
 	int YesOrNo = 1;
 	MYSQL_RES* res;  //查询结果集
@@ -176,8 +202,6 @@ void sql()
 		printf("New client character set: %s\n",
 			mysql_character_set_name(&mysql));
 	}
-	//ret = mysql_query(&mysqlConnect, "SELECT passwd FROM `students` LIMIT 0, 1000");
-	//printf("%d", ret);
 }
 
 int check_password(int who, char* ID, char* password) // 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
@@ -228,11 +252,12 @@ void student_mainmenu()
 	printf("  ② - 查询课程 \n");
 	printf("  ③ - 查询选课结果\n");
 	printf("  ④ - 删除选课结果\n");
-	printf("  ⑤ - 个人信息管理\n\n");
-	printf("  ⑥ - 退出程序\n");
-	printf("请输入1，2，3，4，5或6：");
+	printf("  ⑤ - 个人信息管理\n");
+	printf("  ⑥ - 查看课程详细信息\n\n");
+	printf("  ⑦ - 退出程序\n");
+	printf("请输入1，2，3，4，5，6或7：");
 	int ret2 = scanf("%d", &a);
-	while (ret2 != 1 || a > 6 || a < 1)
+	while (ret2 != 1 || a > 7 || a < 1)
 	{
 		while (getchar() != '\n');
 		{
@@ -276,7 +301,14 @@ void student_mainmenu()
 		student_mainmenu();
 	}
 	else if (a == 6)
-		exit (0);
+	{
+		student_search_specific_imformation();
+		printf("请按任意键返回上一菜单\n");
+		system("pause > nul");
+		student_mainmenu();
+	}
+	else if (a == 7)
+		exit(0);
 }
 
 void student_reg()
@@ -317,14 +349,14 @@ void student_reg()
 	strcat(query1, ")");
 	mysql_query(&mysql, query1);
 
-	//printf("请输入学院:");
-	//scanf("%s", school);
-	//char query2[200] = "update students set school=' ";
-	//strcat(query2, school);
-	//strcat(query2, "' where stuID='");
-	//strcat(query2, stuID);
-	//strcat(query2, "'");
-	//mysql_query(&mysql, query2);
+	printf("请输入学院:");
+	scanf("%s", school);
+	char query2[200] = "update students set school=' ";
+	strcat(query2, school);
+	strcat(query2, "' where stuID='");
+	strcat(query2, stuID);
+	strcat(query2, "'");
+	mysql_query(&mysql, query2);
 
 	printf("请输入专业:");
 	scanf("%s", major);
@@ -415,6 +447,7 @@ int check_phone(char* str)
 
 void student_select_course()
 {
+	MYSQL_RES* result8;
 	system("cls");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 学生选课 ●○●○●○\n");
@@ -425,7 +458,24 @@ void student_select_course()
 	select_class(query);
 	printf("\n请输入您想选的课程编号：");
 	scanf("%s", classID);
-	//还需判断是否有这门课！！！！
+	//判断是否有这门课
+	char query10[100] = "select * from classes where 课程编号='";
+	strcat(query10, classID);
+	strcat(query10, "'");
+	mysql_store_result(&mysql);
+	mysql_query(&mysql, query10);
+	result8 = mysql_store_result(&mysql);
+	while (mysql_num_rows(result8) == 0)
+	{
+		printf("无此课程，请重新输入！\n");
+		scanf("%s", classID);
+		char query10[100] = "select * from classes where 课程编号='";
+		strcat(query10, classID);
+		strcat(query10, "'");
+		mysql_store_result(&mysql);
+		mysql_query(&mysql, query10);
+		result8 = mysql_store_result(&mysql);
+	}
 	//把学生之前选的课从表中取出，存到字符串中
 	char query1[100] = "select class1,class2,class3 from students where stuID='";
 	strcat(query1, stuID);
@@ -446,121 +496,122 @@ void student_select_course()
 		//判断从表中取出的那些课的是不是和学生现在想选的课有重复
 		if (((nextRow[0] != NULL) && (strcmp(classID, nextRow[0]) == 0)) || ((nextRow[1] != NULL) && (strcmp(classID, nextRow[1]) == 0)) || ((nextRow[2] != NULL) && (strcmp(classID, nextRow[2]) == 0)))//strcmp,如果有重复,class1ID==classID||....||....
 		{
-			printf("\n您已选过该课程！\n");
+			printf("\n您已选过该课程！\n\n");
 		}
-
-		//把学生已选的课的开课时间，结课时间，时间段取出并保存在字符串中
-		//select 开课时间,结课时间,上课时间段 from classes where 课程编号=
-		//(select class1 from students where stuID='2019222222')
-		char query6[200] = "select 开课时间,结课时间,上课时间段 from classes where 课程编号=(select class1 from students where stuID='";
-		strcat(query6, stuID);
-		strcat(query6, "')");
-		mysql_store_result(&mysql);
-		mysql_query(&mysql, query6);
-		result2 = mysql_store_result(&mysql);
-		if (result2)
-		{
-			Row1 = mysql_fetch_row(result2);
-		}
-
-		char query7[200] = "select 开课时间,结课时间,上课时间段 from classes where 课程编号=(select class2 from students where stuID='";
-		strcat(query7, stuID);
-		strcat(query7, "')");
-		mysql_store_result(&mysql);
-		mysql_query(&mysql, query7);
-		result3 = mysql_store_result(&mysql);
-		if (result3)
-		{
-			Row2 = mysql_fetch_row(result3);
-		}
-
-		char query8[200] = "select 开课时间,结课时间,上课时间段 from classes where 课程编号=(select class3 from students where stuID='";
-		strcat(query8, stuID);
-		strcat(query8, "')");
-		mysql_store_result(&mysql);
-		mysql_query(&mysql, query8);
-		result4 = mysql_store_result(&mysql);
-		if (result4)
-		{
-			Row3 = mysql_fetch_row(result4);
-		}
-
-		char query9[200] = "select 开课时间,结课时间,上课时间段 from classes where 课程编号=";
-		strcat(query9, classID);
-		mysql_store_result(&mysql);
-		mysql_query(&mysql, query9);
-		result5 = mysql_store_result(&mysql);
-		if (result5)
-		{
-			Row4 = mysql_fetch_row(result5);
-		}
-
-		int check1, check2, check3;
-		check1 = 0;
-		check2 = 0;
-		check3 = 0;
-
-		if (mysql_num_rows(result2) != 0 && mysql_num_rows(result5) != 0)
-			check1 = check_timeClash(Row1[0], Row1[1], Row1[2], Row4[0], Row4[1], Row4[2]);//比较class1和class2是否时间冲突
-		if (mysql_num_rows(result3) != 0 && mysql_num_rows(result5) != 0)
-			check2 = check_timeClash(Row2[0], Row2[1], Row2[2], Row4[0], Row4[1], Row4[2]);
-		if (mysql_num_rows(result4) != 0 && mysql_num_rows(result5) != 0)
-			check3 = check_timeClash(Row3[0], Row3[1], Row3[2], Row4[0], Row4[1], Row4[2]);
-
-		char query2[100] = "select 限制人数,已选人数 from classes where 课程编号='";
-		strcat(query2, classID);
-		strcat(query2, "'");
-		mysql_store_result(&mysql);
-		mysql_query(&mysql, query2);
-		result1 = mysql_store_result(&mysql);
-		if (result1)
-		{
-			Row = mysql_fetch_row(result1);
-		}
-		if (strcmp(Row[0], Row[1]) == 0)//超过限制人数
-		{
-			printf("\n此课程已满，无法选择！\n");
-		}
-		else
-		{
-			if (check1 == 1 || check2 == 1 || check3 == 1)//判断时间是否和已选的课有冲突
+		else {
+			//把学生已选的课的开课时间，结课时间，时间段取出并保存在字符串中
+			//select 开课时间,结课时间,上课时间段 from classes where 课程编号=
+			//(select class1 from students where stuID='2019222222')
+			char query6[200] = "select 开课时间,结课时间,上课时间段 from classes where 课程编号=(select class1 from students where stuID='";
+			strcat(query6, stuID);
+			strcat(query6, "')");
+			mysql_store_result(&mysql);
+			mysql_query(&mysql, query6);
+			result2 = mysql_store_result(&mysql);
+			if (result2)
 			{
-				printf("\n此课程和您已选课程时间冲突，无法选择！\n");
+				Row1 = mysql_fetch_row(result2);
 			}
-			else {
-				if (nextRow[0] == NULL)//class1 == null
+
+			char query7[200] = "select 开课时间,结课时间,上课时间段 from classes where 课程编号=(select class2 from students where stuID='";
+			strcat(query7, stuID);
+			strcat(query7, "')");
+			mysql_store_result(&mysql);
+			mysql_query(&mysql, query7);
+			result3 = mysql_store_result(&mysql);
+			if (result3)
+			{
+				Row2 = mysql_fetch_row(result3);
+			}
+
+			char query8[200] = "select 开课时间,结课时间,上课时间段 from classes where 课程编号=(select class3 from students where stuID='";
+			strcat(query8, stuID);
+			strcat(query8, "')");
+			mysql_store_result(&mysql);
+			mysql_query(&mysql, query8);
+			result4 = mysql_store_result(&mysql);
+			if (result4)
+			{
+				Row3 = mysql_fetch_row(result4);
+			}
+
+			char query9[200] = "select 开课时间,结课时间,上课时间段 from classes where 课程编号=";
+			strcat(query9, classID);
+			mysql_store_result(&mysql);
+			mysql_query(&mysql, query9);
+			result5 = mysql_store_result(&mysql);
+			if (result5)
+			{
+				Row4 = mysql_fetch_row(result5);
+			}
+
+			int check1, check2, check3;
+			check1 = 0;
+			check2 = 0;
+			check3 = 0;
+
+			if (mysql_num_rows(result2) != 0 && mysql_num_rows(result5) != 0)
+				check1 = check_timeClash(Row1[0], Row1[1], Row1[2], Row4[0], Row4[1], Row4[2]);//比较class1和class2是否时间冲突
+			if (mysql_num_rows(result3) != 0 && mysql_num_rows(result5) != 0)
+				check2 = check_timeClash(Row2[0], Row2[1], Row2[2], Row4[0], Row4[1], Row4[2]);
+			if (mysql_num_rows(result4) != 0 && mysql_num_rows(result5) != 0)
+				check3 = check_timeClash(Row3[0], Row3[1], Row3[2], Row4[0], Row4[1], Row4[2]);
+
+			char query2[100] = "select 限制人数,已选人数 from classes where 课程编号='";
+			strcat(query2, classID);
+			strcat(query2, "'");
+			mysql_store_result(&mysql);
+			mysql_query(&mysql, query2);
+			result1 = mysql_store_result(&mysql);
+			if (result1)
+			{
+				Row = mysql_fetch_row(result1);
+			}
+			if (strcmp(Row[0], Row[1]) == 0)//超过限制人数
+			{
+				printf("\n此课程已满，无法选择！\n");
+			}
+			else
+			{
+				if (check1 == 1 || check2 == 1 || check3 == 1)//判断时间是否和已选的课有冲突
 				{
-					//在class1中插入选的课程编号
-					//update students set class1 = '2' where stuID = '2019222222'
-					char query3[100] = "update students set class1 ='";
-					strcat(query3, classID);
-					strcat(query3, "'where stuID='");
-					strcat(query3, stuID);
-					strcat(query3, "'");
-					mysql_query(&mysql, query3);
-					printf("\n选课成功！");
+					printf("\n此课程和您已选课程时间冲突，无法选择！\n");
 				}
-				else if ((nextRow[0] != NULL) && (nextRow[1] == NULL))//class1 != null并且class2=null
-				{
-					//在class2中插入选的编号
-					char query4[100] = "update students set class2 ='";
-					strcat(query4, classID);
-					strcat(query4, "'where stuID='");
-					strcat(query4, stuID);
-					strcat(query4, "'");
-					mysql_query(&mysql, query4);
-					printf("\n选课成功！");
-				}
-				else if ((nextRow[0] != NULL) && (nextRow[1] != NULL) && (nextRow[2] == NULL))//class1 != null并且class2=！null并且class3==null
-				{
-					//在class3中插入选的编号
-					char query5[100] = "update students set class3 ='";
-					strcat(query5, classID);
-					strcat(query5, "'where stuID='");
-					strcat(query5, stuID);
-					strcat(query5, "'");
-					mysql_query(&mysql, query5);
-					printf("\n选课成功！");
+				else {
+					if (nextRow[0] == NULL)//class1 == null
+					{
+						//在class1中插入选的课程编号
+						//update students set class1 = '2' where stuID = '2019222222'
+						char query3[100] = "update students set class1 ='";
+						strcat(query3, classID);
+						strcat(query3, "'where stuID='");
+						strcat(query3, stuID);
+						strcat(query3, "'");
+						mysql_query(&mysql, query3);
+						printf("\n选课成功！");
+					}
+					else if ((nextRow[0] != NULL) && (nextRow[1] == NULL))//class1 != null并且class2=null
+					{
+						//在class2中插入选的编号
+						char query4[100] = "update students set class2 ='";
+						strcat(query4, classID);
+						strcat(query4, "'where stuID='");
+						strcat(query4, stuID);
+						strcat(query4, "'");
+						mysql_query(&mysql, query4);
+						printf("\n选课成功！");
+					}
+					else if ((nextRow[0] != NULL) && (nextRow[1] != NULL) && (nextRow[2] == NULL))//class1 != null并且class2=！null并且class3==null
+					{
+						//在class3中插入选的编号
+						char query5[100] = "update students set class3 ='";
+						strcat(query5, classID);
+						strcat(query5, "'where stuID='");
+						strcat(query5, stuID);
+						strcat(query5, "'");
+						mysql_query(&mysql, query5);
+						printf("\n选课成功！");
+					}
 				}
 			}
 		}
@@ -770,88 +821,98 @@ void student_manage_course()
 
 	switch (num)
 	{
-	case 1:
-	{
-		system("cls");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t○●○●○● 个人信息管理--学生--电话 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\n请输入新的电话：");
-		scanf("%s", &phone);
-		while (check_phone(phone) == 0)
+		case 1:
 		{
-			printf("输入无效！请输入11位电话号：");
+			system("cls");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\t\t\t○●○●○● 个人信息管理--学生--电话 ●○●○●○\n");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\n请输入新的电话：");
 			scanf("%s", &phone);
+			while (check_phone(phone) == 0)
+			{
+				printf("输入无效！请输入11位电话号：");
+				scanf("%s", &phone);
+			}
+			char query[200] = "update students set phone=' ";
+			strcat(query, phone);
+			strcat(query, "' where stuID='");
+			strcat(query, stuID);
+			strcat(query, "'");
+			mysql_query(&mysql, query);
+			printf("\n修改成功!\n");
+			printf("请按任意键返回上一菜单\n");
+			system("pause > nul");
+			student_manage_course();
+			break;
 		}
-		char query[200] = "update students set phone=' ";
-		strcat(query, phone);
-		strcat(query, "' where stuID='");
-		strcat(query, stuID);
-		strcat(query, "'");
-		mysql_query(&mysql, query);
-		printf("\n修改成功!\n");
-		printf("请按任意键返回上一菜单\n");
-		system("pause > nul");
-		student_manage_course();
-		break;
-	}
-	case 2:
-	{
-		system("cls");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t○●○●○● 个人信息管理--学生--密码 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\n请输入新的密码：");
-		scanf("%s", passwd);
-		printf("请再次确认新的密码:");
-		scanf("%s", passwd1);
-		while (strcmp(passwd, passwd1) != 0)
+		case 2:
 		{
-			printf("两次输入的密码不一致，请重新确认：");
+			system("cls");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\t\t\t○●○●○● 个人信息管理--学生--密码 ●○●○●○\n");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\n请输入新的密码：");
+			scanf("%s", passwd);
+			printf("请再次确认新的密码:");
 			scanf("%s", passwd1);
+			while (strcmp(passwd, passwd1) != 0)
+			{
+				printf("两次输入的密码不一致，请重新确认：");
+				scanf("%s", passwd1);
+			}
+			char query1[200] = "update students set passwd=' ";
+			strcat(query1, passwd);
+			strcat(query1, "' where stuID='");
+			strcat(query1, stuID);
+			strcat(query1, "'");
+			mysql_query(&mysql, query1);
+			printf("\n修改成功!\n\n");
+			printf("请按任意键返回上一菜单\n");
+			system("pause > nul");
+			student_manage_course();
+			break;
 		}
-		char query1[200] = "update students set passwd=' ";
-		strcat(query1, passwd);
-		strcat(query1, "' where stuID='");
-		strcat(query1, stuID);
-		strcat(query1, "'");
-		mysql_query(&mysql, query1);
-		printf("\n修改成功!\n\n");
-		printf("请按任意键返回上一菜单\n");
-		system("pause > nul");
-		student_manage_course();
-		break;
-	}
-	case 3:
-	{
-		system("cls");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t○●○●○● 个人信息管理--学生--邮箱 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\n请输入新的邮箱：");
-		scanf("%s", email);
-		while (check_email(email) == 0)
+		case 3:
 		{
-			printf("无效输入！请按照***@***.***格式输入：");
+			system("cls");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\t\t\t○●○●○● 个人信息管理--学生--邮箱 ●○●○●○\n");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\n请输入新的邮箱：");
 			scanf("%s", email);
+			while (check_email(email) == 0)
+			{
+				printf("无效输入！请按照***@***.***格式输入：");
+				scanf("%s", email);
+			}
+			char query2[200] = "update students set email=' ";
+			strcat(query2, email);
+			strcat(query2, "' where stuID='");
+			strcat(query2, stuID);
+			strcat(query2, "'");
+			mysql_query(&mysql, query2);
+			printf("\n修改成功!\n");
+			printf("\n请按任意键返回上一菜单\n");
+			system("pause > nul");
+			student_manage_course();
+			break;
 		}
-		char query2[200] = "update students set email=' ";
-		strcat(query2, email);
-		strcat(query2, "' where stuID='");
-		strcat(query2, stuID);
-		strcat(query2, "'");
-		mysql_query(&mysql, query2);
-		printf("\n修改成功!\n");
-		printf("\n请按任意键返回上一菜单\n");
-		system("pause > nul");
-		student_manage_course();
-		break;
+		case 4:
+		{
+			exit(0);
+		}
 	}
-	case 4:
-	{
-		exit(0);
-	}
-	}
+}
+
+void student_search_specific_imformation()
+{
+	system("cls");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\t\t\t○●○●○● 查看课程详细信息--学生 ●○●○●○\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+
+
 }
 
 void select_class(char* query)
@@ -865,14 +926,14 @@ void select_class(char* query)
 		{
 			int row = mysql_num_rows(result);
 			int column = mysql_num_fields(result);
-			for (int i = 0; field = mysql_fetch_field(result); i++) {
+			for (int i = 0; field = mysql_fetch_field(result),i<7; i++) {
 				//获得属性名 
 				printf("%10s", field->name);
 				printf(" |");
 			}
 			printf("\n");
 			while (nextRow = mysql_fetch_row(result)) {
-				for (int j = 0; j < column; j++) {
+				for (int j = 0; j < column-8; j++) {
 					printf("%10s", nextRow[j]);
 					printf(" |");
 				}
