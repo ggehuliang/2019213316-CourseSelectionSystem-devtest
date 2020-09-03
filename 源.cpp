@@ -6,19 +6,19 @@
 #include <string.h>
 #include <time.h>
 #pragma comment (lib, "libmysql.lib")
+//==========================================
+//程序启动部分功能
 
 void config_init();				// 若配置文件存在则读取，否则进行首次运行配置程序
 void readCFG();
-
-int check_stuId(char* str);
-int main_entrance();
-void student_login();
 void sql();
-int check_password(int who, char* ID, char* password);
+int main_entrance();
+//==========================================
+//学生功能
+
+void student_login();
 void student_mainmenu();
 void student_reg();
-int check_phone(char* str);
-int check_email(char* str);
 void student_select_course();
 void student_query_course();
 void student_query_result();
@@ -26,37 +26,46 @@ void student_delete_course();
 void student_manage_course();
 void student_search_specific_imformation();
 void select_class(char* query);
-int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char* time2_sweek, char* time2_eweek, char* time2_day);
 void check_class_exist(char* classID);
+int check_stuId(char* str);
+int check_phone(char* str);
+int check_email(char* str);
+//==========================================
+//教师功能
 
-int check_classId(char* str);
-void select_class(char* query);
-void teacher_login();   // 教师登录模块
-void teacher_mainmenu();  // 教师主菜单-3个大功能选单
-void select_managemenu();  // 选课管理选单-5个小功能
-void sm_mycourse();    //  查询查询教师自己开设过的课程的选课情况
-void sm_findcourse();   //  查询选择某门课程的学生信息
-void sm_lessthan30delete();  //  选课人数少于30则删除
-void sm_sortcourse();   //  统计选课信息
-void sm_rankcourse();   //排序选课信息
-void course_managemenu();  // 课程管理选单-4个小功能
-void cm_list1();     //  课程查询显示
-void cm_list2();    // 课程查询操作
-void cm_add();     //  加课
-void cm_edit();     //  改课选单
-void cm_delete();    //  未开课前删课
-void personal_managemenu();  // 个人信息管理选单-2个小功能
-void pm_edit();   //  改密码
+void teacher_login();			// 教师登录模块
+void teacher_mainmenu();		// 教师主菜单-3个大功能选单
+void select_managemenu();		// 选课管理选单-5个小功能
+void sm_mycourse();				//  查询查询教师自己开设过的课程的选课情况
+void sm_findcourse();			//  查询选择某门课程的学生信息
+void sm_lessthan30delete();		//  选课人数少于30则删除
+void sm_sortcourse();			//  统计选课信息
+void sm_rankcourse();			//排序选课信息
+void course_managemenu();		// 课程管理选单-4个小功能
+void cm_list1();				//  课程查询显示
+void cm_list2();				// 课程查询操作
+void cm_add();					//  加课
+void cm_edit();					//  改课选单
+void cm_delete();				//  未开课前删课
+void pm_edit();					//  改信息
+
+//==========================================
+//公共功能
+
+int check_password(int who, char* ID, char* password);
 int getState_selecting();		// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
 int getState_starting(char*, char*);		// 获取开课状态 0为未开课，1为已开课
 int check_password(int, char*, char*);	// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
-void sql();
 int check_phone(char*);
 int check_classId(char*);
 int check_teachId(char*);
 int check_timeClash(char*, char*, char*, char*, char*, char*);
+time_t convert_dateToTT(int, int, int, int, int, int);
 
-MYSQL mysql;     //创造一个MYSQL句柄
+//==========================================
+//全局变量声明
+
+MYSQL mysql;			// 全局mysql连接
 MYSQL_RES* result;
 MYSQL_RES* result1;
 MYSQL_RES* result2;
@@ -65,7 +74,6 @@ MYSQL_RES* result4;
 MYSQL_RES* result5;
 MYSQL_RES* result6;
 MYSQL_RES* result7;
-
 MYSQL_FIELD* field;
 MYSQL_ROW nextRow;
 MYSQL_ROW Row;
@@ -75,11 +83,8 @@ MYSQL_ROW Row3;
 MYSQL_ROW Row4;
 MYSQL_ROW Row5;
 char stuID[11];
-time_t convert_dateToTT(int, int, int, int, int, int);
-
-char teachID[100] = "2019222222";
+char teachID[100];
 char nowName[20], nowSchool[20];			//登录进来先获取自己的名字和学院方便后续使用
-
 
 char dbIP[50] = "", dbUser[50] = "", dbPassWd[50] = "", dbName[50] = "";
 int dbPort = 3306;
@@ -1028,6 +1033,7 @@ void student_search_specific_imformation()
 	}
 }
 
+//传入查询语句打印查询结果
 void select_class(char* query)
 {
 	mysql_query(&mysql, query);
