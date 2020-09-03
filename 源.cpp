@@ -425,46 +425,43 @@ void student_mainmenu()
 void student_reg()
 {
 	system("cls");
-	char stuID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
+	char school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
 	system("title 学生选课管理系统 - 学生注册");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 注册 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("请输入学号:");
-	scanf("%s", stuID);
-	char query[100] = "select * from students where stuID='";
-	strcat(query, stuID);
-	strcat(query, "'");
-	mysql_query(&mysql, query);
-	result = mysql_store_result(&mysql);
-	while (mysql_num_rows(result) != 0)
-	{
-		printf("此学号已注册!请更换学号:（若返回上一级，请按ctrl+q）");
+	int flag;
+	do {
+		flag = 0;
+		printf("请输入学号:");
 		scanf("%s", stuID);
 		if (stuID[0] == 17)//返回上一级
 		{
 			system("cls");
 			student_login();
 		}
-		else
+
+		if (check_stuId(stuID) == 0)//检查输入是否符合规范 
 		{
-			char query11[100] = "select * from students where stuID='";
-			strcat(query11, stuID);
-			strcat(query11, "'");
-			mysql_query(&mysql, query11);
-			result = mysql_store_result(&mysql);
+			printf("无效输入！请输入10位数字:（若返回上一级，请按ctrl+q）");
+			flag = 1;
+			continue;
 		}
-	}
-	while (check_stuId(stuID) == 0)//检查输入是否符合规范 
-	{
-		printf("无效输入！请输入10位数字:（若返回上一级，请按ctrl+q）");
-		scanf("%s", stuID);
-		if (stuID[0] == 17)//返回上一级
+
+		char query[100] = "select * from students where stuID='";
+		strcat(query, stuID);
+		strcat(query, "'");
+		mysql_query(&mysql, query);
+		result = mysql_store_result(&mysql);
+		if (mysql_num_rows(result) != 0)
 		{
-			system("cls");
-			student_reg();
+			printf("此学号已注册!请更换学号:（若返回上一级，请按ctrl+q）");
+			flag = 1;
+			continue;
 		}
-	}
+		
+	} while (flag);
+
 	char query1[200] = "insert into students(stuID) values(";
 	strcat(query1, "'");
 	strcat(query1, stuID);
@@ -562,7 +559,6 @@ void student_reg()
 	mysql_query(&mysql, query8);
 
 	printf("\n注册成功！\n");
-
 }
 
 int check_phone(char* str)
@@ -2277,6 +2273,7 @@ void teacher_login() {
 		mysql_store_result(&mysql);
 		int option1;
 		system("title 学生选课管理系统 - 教师登录");
+		system("cls");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--教师 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -2304,7 +2301,7 @@ void teacher_login() {
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			do {
 				flag = 0;
-				printf("请输入用户名：");
+				printf("请输入教师工号：");
 				scanf("%s", teachID);
 				if (teachID[0] == 17)//若返回上一级，请按ctrl+q
 				{
@@ -2312,7 +2309,7 @@ void teacher_login() {
 					teacher_login();
 				}
 				if (!check_teachId(teachID)) {
-					printf("学号格式错误！请重试！(若返回上一级，请按ctrl+q)\n");
+					printf("教师工号格式错误！请重试！(若返回上一级，请按ctrl+q)\n");
 					flag = 1;
 					continue;
 				}
@@ -2325,7 +2322,7 @@ void teacher_login() {
 				}
 				if (!check_password(1, teachID, password))
 				{
-					printf("用户名或密码错误！请重试！(若返回上一级，请按ctrl+q)\n");
+					printf("教师工号或密码错误！请重试！(若返回上一级，请按ctrl+q)\n");
 					flag = 1;
 				}
 			} while (flag);
@@ -3378,46 +3375,46 @@ int check_classId(char* str)
 void teacher_reg()
 {
 	system("cls");
-	char teachID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
+	char school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
 	system("title 学生选课管理系统 - 教师注册");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 注册 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("请输入教师工号:");
-	scanf("%s", teachID);
-	char query[100] = "select * from teachers where teachID='";
-	strcat(query, teachID);
-	strcat(query, "'");
-	mysql_query(&mysql, query);
-	result = mysql_store_result(&mysql);
-	while (mysql_num_rows(result) != 0)
-	{
-		printf("此教师工号已注册!请更换教师工号:(若返回上一级，请按ctrl+q)");
+	int flag;
+	do {
+		flag = 0;
+		printf("请输入教师工号:");
 		scanf("%s", teachID);
+		
+		while (getchar() != '\n');
 		if (teachID[0] == 17)//若返回上一级，请按ctrl+q
 		{
 			system("cls");
 			teacher_login();
 			return;
 		}
-		char query11[100] = "select * from teachers where teachID='";
-		strcat(query11, teachID);
-		strcat(query11, "'");
-		mysql_query(&mysql, query11);
-		result = mysql_store_result(&mysql);
-	}
-	while (check_stuId(teachID) == 0)//检查输入是否符合规范 
-	{
-		printf("无效输入！请输入10位数字:(若返回上一级，请按ctrl+q)");
-		scanf("%s", teachID);
 
-		if (teachID[0] == 17)//若返回上一级，请按ctrl+q
+		if (check_stuId(teachID) == 0)//检查输入是否符合规范 
 		{
-			system("cls");
-			teacher_login();
-			return;
+			printf("无效输入！请输入10位数字(若返回上一级，请按ctrl+q)\n");
+			flag = 1;
+			continue;
 		}
-	}
+
+		mysql_store_result(&mysql);
+		char query[100] = "select * from teachers where teachID='";
+		strcat(query, teachID);
+		strcat(query, "'");
+		mysql_query(&mysql, query);
+		result = mysql_store_result(&mysql);
+		if(mysql_num_rows(result) != 0)
+		{
+			printf("此教师工号已注册!请更换教师工号(若返回上一级，请按ctrl+q)\n");
+			flag = 1;
+			continue;
+			
+		}
+	} while (flag);
 	char query1[200] = "insert into teachers(teachID) values(";
 	strcat(query1, "'");
 	strcat(query1, teachID);
@@ -3466,6 +3463,7 @@ void teacher_reg()
 	printf("请输入密码:");
 	scanf_pw(passwd);
 	char query7[200] = "update teachers set passwd='";
+	pw_encode(passwd);
 	strcat(query7, passwd);
 	strcat(query7, "' where teachID='");
 	strcat(query7, teachID);
