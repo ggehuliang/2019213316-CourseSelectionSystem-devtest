@@ -170,6 +170,7 @@ int main_entrance()
 
 void student_login()
 {
+	system("cls");
 	int option1;
 	system("title 学生选课管理系统 - 学生登录");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -746,7 +747,7 @@ void student_query_course()
 	printf("  ② - 根据开课学院查询\n");
 	printf("  ③ - 根据课余量排序所有课程\n");
 	printf("  ④ - 根据选课人数排序所有课程\n");
-	printf("  ⑤ - 退出程序\n");
+	printf("  ⑤ - 返回学生主菜单\n");
 	printf("请输入1，2，3，4或5:");
 	int ret3 = scanf("%d", &a);
 	while (ret3 != 1 || a > 5 || a < 1)
@@ -800,7 +801,8 @@ void student_query_course()
 		printf("\t\t\t○●○●○● 查询课程--课余量排序所有课程 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\n按课余量排序的所有课程如下：\n");
-		char query3[100] = "select *,(限制人数-已选人数) 余课量 from classes order by 余课量 desc";
+		char query3[200] = "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,(限制人数-已选人数) 余课量,教材信息,";
+		strcat(query3, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes order by 余课量 desc");
 		select_class(query3);
 		printf("\n请按任意键返回上一菜单");
 		system("pause > nul");
@@ -813,7 +815,8 @@ void student_query_course()
 		printf("\t\t\t○●○●○● 查询课程--选课人数排序所有课程 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\n根据选课人数排序的所有课程如下：\n");
-		char query4[100] = "select * from classes order by 已选人数 desc";
+		char query4[200] = "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,已选人数,教材信息,课程简介,已选人数,限制人数,";
+		strcat(query4, "上课地点,上课时间段,开课时间,结课时间 from classes order by 已选人数 desc");
 		select_class(query4);
 		printf("\n请按任意键返回上一菜单");
 		system("pause > nul");
@@ -821,7 +824,8 @@ void student_query_course()
 	}
 	if (a == 5)
 	{
-		exit(0);
+		system("cls");
+		student_mainmenu();
 	}
 }
 
@@ -876,12 +880,12 @@ void student_delete_course()
 		printf("此课程已开课，无法删除！\n");
 		printf("请重新输入课程编号：（若返回上一级，请按ctrl+q）\n");
 		scanf("%s", classID);
-		check_class_exist(classID);
 		if (classID[0] == 17)//返回上一级
 		{
 			system("cls");
 			student_delete_course();
 		}
+		check_class_exist(classID);
 		char query12[100] = "select 开课时间,上课时间段 from classes where 课程编号='";
 		strcat(query12, classID);
 		strcat(query12, "'");
@@ -941,10 +945,28 @@ void student_delete_course()
 		strcat(query33, "'");
 		mysql_query(&mysql, query33);
 	}
-	if (nextRow[0] != NULL && strcmp(nextRow[0], classID) != 0 && nextRow[1] != NULL && strcmp(nextRow[1], classID) != 0 && nextRow[2] != NULL && strcmp(nextRow[2], classID) != 0)
-	{
+	if ((nextRow[0] != NULL && strcmp(nextRow[0], classID) != 0) && (nextRow[1] != NULL && strcmp(nextRow[1], classID) != 0 )&& (nextRow[2] != NULL && strcmp(nextRow[2], classID) != 0))
 		printf("\n您未选修该课程！\n");
-	}
+	if (nextRow[0] == NULL)
+		if((nextRow[1] != NULL && strcmp(nextRow[1], classID) != 0) && (nextRow[2] != NULL && strcmp(nextRow[2], classID) != 0))
+			printf("\n您未选修该课程！\n");
+	if (nextRow[1] == NULL)
+		if ((nextRow[0] != NULL && strcmp(nextRow[0], classID) != 0) && (nextRow[2] != NULL && strcmp(nextRow[2], classID) != 0))
+			printf("\n您未选修该课程！\n");
+	if (nextRow[2] == NULL)
+		if ((nextRow[1] != NULL && strcmp(nextRow[1], classID) != 0) && (nextRow[0] != NULL && strcmp(nextRow[0], classID) != 0))
+			printf("\n您未选修该课程！\n");
+	if(nextRow[0] == NULL&& nextRow[1] == NULL)
+		if(nextRow[2] != NULL && strcmp(nextRow[2], classID) != 0)
+			printf("\n您未选修该课程！\n");
+	if (nextRow[0] == NULL && nextRow[2] == NULL)
+		if (nextRow[1] != NULL && strcmp(nextRow[1], classID) != 0)
+			printf("\n您未选修该课程！\n");
+	if (nextRow[1] == NULL && nextRow[2] == NULL)
+		if (nextRow[0] != NULL && strcmp(nextRow[0], classID) != 0)
+			printf("\n您未选修该课程！\n");
+	if(nextRow[1] == NULL && nextRow[2] == NULL&& nextRow[3] == NULL)
+		printf("\n您未选修该课程！\n");
 }
 
 void student_manage_course()
@@ -963,7 +985,7 @@ void student_manage_course()
 	printf("  ① - 电话\n");
 	printf("  ② - 密码\n");
 	printf("  ③ - 邮箱\n");
-	printf("  ④ - 退出程序\n");
+	printf("  ④ - 返回学生主菜单\n");
 	printf("\n请输入1，2，3或4：");
 	int ret4 = scanf("%d", &num);
 	while (ret4 != 1 || num > 4 || num < 1)
@@ -1083,7 +1105,8 @@ void student_manage_course()
 	}
 	case 4:
 	{
-		exit(0);
+		system("cls");
+		student_mainmenu();
 	}
 	}
 }
@@ -1096,11 +1119,13 @@ void student_search_specific_imformation()
 	printf("\t\t\t○●○●○● 查看课程详细信息--学生 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n全部课程如下：\n");
-	char query[50] = "select * from classes";
-	select_class(query);
 	printf("输入课程编号以查看该课程的详细信息\n");
 	scanf("%s", classID);
 	check_class_exist(classID);
+	char query[100] = "select * from classes where classID='";
+	strcat(query, classID);
+	strcat(classID, "'");
+	select_class(query);
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	if (result)
@@ -1142,28 +1167,28 @@ void select_class(char* query)
 		{
 			int row = mysql_num_rows(result);
 			int column = mysql_num_fields(result);
-			for (int i = 0; field = mysql_fetch_field(result), i < 7; i++) {
+			for (int i = 0; field = mysql_fetch_field(result),i<7; i++) {
 				//获得属性名 
 				if (i == 0)
 				{
 					printf("%-8s", field->name);
-					printf(" |");
+					printf("|");
 				}
 				else if (i == 1||i==2)
 				{
 					printf("%-20s", field->name);
-					printf(" |");
+					printf("|");
 				}
 				else
 				{
 					printf("%-8s", field->name);
-					printf(" |");
+					printf("|");
 				}
 			}
 
 			printf("\n");
 			while (nextRow = mysql_fetch_row(result)) {
-				for (int j = 0; j < column - 8; j++) {
+				for (int j = 0; j < column-8; j++) {
 					if (j == 0)
 					{
 						printf("%-8s", nextRow[j]);
