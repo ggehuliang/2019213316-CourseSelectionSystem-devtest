@@ -48,7 +48,7 @@ void cm_delete();    //  未开课前删课
 void personal_managemenu();  // 个人信息管理选单-2个小功能
 void pm_edit();   //  改密码
 int getState_selecting();		// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
-int getState_starting(char*, char*);		// 获取选课状态 0为未开课，1为已开课
+int getState_starting(char*, char*);		// 获取开课状态 0为未开课，1为已开课
 int check_password(int, char*, char*);	// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
 void sql();
 int check_phone(char*);
@@ -64,6 +64,7 @@ MYSQL_RES* result3;
 MYSQL_RES* result4;
 MYSQL_RES* result5;
 MYSQL_RES* result6;
+MYSQL_RES* result7;
 
 MYSQL_FIELD* field;
 MYSQL_ROW nextRow;
@@ -72,6 +73,7 @@ MYSQL_ROW Row1;
 MYSQL_ROW Row2;
 MYSQL_ROW Row3;
 MYSQL_ROW Row4;
+MYSQL_ROW Row5;
 char stuID[11];
 time_t convert_dateToTT(int, int, int, int, int, int);
 
@@ -781,6 +783,37 @@ void student_delete_course()
 	student_query_result();
 	printf("\n请输入课程编号以删除课程:");
 	scanf("%s", classID);
+	check_class_exist(classID);
+	//取出学生想删除课的开课时间和上课时间段======================================================================================================
+	char query12[100] = "select 开课时间,上课时间段 from classes where 课程编号='";
+	strcat(query12, classID);
+	strcat(query12, "'");
+	mysql_store_result(&mysql);
+	mysql_query(&mysql, query12);
+	result7 = mysql_store_result(&mysql);
+	if (result7)
+	{
+		Row5 = mysql_fetch_row(result7);
+	}
+	//===========================================================================================
+	while (getState_starting(Row5[0], Row5[1]) == 1)
+	{
+		printf("此课程已开课，无法删除！\n");
+		printf("请重新输入课程编号：\n");
+		scanf("%s", classID);
+		check_class_exist(classID);
+		char query12[100] = "select 开课时间,上课时间段 from classes where 课程编号='";
+		strcat(query12, classID);
+		strcat(query12, "'");
+		mysql_store_result(&mysql);
+		mysql_query(&mysql, query12);
+		result7 = mysql_store_result(&mysql);
+		if (result7)
+		{
+			Row5 = mysql_fetch_row(result7);
+		}
+	}
+	//=============================================================================================
 	char query[100] = "select class1,class2,class3 from students where stuID='";
 	strcat(query, stuID);
 	strcat(query, "'");
@@ -791,6 +824,7 @@ void student_delete_course()
 	{
 		nextRow = mysql_fetch_row(result);
 	}
+
 	if (nextRow[0] != NULL && strcmp(nextRow[0], classID) == 0)
 	{
 		char query1[100] = "update students set class1=null where stuID='";
@@ -946,7 +980,7 @@ void student_manage_course()
 		}
 	}
 }
-//----------------------------------------------------------------------------------------
+
 void student_search_specific_imformation()
 {
 	char classID[100];
@@ -976,7 +1010,7 @@ void student_search_specific_imformation()
 					printf("%-30s", field->name);
 					printf(" |");
 				}
-			}//----------------------------------------------------------------------------------------------------------------------------------------
+			}
 			printf("\n");
 			while (nextRow = mysql_fetch_row(result)) {
 				for (int j = 7; j < column ; j++) {
@@ -1654,6 +1688,7 @@ int getState_selecting() {
 }
 
 // 输入开课时间与时间段返回是否开课,0为未开课，1为已开课
+//输入格式为开课时间和上课时间段
 int getState_starting(char* sweek, char* stime) {
 	char tmp[50];
 	int year, term, week, day, hr, min;
