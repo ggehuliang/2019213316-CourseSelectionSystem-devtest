@@ -1573,10 +1573,14 @@ void sm_lessthan30delete() {
 	printf("  ② - 返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+	int ret1 = scanf("%d", &option2);
+	while (ret1 != 1 || option2 > 2 || option2 < 1)
 	{
-		printf("无效，请重新输入!\n");
-		fflush(stdin);
+		while (getchar() != '\n');
+		{
+			printf("输入无效！请重新输入：");
+			ret1 = scanf("%d", &option2);
+		}
 	}
 	switch (option2)
 	{
@@ -1584,6 +1588,11 @@ void sm_lessthan30delete() {
 		do {
 			printf("请输入您想要删除的课程的编号：");
 			scanf("%s", courseName);
+			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				sm_lessthan30delete();
+			}
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'"
 				, courseName);
 			mysql_query(&mysql, query);
@@ -1592,7 +1601,7 @@ void sm_lessthan30delete() {
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
-				printf("无结果，请重新输入\n");
+				printf("无结果，请重新输入（若返回上一级，请按ctrl+q）\n");
 				mysql_free_result(result);
 			}
 			else {
