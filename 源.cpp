@@ -1643,7 +1643,7 @@ void sm_lessthan30delete() {
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
 
-				int ret1 = scanf("%d", &option2);
+				ret1 = scanf("%d", &option2);
 				while (ret1 != 1 || option2 > 2 || option2 < 1)
 				{
 					while (getchar() != '\n');
@@ -1923,7 +1923,8 @@ int getState_starting(char* sweek, char* stime) {
 	{
 		return 0;
 	}
-	else {
+	else 
+	{
 		return 1;
 	}
 }
@@ -1984,14 +1985,13 @@ void config_init() {
 		}
 		while (getchar() != '\n'); {}
 
-		printf("请输入MySQL数据库库名称（留空默认为cssystem）：");
+		printf("请输入MySQL数据库库名称（留空默认为courseselectionsystem）：");
 		scanf("%[^\n]", dbName);
 		if (!strcmp(dbName, ""))
 		{
-			sprintf(dbName, "cssystem");
+			sprintf(dbName, "courseselectionsystem");
 		}
 		while (getchar() != '\n'); {}
-		printf("%s %s %s %s %d", dbIP, dbUser, dbPassWd, dbName, dbPort);
 		if (!mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd, dbName, dbPort, NULL, 0))
 		{
 			printf("\n\n数据库连接失败！请确认配置是否正确，按回车重新配置……\n");
@@ -2230,16 +2230,26 @@ void teacher_login() {
 				flag = 0;
 				printf("请输入用户名：");
 				scanf("%s", teachID);
+				if (teachID[0] == 17)//若返回上一级，请按ctrl+q
+				{
+					system("cls");
+					teacher_login();
+				}
 				if (!check_teachId(teachID)) {
-					printf("学号格式错误！请重试！\n");
+					printf("学号格式错误！请重试！(若返回上一级，请按ctrl+q)\n");
 					flag = 1;
 					continue;
 				}
 				printf("请输入密码：");
 				scanf_pw(password);
+				if (password[0] == 17)//若返回上一级，请按ctrl+q
+				{
+					system("cls");
+					teacher_login();
+				}
 				if (!check_password(1, teachID, password))
 				{
-					printf("用户名或密码错误！请重试！\n");
+					printf("密码错误！请重试！(若返回上一级，请按ctrl+q)\n");
 					flag = 1;
 				}
 			} while (flag);
@@ -2284,10 +2294,14 @@ void cm_list1()
 	printf("  ② - 返回上一个菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+	int ret1 = scanf("%d", &option2);
+	while (ret1 != 1 || option2 > 2 || option2 < 1)
 	{
-		printf("无效，请重新输入!\n");
-		fflush(stdin);
+		while (getchar() != '\n');
+		{
+			printf("输入无效！请重新输入：");
+			ret1 = scanf("%d", &option2);
+		}
 	}
 	switch (option2)
 	{
@@ -2311,6 +2325,11 @@ void cm_list2()
 	do {
 		printf("请输入您想要查询的课程名称：");
 		scanf("%s", courseName);
+		if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+		{
+			system("cls");
+			cm_list1();
+		}
 		char query[200] = "SELECT * FROM `classes`WHERE 课程名称 = '";
 		strcat(query, courseName);
 		strcat(query, "'");
@@ -2319,7 +2338,7 @@ void cm_list2()
 		if (mysql_num_rows(result) == 0)
 		{
 			flag = 1;
-			printf("无结果，请重新输入\n");
+			printf("无结果，请重新输入(若返回上一级，请按ctrl+q)\n");
 			mysql_free_result(result);
 		}
 		else {
@@ -2366,17 +2385,28 @@ void cm_edit() {
 	printf("  ② - 结束修改并返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+	int ret1 = scanf("%d", &option2);
+	while (ret1 != 1 || option2 > 2 || option2 < 1)
 	{
-		printf("无效，请重新输入!\n");
-		fflush(stdin);
+		while (getchar() != '\n');
+		{
+			printf("输入无效！请重新输入：");
+			ret1 = scanf("%d", &option2);
+		}
 	}
+	int ret2;
 	switch (option2)
 	{
 	case 1:
 		do {
 			printf("请输入您想要修改的课程的编号：");
 			scanf("%s", courseName);
+			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				cm_edit();
+				return;
+			}
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
@@ -2384,7 +2414,7 @@ void cm_edit() {
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
-				printf("无结果，请重新输入\n");
+				printf("无结果，请重新输入(若返回上一级，请按ctrl+q)\n");
 				mysql_free_result(result);
 			}
 			else {
@@ -2422,10 +2452,14 @@ void cm_edit() {
 			printf("  ④ - 返回上一个菜单\n\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			printf("请输入1，2，3或4:");
-			while (scanf("%d", &option2) != 1 || option2 > 4 || option2 < 1)
+			ret1 = scanf("%d", &option2);
+			while (ret1 != 1 || option2 > 4 || option2 < 1)
 			{
-				printf("无效，请重新输入!\n");
-				fflush(stdin);
+				while (getchar() != '\n');
+				{
+					printf("输入无效！请重新输入：");
+					ret1 = scanf("%d", &option2);
+				}
 			}
 			char content[1000];
 			switch (option2)
@@ -2474,10 +2508,14 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+				ret1 = scanf("%d", &option2);
+				while (ret1 != 1 || option2 > 2 || option2 < 1)
 				{
-					printf("无效，请重新输入!\n");
-					fflush(stdin);
+					while (getchar() != '\n');
+					{
+						printf("输入无效！请重新输入：");
+						ret1 = scanf("%d", &option2);
+					}
 				}
 				switch (option2)
 				{
@@ -2504,10 +2542,14 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+				ret2 = scanf("%d", &option2);
+				while (ret2 != 1 || option2 > 2 || option2 < 1)
 				{
-					printf("无效，请重新输入!\n");
-					fflush(stdin);
+					while (getchar() != '\n');
+					{
+						printf("输入无效！请重新输入：");
+						ret2 = scanf("%d", &option2);
+					}
 				}
 				switch (option2)
 				{
@@ -2553,10 +2595,14 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+				ret1 = scanf("%d", &option2);
+				while (ret1 != 1 || option2 > 2 || option2 < 1)
 				{
-					printf("无效，请重新输入!\n");
-					fflush(stdin);
+					while (getchar() != '\n');
+					{
+						printf("输入无效！请重新输入：");
+						ret1 = scanf("%d", &option2);
+					}
 				}
 				switch (option2)
 				{
@@ -2596,10 +2642,14 @@ void cm_edit() {
 					printf("  ② - 否\n\n");
 					printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 					printf("\n请输入1或2:");
-					while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+					ret1 = scanf("%d", &option2);
+					while (ret1 != 1 || option2 > 2 || option2 < 1)
 					{
-						printf("无效，请重新输入!\n");
-						fflush(stdin);
+						while (getchar() != '\n');
+						{
+							printf("输入无效！请重新输入：");
+							ret1 = scanf("%d", &option2);
+						}
 					}
 					switch (option2)
 					{
@@ -2622,9 +2672,8 @@ void cm_edit() {
 				break;
 			default:
 				printf("无效，请重新输入!\n");
-
 			}
-		};
+		}
 		break;
 	case 2:
 		course_managemenu();
@@ -2632,7 +2681,6 @@ void cm_edit() {
 	default:
 		printf("无效，请重新输入!\n");
 	}
-
 }
 
 void cm_delete() {
@@ -2654,10 +2702,14 @@ void cm_delete() {
 	printf("  ② - 返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+	int ret1 = scanf("%d", &option2);
+	while (ret1 != 1 || option2 > 2 || option2 < 1)
 	{
-		printf("无效，请重新输入!\n");
-		fflush(stdin);
+		while (getchar() != '\n');
+		{
+			printf("输入无效！请重新输入：");
+			ret1 = scanf("%d", &option2);
+		}
 	}
 	switch (option2)
 	{
@@ -2665,6 +2717,12 @@ void cm_delete() {
 		do {
 			printf("请输入您想要删除的课程的编号：");
 			scanf("%s", courseName);
+			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				cm_delete();
+				return;
+			}
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
@@ -2672,10 +2730,11 @@ void cm_delete() {
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
-				printf("无结果，请重新输入\n");
+				printf("无结果，请重新输入(若返回上一级，请按ctrl+q)\n");
 				mysql_free_result(result);
 			}
-			else {
+			else 
+			{
 				flag = 0;
 			}
 		} while (flag == 1);
@@ -2703,12 +2762,15 @@ void cm_delete() {
 			printf("  ② - 否\n\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			printf("\n请输入1或2:");
-			while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+			ret1 = scanf("%d", &option2);
+			while (ret1 != 1 || option2 > 2 || option2 < 1)
 			{
-				printf("无效，请重新输入!\n");
-				fflush(stdin);
+				while (getchar() != '\n');
+				{
+					printf("输入无效！请重新输入：");
+					ret1 = scanf("%d", &option2);
+				}
 			}
-			/*printf("===============%s===============", courseName);*/
 			switch (option2)
 			{
 			case 1:
@@ -2741,8 +2803,6 @@ void cm_delete() {
 		break;
 	default:
 		printf("无效，请重新输入!\n");
-
-
 	}
 }
 
@@ -2786,8 +2846,17 @@ void pm_edit()
 		scanf("%s", passwd1);
 		while (strcmp(passwd, passwd1) != 0)
 		{
-			printf("两次输入不一致!请重新确认:");
-			scanf("%s", passwd1);
+			if (email[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				pm_edit();
+				return;
+			}//=============================================================================================
+			else
+			{
+				printf("两次输入不一致!请重新确认:(若返回上一级，请按ctrl+q)");
+				scanf("%s", passwd1);
+			}
 		}
 		char query1[200] = "update teachers set passwd=' ";
 		strcat(query1, passwd);
