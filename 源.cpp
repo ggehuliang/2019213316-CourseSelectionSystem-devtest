@@ -5,20 +5,21 @@
 #include <mysql.h> 
 #include <string.h>
 #include <time.h>
+#include <conio.h>
 #pragma comment (lib, "libmysql.lib")
+//==========================================
+//程序启动部分功能
 
 void config_init();				// 若配置文件存在则读取，否则进行首次运行配置程序
 void readCFG();
-
-int check_stuId(char* str);
-int main_entrance();
-void student_login();
 void sql();
-int check_password(int who, char* ID, char* password);
+int main_entrance();
+//==========================================
+//学生功能
+
+void student_login();
 void student_mainmenu();
 void student_reg();
-int check_phone(char* str);
-int check_email(char* str);
 void student_select_course();
 void student_query_course();
 void student_query_result();
@@ -26,12 +27,37 @@ void student_delete_course();
 void student_manage_course();
 void student_search_specific_imformation();
 void select_class(char* query);
-int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char* time2_sweek, char* time2_eweek, char* time2_day);
 void check_class_exist(char* classID);
+int check_stuId(char* str);
+int check_phone(char* str);
+int check_email(char* str);
+//==========================================
+//教师功能
 
+void teacher_login();			// 教师登录模块
+void teacher_mainmenu();		// 教师主菜单-3个大功能选单
+void select_managemenu();		// 选课管理选单-5个小功能
+void sm_mycourse();				//  查询查询教师自己开设过的课程的选课情况
+void sm_findcourse();			//  查询选择某门课程的学生信息
+void sm_lessthan30delete();		//  选课人数少于30则删除
+void sm_sortcourse();			//  统计选课信息
+void sm_rankcourse();			//排序选课信息
+void course_managemenu();		// 课程管理选单-4个小功能
+void cm_list1();				//  课程查询显示
+void cm_list2();				// 课程查询操作
+void cm_add();					//  加课
+void cm_edit();					//  改课选单
+void cm_delete();				//  未开课前删课
+void pm_edit();					//  改信息
+
+//==========================================
+//公共功能
+
+int check_password(int who, char* ID, char* password);
 int check_classId(char* str);
 void select_class(char* query);
 void teacher_login();   // 教师登录模块
+void teacher_reg();		//教师注册模块
 void teacher_mainmenu();  // 教师主菜单-3个大功能选单
 void select_managemenu();  // 选课管理选单-5个小功能
 void sm_mycourse();    //  查询查询教师自己开设过的课程的选课情况
@@ -50,13 +76,18 @@ void pm_edit();   //  改密码
 int getState_selecting();		// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
 int getState_starting(char*, char*);		// 获取开课状态 0为未开课，1为已开课
 int check_password(int, char*, char*);	// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
-void sql();
 int check_phone(char*);
 int check_classId(char*);
 int check_teachId(char*);
 int check_timeClash(char*, char*, char*, char*, char*, char*);
+time_t convert_dateToTT(int, int, int, int, int, int);
+int scanf_pw(char*);
+void pw_encode(char* code);
+void pw_decode(char* code);
+//==========================================
+//全局变量声明
 
-MYSQL mysql;     //创造一个MYSQL句柄
+MYSQL mysql;			// 全局mysql连接
 MYSQL_RES* result;
 MYSQL_RES* result1;
 MYSQL_RES* result2;
@@ -65,7 +96,6 @@ MYSQL_RES* result4;
 MYSQL_RES* result5;
 MYSQL_RES* result6;
 MYSQL_RES* result7;
-
 MYSQL_FIELD* field;
 MYSQL_ROW nextRow;
 MYSQL_ROW Row;
@@ -75,11 +105,8 @@ MYSQL_ROW Row3;
 MYSQL_ROW Row4;
 MYSQL_ROW Row5;
 char stuID[11];
-time_t convert_dateToTT(int, int, int, int, int, int);
-
-char teachID[100] = "2019222222";
+char teachID[100];
 char nowName[20], nowSchool[20];			//登录进来先获取自己的名字和学院方便后续使用
-
 
 char dbIP[50] = "", dbUser[50] = "", dbPassWd[50] = "", dbName[50] = "";
 int dbPort = 3306;
@@ -227,7 +254,7 @@ void student_login()
 		}
 
 		printf("请输入密码：");
-		scanf("%s", stu_passwd);
+		scanf_pw(stu_passwd);
 		while (check_password(0, stuID, stu_passwd) == 0)
 		{
 			printf("密码错误!请重新输入密码：");
@@ -279,7 +306,7 @@ void sql()
 // 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
 int check_password(int who, char* ID, char* password) 
 {
-	char query[200] = "SELECT * FROM ";
+	char query[200] = "SELECT name FROM ";
 	if (who) {
 		strcat(query, "teachers WHERE teachID='");
 		strcat(query, ID);
@@ -498,7 +525,7 @@ void student_reg()
 	mysql_query(&mysql, query6);
 
 	printf("请输入密码:");
-	scanf("%s", passwd);
+	scanf_pw(passwd);
 	char query7[200] = "update students set passwd=' ";
 	strcat(query7, passwd);
 	strcat(query7, "' where stuID='");
@@ -1087,6 +1114,7 @@ void student_search_specific_imformation()
 	}
 }
 
+//传入查询语句打印查询结果
 void select_class(char* query)
 {
 	mysql_query(&mysql, query);
@@ -2159,34 +2187,77 @@ void teacher_login() {
 	else
 	{
 		mysql_store_result(&mysql);
-		do {
-			//system("cls");			// 清屏，保证重复输入时美观
+		int option1;
+		system("title 学生选课管理系统 - 教师登录");
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--教师 ●○●○●○\n");
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		printf("\n请选择您要进行的操作:\n");
+		printf("  ① - 登录\n");
+		printf("  ② - 注册\n");
+		printf("  ③ - 返回上层\n\n");
+		printf("请输入1，2或3：");
+		int ret1 = scanf("%d", &option1);
+		while (ret1 != 1 || option1 > 3 || option1 < 1)
+		{
+			while (getchar() != '\n');
+			{
+				printf("输入无效！请重新输入：");
+				ret1 = scanf("%d", &option1);
+			}
+		}
+		if (option1 == 1)
+		{
+			int flag = 0;
+			system("cls");			// 清屏，保证重复输入时美观
 			system("title 学生选课管理系统 - 教师登录");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("请输入用户名：");
-			scanf("%s", teachID);
-			printf("请输入密码：");
-			scanf("%s", password);
-			printf("%d", check_password(0, teachID, password));
-		} while (!check_password(1, teachID, password));
-		mysql_store_result(&mysql);
-		sprintf(query, "select school,name from teachers where teachID='%s'", teachID);
-		mysql_query(&mysql, query);
-		result = mysql_store_result(&mysql);
-		if (result)
-		{										// 防止数据为空造成崩溃
-			if (mysql_num_rows(result) == 1)	// 若非有且仅有一行数据则登录失败
-			{
-				nextRow = mysql_fetch_row(result);
-				sprintf(nowName, nextRow[1]);
-				sprintf(nowSchool, nextRow[0]);
+			do {
+				flag = 0;
+				printf("请输入用户名：");
+				scanf("%s", teachID);
+				if (!check_teachId(teachID)) {
+					printf("学号格式错误！请重试！\n");
+					flag = 1;
+					continue;
+				}
+				printf("请输入密码：");
+				scanf_pw(password);
+				if (!check_password(1, teachID, password)) 
+				{
+					printf("用户名或密码错误！请重试！\n");
+					flag = 1;
+				}
+			} while (flag);
+			mysql_store_result(&mysql);
+			sprintf(query, "select school,name from teachers where teachID='%s'", teachID);
+			mysql_query(&mysql, query);
+			result = mysql_store_result(&mysql);
+			if (result)
+			{										// 防止数据为空造成崩溃
+				if (mysql_num_rows(result) == 1)	// 若非有且仅有一行数据则登录失败
+				{
+					nextRow = mysql_fetch_row(result);
+					sprintf(nowName, nextRow[1]);
+					sprintf(nowSchool, nextRow[0]);
+				}
+				teacher_mainmenu();
 			}
-			teacher_mainmenu();
+		}
+		else if (option1 == 2)
+		{
+			teacher_reg();
+			printf("\n请按任意键返回上一菜单\n");
+			system("pause > nul");
+			teacher_login();
+		}
+		else if (option1 == 3)
+		{
+			main_entrance();
 		}
 	}
-
 }
 
 void cm_list1()
@@ -3138,3 +3209,215 @@ int check_classId(char* str)
 	}
 	return b;
 }
+
+void teacher_reg()
+{
+	system("cls");
+	char teachID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
+	system("title 学生选课管理系统 - 教师注册");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\t\t\t○●○●○● 注册 ●○●○●○\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("请输入教师工号:");
+	scanf("%s", teachID);
+	char query[100] = "select * from teachers where teachID='";
+	strcat(query, teachID);
+	strcat(query, "'");
+	mysql_query(&mysql, query);
+	result = mysql_store_result(&mysql);
+	while (mysql_num_rows(result) != 0)
+	{
+		printf("此教师工号已注册!请更换教师工号:");
+		scanf("%s", teachID);
+		char query11[100] = "select * from teachers where teachID='";
+		strcat(query11, teachID);
+		strcat(query11, "'");
+		mysql_query(&mysql, query11);
+		result = mysql_store_result(&mysql);
+	}
+
+
+	while (check_stuId(stuID) == 0)//检查输入是否符合规范 
+	{
+		printf("无效输入！请输入10位数字:");
+		scanf("%s", stuID);
+	}
+	char query1[200] = "insert into teachers(teachID) values(  ";
+	strcat(query1, "'");
+	strcat(query1, teachID);
+	strcat(query1, "'");
+	strcat(query1, ")");
+	mysql_query(&mysql, query1);
+
+	printf("请输入学院:");
+	scanf("%s", school);
+	char query2[200] = "update teachers set school=' ";
+	strcat(query2, school);
+	strcat(query2, "' where teachID='");
+	strcat(query2, teachID);
+	strcat(query2, "'");
+	mysql_query(&mysql, query2);
+
+	printf("请输入姓名:");
+	scanf("%s", name);
+	char query4[200] = "update teachers set name=' ";
+	strcat(query4, name);
+	strcat(query4, "' where teachID='");
+	strcat(query4, teachID);
+	strcat(query4, "'");
+	mysql_query(&mysql, query4);
+
+	printf("请输入电话:");
+	scanf("%s", phone);
+	while (check_phone(phone) == 0)
+	{
+		printf("无效输入！请输入11位电话号:");
+		scanf("%s", phone);
+	}
+	char query6[200] = "update teachers set phone=' ";
+	strcat(query6, phone);
+	strcat(query6, "' where teachID='");
+	strcat(query6, teachID);
+	strcat(query6, "'");
+	mysql_query(&mysql, query6);
+
+	printf("请输入密码:");
+	scanf_pw(passwd);
+	char query7[200] = "update teachers set passwd=' ";
+	strcat(query7, passwd);
+	strcat(query7, "' where teachID='");
+	strcat(query7, teachID);
+	strcat(query7, "'");
+	mysql_query(&mysql, query7);
+
+	printf("请输入邮箱:");
+	scanf("%s", email);
+	while (check_email(email) == 0)
+	{
+		printf("无效输入！请按照***@***.***格式输入:");
+		scanf("%s", email);
+	}
+	char query8[200] = "update teachers set email=' ";
+	strcat(query8, email);
+	strcat(query8, "' where teachID='");
+	strcat(query8, teachID);
+	strcat(query8, "'");
+	mysql_query(&mysql, query8);
+
+	printf("\n注册成功！\n");
+
+}
+
+//输入密码用*代替显示，输入为待赋值字符串数组
+int scanf_pw(char* str)
+{
+	int i;
+	for (i = 0; i != 100; i++)
+	{
+		str[i] = _getch();
+		if (str[i] == 13)
+		{
+			str[i] = '\0';
+			break;
+		}else if(str[i] == 8)
+		{
+			printf("\b");
+		}
+		else {
+			printf("*");
+		}
+	}
+	printf("\n");
+	return 1;
+}
+
+
+
+void pw_encode(char* str)
+{
+	long lenth;
+	long str_lenth;
+	char* en_result;
+	int i, j;
+	//定义base64编码表  
+	char base64_table[100] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+	//计算经过base64编码后的字符串长度  
+	str_lenth = strlen(str);
+	if (str_lenth % 3 == 0)
+		lenth = str_lenth / 3 * 4;
+	else
+		lenth = (str_lenth / 3 + 1) * 4;
+
+	en_result = (char*)malloc(sizeof(char) * lenth + 1);
+	en_result[lenth] = '\0';
+
+	//以3个8位字符为一组进行编码  
+	for (i = 0, j = 0; i < lenth - 2; j += 3, i += 4)
+	{
+		en_result[i] = base64_table[str[j] >> 2]; //取出第一个字符的前6位并找出对应的结果字符  
+		en_result[i + 1] = base64_table[(str[j] & 0x3) << 4 | (str[j + 1] >> 4)]; //将第一个字符的后位与第二个字符的前4位进行组合并找到对应的结果字符  
+		en_result[i + 2] = base64_table[(str[j + 1] & 0xf) << 2 | (str[j + 2] >> 6)]; //将第二个字符的后4位与第三个字符的前2位组合并找出对应的结果字符  
+		en_result[i + 3] = base64_table[str[j + 2] & 0x3f]; //取出第三个字符的后6位并找出结果字符  
+	}
+
+	switch (str_lenth % 3)
+	{
+	case 1:
+		en_result[i - 2] = '=';
+		en_result[i - 1] = '=';
+		break;
+	case 2:
+		en_result[i - 1] = '=';
+		break;
+	}
+
+	sprintf(str, "%s", en_result);
+}
+
+void pw_decode(char* str)
+{
+	//根据base64表，以字符找到对应的十进制数据  
+	
+	long lenth;
+	long str_lenth;
+	char* de_result;
+	int i, j; 
+	int table[] = { 0,0,0,0,0,0,0,0,0,0,0,0,
+			 0,0,0,0,0,0,0,0,0,0,0,0,
+			 0,0,0,0,0,0,0,0,0,0,0,0,
+			 0,0,0,0,0,0,0,62,0,0,0,
+			 63,52,53,54,55,56,57,58,
+			 59,60,61,0,0,0,0,0,0,0,0,
+			 1,2,3,4,5,6,7,8,9,10,11,12,
+			 13,14,15,16,17,18,19,20,21,
+			 22,23,24,25,0,0,0,0,0,0,26,
+			 27,28,29,30,31,32,33,34,35,
+			 36,37,38,39,40,41,42,43,44,
+			 45,46,47,48,49,50,51
+	};
+
+	//计算解码后的字符串长度  
+	lenth = strlen(str);
+	//判断编码后的字符串后是否有=  
+	if (strstr(str, "=="))
+		str_lenth = lenth / 4 * 3 - 2;
+	else if (strstr(str, "="))
+		str_lenth = lenth / 4 * 3 - 1;
+	else
+		str_lenth = lenth / 4 * 3;
+
+	de_result = (char*)malloc(sizeof(unsigned char) * str_lenth + 1);
+	de_result[str_lenth] = '\0';
+
+	//以4个字符为一位进行解码  
+	for (i = 0, j = 0; i < lenth - 2; j += 3, i += 4)
+	{
+		de_result[j] = ((unsigned char)table[str[i]]) << 2 | (((unsigned char)table[str[i + 1]]) >> 4); //取出第一个字符对应base64表的十进制数的前6位与第二个字符对应base64表的十进制数的后2位进行组合  
+		de_result[j + 1] = (((unsigned char)table[str[i + 1]]) << 4) | (((unsigned char)table[str[i + 2]]) >> 2); //取出第二个字符对应base64表的十进制数的后4位与第三个字符对应bas464表的十进制数的后4位进行组合  
+		de_result[j + 2] = (((unsigned char)table[str[i + 2]]) << 6) | ((unsigned char)table[str[i + 3]]); //取出第三个字符对应base64表的十进制数的后2位与第4个字符进行组合  
+	}
+
+	sprintf(str, "%s", de_result);
+	
+} 
