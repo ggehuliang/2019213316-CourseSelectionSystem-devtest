@@ -133,7 +133,7 @@ int main()
 int main_entrance()
 {
 	int option;
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	system("title 学生选课管理系统 - 入口");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
@@ -155,11 +155,11 @@ int main_entrance()
 	switch (option)
 	{
 	case 1:
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		student_login();
 		break;
 	case 2:
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		teacher_login();
 		break;
 	case 3:
@@ -192,7 +192,7 @@ void student_login()
 
 	if (option1 == 1)
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		char stu_passwd[100];
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 登陆界面--学生 ●○●○●○\n");
@@ -219,7 +219,7 @@ void student_login()
 			{
 				if (stuID[0] == 17)//输入ctrl+q返回上一级
 				{
-					system("cls");
+					system("cls");  //清屏，保证输入时界面美观
 					student_login();
 				}
 				else
@@ -229,7 +229,7 @@ void student_login()
 			{
 				if (stuID[0] == 17)//返回上一级
 				{
-					system("cls");
+					system("cls");  //清屏，保证输入时界面美观
 					student_login();
 				}
 				else
@@ -341,7 +341,7 @@ int check_password(int who, char* ID, char* password)
 
 void student_mainmenu()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int a;
 	system("title 学生选课管理系统 - 学生主菜单");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -416,7 +416,7 @@ void student_mainmenu()
 
 void student_reg()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	char stuID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
 	system("title 学生选课管理系统 - 学生注册");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -435,7 +435,7 @@ void student_reg()
 		scanf("%s", stuID);
 		if (stuID[0] == 17)//返回上一级
 		{
-			system("cls");
+			system("cls");  //清屏，保证输入时界面美观
 			student_reg();
 		}
 		else
@@ -453,7 +453,7 @@ void student_reg()
 		scanf("%s", stuID);
 		if (stuID[0] == 17)//返回上一级
 		{
-			system("cls");
+			system("cls");  //清屏，保证输入时界面美观
 			student_reg();
 		}
 	}
@@ -513,7 +513,7 @@ void student_reg()
 		scanf("%s", phone);
 		if (phone[0] == 17)//返回上一级
 		{
-			system("cls");
+			system("cls");  //清屏，保证输入时界面美观
 			student_reg();
 		}
 	}
@@ -541,7 +541,7 @@ void student_reg()
 		scanf("%s", email);
 		if (email[0] == 17)//返回上一级
 		{
-			system("cls");
+			system("cls");  //清屏，保证输入时界面美观
 			student_reg();
 		}
 	}
@@ -573,7 +573,7 @@ int check_phone(char* str)
 
 void student_select_course()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	system("title 学生选课管理系统 - 学生选课");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 学生选课 ●○●○●○\n");
@@ -731,7 +731,7 @@ void student_select_course()
 
 void student_query_course()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int a;
 	system("title 学生选课管理系统 - 学生查课");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -745,7 +745,7 @@ void student_query_course()
 	printf("  ⑤ - 退出程序\n");
 	printf("请输入1，2，3，4或5:");
 	int ret3 = scanf("%d", &a);
-	while (ret3 != 1 || a > 5 || a < 1)
+	while (ret3 != 1 || a > 5 || a < 1)	//检查输入是否符合规范
 	{
 		while (getchar() != '\n');
 		{
@@ -755,7 +755,7 @@ void student_query_course()
 	}
 	if (a == 1)
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		char class_name[100];
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 查询课程--课程名查询 ●○●○●○\n");
@@ -773,7 +773,7 @@ void student_query_course()
 	}
 	if (a == 2)
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		char school_name[100];
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 查询课程--开课学院查询 ●○●○●○\n");
@@ -791,7 +791,7 @@ void student_query_course()
 	}
 	if (a == 3)
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 查询课程--课余量排序所有课程 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -804,7 +804,7 @@ void student_query_course()
 	}
 	if (a == 4)
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 查询课程--选课人数排序所有课程 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -827,7 +827,7 @@ void student_query_result()
 	//select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=??????????)
 	//or c.`课程编号`=(select s.class2 from students s where stuID=??????????) 
 	//or c.`课程编号`=(select s.class3 from students s where stuID=??????????)
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	char query[500] = "select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=";
 	strcat(query, stuID);
 	strcat(query, ")or c.`课程编号`=(select s.class2 from students s where stuID=");
@@ -844,7 +844,7 @@ void student_query_result()
 
 void student_delete_course()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	char classID[100];
 	system("title 学生选课管理系统 - 学生删课");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -875,7 +875,7 @@ void student_delete_course()
 		check_class_exist(classID);
 		if (classID[0] == 17)//返回上一级
 		{
-			system("cls");
+			system("cls");  //清屏，保证输入时界面美观
 			student_delete_course();
 		}
 		char query12[100] = "select 开课时间,上课时间段 from classes where 课程编号='";
@@ -945,7 +945,7 @@ void student_delete_course()
 
 void student_manage_course()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int num;
 	char phone[20];
 	char passwd[20];
@@ -964,7 +964,7 @@ void student_manage_course()
 	int ret4 = scanf("%d", &num);
 	while (ret4 != 1 || num > 4 || num < 1)
 	{
-		while (getchar() != '\n');
+		while (getchar() != '\n');//检查输入是否符合规范
 		{
 			printf("输入无效!请重新输入：");
 			ret4 = scanf("%d", &num);
@@ -975,7 +975,7 @@ void student_manage_course()
 	{
 	case 1:
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 个人信息管理--学生--电话 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -987,7 +987,7 @@ void student_manage_course()
 			scanf("%s", &phone);
 			if (phone[0] == 17)//若返回上一级，请按ctrl+q
 			{
-				system("cls");
+				system("cls");  //清屏，保证输入时界面美观
 				student_manage_course();
 			}
 		}
@@ -1005,7 +1005,7 @@ void student_manage_course()
 	}
 	case 2:
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 个人信息管理--学生--密码 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1019,7 +1019,7 @@ void student_manage_course()
 			scanf("%s", passwd1);
 			if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
 			{
-				system("cls");
+				system("cls");  //清屏，保证输入时界面美观
 				student_manage_course();
 			}
 		}
@@ -1037,7 +1037,7 @@ void student_manage_course()
 	}
 	case 3:
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 个人信息管理--学生--邮箱 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1049,7 +1049,7 @@ void student_manage_course()
 			scanf("%s", email);
 			if (email[0] == 17)//若返回上一级，请按ctrl+q
 			{
-				system("cls");
+				system("cls");  //清屏，保证输入时界面美观
 				student_manage_course();
 			}
 		}
@@ -1075,7 +1075,7 @@ void student_manage_course()
 void student_search_specific_imformation()
 {
 	char classID[100];
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 查看课程详细信息--学生 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1280,9 +1280,9 @@ void check_class_exist(char* classID)
 	}
 }
 
-void teacher_mainmenu()
+void teacher_mainmenu()  // 教师主菜单-3个大功能选单
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int option2 = 0;
 	system("title 学生选课管理系统 - 教师主菜单");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1300,7 +1300,7 @@ void teacher_mainmenu()
 	int ret1 = scanf("%d", &option2);
 	while (ret1 != 1 || option2 > 4 || option2 < 1)
 	{
-		while (getchar() != '\n');
+		while (getchar() != '\n');	//检查输入是否符合规范
 		{
 			printf("输入无效！请重新输入：");
 			ret1 = scanf("%d", &option2);
@@ -1324,8 +1324,8 @@ void teacher_mainmenu()
 
 }
 
-void select_managemenu() {
-	system("cls");
+void select_managemenu() {  // 选课管理选单-5个小功能
+	system("cls");  //清屏，保证输入时界面美观		
 	int option2 = 0;
 	system("title 学生选课管理系统 - 教师选课管理");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1343,7 +1343,7 @@ void select_managemenu() {
 	int ret1 = scanf("%d", &option2);
 	while (ret1 != 1 || option2 > 6 || option2 < 1)
 	{
-		while (getchar() != '\n');
+		while (getchar() != '\n');		//检查输入是否符合规范
 		{
 			printf("输入无效！请重新输入：");
 			ret1 = scanf("%d", &option2);
@@ -1375,7 +1375,7 @@ void select_managemenu() {
 
 void sm_mycourse()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
 	strcat(query, nowName);
 	strcat(query, "'");
@@ -1387,7 +1387,7 @@ void sm_mycourse()
 
 void sm_findcourse()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int column;
 	int row;
 	int flag = 0;
@@ -1406,7 +1406,7 @@ void sm_findcourse()
 	int ret1 = scanf("%d", &option2);
 	while (ret1 != 1 || option2 > 3 || option2 < 1)
 	{
-		while (getchar() != '\n');
+		while (getchar() != '\n');	//检查输入是否符合规范
 		{
 			printf("输入无效！请重新输入：");
 			ret1 = scanf("%d", &option2);
@@ -1421,7 +1421,7 @@ void sm_findcourse()
 			scanf("%s", courseName);
 			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
 			{
-				system("cls");
+				system("cls");  //清屏，保证输入时界面美观
 				sm_findcourse();
 			}
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程名称 = '%s'", courseName);
@@ -1460,7 +1460,7 @@ void sm_findcourse()
 			scanf("%s", courseName);
 			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
 			{
-				system("cls");
+				system("cls");  //清屏，保证输入时界面美观
 				sm_findcourse();
 			}
 			sprintf(query, "SELECT * FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
@@ -1504,7 +1504,7 @@ void sm_findcourse()
 			scanf("%s", studentName);
 			if (studentName[0] == 17)//若返回上一级，请按ctrl+q
 			{
-				system("cls");
+				system("cls");  //清屏，保证输入时界面美观
 				sm_findcourse();
 			}
 			char query[200] = "SELECT * FROM `students`WHERE name = '";
@@ -1552,7 +1552,7 @@ void sm_findcourse()
 }
 
 void sm_lessthan30delete() {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int column;
 	int row;
 	int stu_num;
@@ -1590,7 +1590,7 @@ void sm_lessthan30delete() {
 			scanf("%s", courseName);
 			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
 			{
-				system("cls");
+				system("cls");  //清屏，保证输入时界面美观
 				sm_lessthan30delete();
 			}
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'"
@@ -1757,7 +1757,7 @@ void sm_rankcourse() {
 
 void course_managemenu()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int option2 = 0;
 	system("title 学生选课管理系统 - 教师课程管理");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -2189,10 +2189,10 @@ void readCFG() {
 
 }
 
-void teacher_login() {
+void teacher_login() {	// 教师登录模块
 	char query[100];
 	char password[100];
-	if (mysql_query(&mysql, "select * from `teachers`"))
+	if (mysql_query(&mysql, "select * from `teachers`"))  //确认教师数据表是否存在
 	{
 		printf("\n教师数据表查询失败！请确认数据表是否存在\n");
 	}
@@ -2200,7 +2200,7 @@ void teacher_login() {
 	{
 		mysql_store_result(&mysql);
 		int option1;
-		system("title 学生选课管理系统 - 教师登录");
+		system("title 学生选课管理系统 - 教师登录");	//变更窗体标题
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--教师 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -2209,7 +2209,7 @@ void teacher_login() {
 		printf("  ② - 注册\n");
 		printf("  ③ - 返回上层\n\n");
 		printf("请输入1，2或3：");
-		int ret1 = scanf("%d", &option1);
+		int ret1 = scanf("%d", &option1);  //判断输入的内容是否规范
 		while (ret1 != 1 || option1 > 3 || option1 < 1)
 		{
 			while (getchar() != '\n');
@@ -2230,14 +2230,14 @@ void teacher_login() {
 				flag = 0;
 				printf("请输入用户名：");
 				scanf("%s", teachID);
-				if (!check_teachId(teachID)) {
+				if (!check_teachId(teachID)) {	//判断输入的内容是否规范
 					printf("学号格式错误！请重试！\n");
 					flag = 1;
 					continue;
 				}
 				printf("请输入密码：");
 				scanf_pw(password);
-				if (!check_password(1, teachID, password))
+				if (!check_password(1, teachID, password))	//判断输入的内容是否规范
 				{
 					printf("用户名或密码错误！请重试！\n");
 					flag = 1;
@@ -2274,7 +2274,7 @@ void teacher_login() {
 
 void cm_list1()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	char query[200] = "SELECT * FROM `classes` LIMIT 0, 1000";
 	select_class(query);//打印相应查询内容
 	int option2 = 0;
@@ -2284,7 +2284,7 @@ void cm_list1()
 	printf("  ② - 返回上一个菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)	//判断输入的内容是否规范
 	{
 		printf("无效，请重新输入!\n");
 		fflush(stdin);
@@ -2297,7 +2297,7 @@ void cm_list1()
 	case 2:
 		course_managemenu();
 		break;
-	default:
+	default:	//判断输入的内容是否规范
 		printf("无效，请重新输入!\n");
 	}
 
@@ -2316,7 +2316,7 @@ void cm_list2()
 		strcat(query, "'");
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
-		if (mysql_num_rows(result) == 0)
+		if (mysql_num_rows(result) == 0)	//判断输入的内容是否规范
 		{
 			flag = 1;
 			printf("无结果，请重新输入\n");
@@ -2348,7 +2348,7 @@ void cm_list2()
 }
 
 void cm_edit() {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	char query[200] = "SELECT * FROM `classes`WHERE 课程名称 = '";
 	int column;
 	int stu_num;
@@ -2366,7 +2366,7 @@ void cm_edit() {
 	printf("  ② - 结束修改并返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)	//判断输入的内容是否规范
 	{
 		printf("无效，请重新输入!\n");
 		fflush(stdin);
@@ -2381,7 +2381,7 @@ void cm_edit() {
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			column = mysql_num_fields(result);
-			if (mysql_num_rows(result) == 0)
+			if (mysql_num_rows(result) == 0)	//判断输入的内容是否规范
 			{
 				flag = 1;
 				printf("无结果，请重新输入\n");
@@ -2422,7 +2422,7 @@ void cm_edit() {
 			printf("  ④ - 返回上一个菜单\n\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			printf("请输入1，2，3或4:");
-			while (scanf("%d", &option2) != 1 || option2 > 4 || option2 < 1)
+			while (scanf("%d", &option2) != 1 || option2 > 4 || option2 < 1)	//判断输入的内容是否规范
 			{
 				printf("无效，请重新输入!\n");
 				fflush(stdin);
@@ -2474,7 +2474,7 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)	//判断输入的内容是否规范
 				{
 					printf("无效，请重新输入!\n");
 					fflush(stdin);
@@ -2493,7 +2493,7 @@ void cm_edit() {
 				case 2:
 					cm_edit();
 					break;
-				default:
+				default:	//判断输入的内容是否规范
 					printf("无效，请重新输入!\n");
 				}
 				break;
@@ -2504,7 +2504,7 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)	//判断输入的内容是否规范
 				{
 					printf("无效，请重新输入!\n");
 					fflush(stdin);
@@ -2523,14 +2523,14 @@ void cm_edit() {
 				case 2:
 					cm_edit();
 					break;
-				default:
+				default:	//判断输入的内容是否规范
 					printf("无效，请重新输入!\n");
 				}
 				break;
 			case 4:
 				course_managemenu();
 				break;
-			default:
+			default:	//判断输入的内容是否规范
 				printf("无效，请重新输入!\n");
 			}
 		}
@@ -2553,7 +2553,7 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+				while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)	//判断输入的内容是否规范
 				{
 					printf("无效，请重新输入!\n");
 					fflush(stdin);
@@ -2572,7 +2572,7 @@ void cm_edit() {
 				case 2:
 					cm_edit();
 					break;
-				default:
+				default:	//判断输入的内容是否规范
 					printf("无效，请重新输入!\n");
 				}
 				break;
@@ -2596,7 +2596,7 @@ void cm_edit() {
 					printf("  ② - 否\n\n");
 					printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 					printf("\n请输入1或2:");
-					while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+					while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)	//判断输入的内容是否规范
 					{
 						printf("无效，请重新输入!\n");
 						fflush(stdin);
@@ -2615,7 +2615,7 @@ void cm_edit() {
 					case 2:
 						cm_edit();
 						break;
-					default:
+					default:	//判断输入的内容是否规范
 						printf("无效，请重新输入!\n");
 					}
 				}
@@ -2629,14 +2629,14 @@ void cm_edit() {
 	case 2:
 		course_managemenu();
 		break;
-	default:
+	default:	//判断输入的内容是否规范
 		printf("无效，请重新输入!\n");
 	}
 
 }
 
 void cm_delete() {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int column;
 	int row;
 	int flag = 0;
@@ -2654,7 +2654,7 @@ void cm_delete() {
 	printf("  ② - 返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+	while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)	//判断输入的内容是否规范
 	{
 		printf("无效，请重新输入!\n");
 		fflush(stdin);
@@ -2669,7 +2669,7 @@ void cm_delete() {
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			column = mysql_num_fields(result);
-			if (mysql_num_rows(result) == 0)
+			if (mysql_num_rows(result) == 0)	//判断输入的内容是否规范
 			{
 				flag = 1;
 				printf("无结果，请重新输入\n");
@@ -2703,7 +2703,7 @@ void cm_delete() {
 			printf("  ② - 否\n\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			printf("\n请输入1或2:");
-			while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)
+			while (scanf("%d", &option2) != 1 || option2 > 2 || option2 < 1)	//判断输入的内容是否规范
 			{
 				printf("无效，请重新输入!\n");
 				fflush(stdin);
@@ -2723,7 +2723,7 @@ void cm_delete() {
 			case 2:
 				cm_delete();
 				break;
-			default:
+			default:	//判断输入的内容是否规范
 				printf("无效，请重新输入!\n");
 			}
 		}
@@ -2739,7 +2739,7 @@ void cm_delete() {
 	case 2:
 		select_managemenu();
 		break;
-	default:
+	default:	//判断输入的内容是否规范
 		printf("无效，请重新输入!\n");
 
 
@@ -2748,7 +2748,7 @@ void cm_delete() {
 
 void pm_edit()
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	int num;
 	char passwd[20];
 	char passwd1[20];
@@ -2765,7 +2765,7 @@ void pm_edit()
 	int ret4 = scanf("%d", &num);
 	while (ret4 != 1 || num > 3 || num < 1)
 	{
-		while (getchar() != '\n');
+		while (getchar() != '\n');	//判断输入的内容是否规范
 		{
 			printf("无效，请重新输入!\n");
 			ret4 = scanf("%d", &num);
@@ -2776,7 +2776,7 @@ void pm_edit()
 	{
 	case 1:
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 信息修改界面--教师--密码 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -2784,7 +2784,7 @@ void pm_edit()
 		scanf("%s", passwd);
 		printf("请再次确认新的密码:\n");
 		scanf("%s", passwd1);
-		while (strcmp(passwd, passwd1) != 0)
+		while (strcmp(passwd, passwd1) != 0)	//判断输入的内容是否规范
 		{
 			printf("两次输入不一致!请重新确认:");
 			scanf("%s", passwd1);
@@ -2803,13 +2803,13 @@ void pm_edit()
 	}
 	case 2:
 	{
-		system("cls");
+		system("cls");  //清屏，保证输入时界面美观
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 信息修改界面--学生--邮箱 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\n请输入新的邮箱：");
 		scanf("%s", email);
-		while (check_email(email) == 0)
+		while (check_email(email) == 0)	//判断输入的内容是否规范
 		{
 			printf("无效输入！请按照***@***.***格式输入:");
 			scanf("%s", email);
@@ -2886,7 +2886,7 @@ void cm_add() {
 	int ret = scanf("%d", &in);
 	while (ret != 1 || in > 9 || in < 0)
 	{
-		while (getchar() != '\n');
+		while (getchar() != '\n');	//判断输入的内容是否规范
 		{
 			printf("无效，请重新输入：");
 			ret = scanf("%d", &in);
@@ -2897,7 +2897,7 @@ void cm_add() {
 	ret = scanf("%d", &in);
 	while (ret != 1 || in > 2 || in < 1)
 	{
-		while (getchar() != '\n');
+		while (getchar() != '\n');	//判断输入的内容是否规范
 		{
 			printf("无效，请重新输入：");
 			ret = scanf("%d", &in);
@@ -2939,7 +2939,7 @@ void cm_add() {
 		if (numClass2 > 1) {
 			printf("您本学期的选修课开课数量已达上限！\n");
 		}
-		while (getchar() != '\n');
+		while (getchar() != '\n');	//判断输入的内容是否规范
 		{
 			printf("无效，请重新输入：");
 			ret = scanf("%d", &in);
@@ -3158,7 +3158,7 @@ void cm_add() {
 					break;
 				}
 			}
-			if (reflag)
+			if (reflag)	//判断输入的内容是否规范
 			{
 				printf("\n\n该教师与其他课程有冲突，请重新输入！\n\n");
 				continue;
@@ -3172,7 +3172,7 @@ void cm_add() {
 	ret = scanf("%d", &in);
 	while (ret != 1 || !(in == 80 || in == 100))
 	{
-		while (getchar() != '\n');
+		while (getchar() != '\n');	//判断输入的内容是否规范
 		{
 			printf("无效，请重新输入：");
 			ret = scanf("%d", &in);
@@ -3222,9 +3222,9 @@ int check_classId(char* str)
 	return b;
 }
 
-void teacher_reg()
+void teacher_reg()	//教师注册模块
 {
-	system("cls");
+	system("cls");  //清屏，保证输入时界面美观
 	char teachID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
 	system("title 学生选课管理系统 - 教师注册");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -3281,7 +3281,7 @@ void teacher_reg()
 
 	printf("请输入电话:");
 	scanf("%s", phone);
-	while (check_phone(phone) == 0)
+	while (check_phone(phone) == 0)		//判断输入的内容是否规范
 	{
 		printf("无效输入！请输入11位电话号:");
 		scanf("%s", phone);
@@ -3304,7 +3304,7 @@ void teacher_reg()
 
 	printf("请输入邮箱:");
 	scanf("%s", email);
-	while (check_email(email) == 0)
+	while (check_email(email) == 0)	//判断输入的内容是否规范
 	{
 		printf("无效输入！请按照***@***.***格式输入:");
 		scanf("%s", email);
