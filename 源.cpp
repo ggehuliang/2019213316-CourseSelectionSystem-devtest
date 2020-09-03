@@ -7,83 +7,86 @@
 #include <time.h>
 #include <conio.h>
 #pragma comment (lib, "libmysql.lib")
-//==========================================
+
+//==================================================================================
 //程序启动部分功能
-
 void config_init();				// 若配置文件存在则读取，否则进行首次运行配置程序
-void readCFG();
-void sql();
-int main_entrance();
-//==========================================
+void readCFG();					// 读取配置文件
+void sql();						// 连接数据库
+int main_entrance();			// 学生选课管理系统入口（选择教师或学生）
+
+//==================================================================================
 //学生功能
+void student_login();							// 学生登录模块
+void student_mainmenu();						// 学生主菜单-7个大功能
+void student_reg();								// 学生注册功能
+void student_select_course();					// 学生选课功能
+void student_query_course();					// 学生查课功能-5个大功能
+void student_query_result();					// 学生查询选课结果功能
+void student_delete_course();					// 学生删除选课结果功能
+void student_manage_course();					// 学生个人信息管理功能
+void student_search_specific_imformation();		// 学生查询课程信息功能
+void select_class(char* query);					// 传入查询语句打印查询结果
+void check_class_exist(char* classID);			// 检查课程是否存在
+int check_stuId(char* str);						// 检查学号是否为10位数字
+int check_phone(char* str);						// 检查电话号码是否为11位数字
+int check_email(char* str);						// 检查邮箱格式是否为***@***.***
 
-void student_login();
-void student_mainmenu();
-void student_reg();
-void student_select_course();
-void student_query_course();
-void student_query_result();
-void student_delete_course();
-void student_manage_course();
-void student_search_specific_imformation();
-void select_class(char* query);
-void check_class_exist(char* classID);
-int check_stuId(char* str);
-int check_phone(char* str);
-int check_email(char* str);
-//==========================================
+//==================================================================================
 //教师功能
-
 void teacher_login();			// 教师登录模块
-void teacher_mainmenu();		// 教师主菜单-3个大功能选单
-void select_managemenu();		// 选课管理选单-5个小功能
-void sm_mycourse();				//  查询查询教师自己开设过的课程的选课情况
-void sm_findcourse();			//  查询选择某门课程的学生信息
-void sm_lessthan30delete();		//  选课人数少于30则删除
-void sm_sortcourse();			//  统计选课信息
-void sm_rankcourse();			//排序选课信息
-void course_managemenu();		// 课程管理选单-4个小功能
-void cm_list1();				//  课程查询显示
-void cm_list2();				// 课程查询操作
-void cm_add();					//  加课
-void cm_edit();					//  改课选单
-void cm_delete();				//  未开课前删课
-void pm_edit();					//  改信息
+void teacher_mainmenu();		// 教师主菜单-4个大功能
+void select_managemenu();		// 教师选课管理菜单-5个功能
+void sm_mycourse();				// 教师查看自己开设过的课程的选课情况
+void sm_findcourse();			// 教师查询选择某门课程的学生信息
+void sm_lessthan30delete();		// 教师的某门课程选课人数少于30则删除
+void sm_sortcourse();			// 教师统计自己开设过的课程数目选课信息
+void sm_rankcourse();			// 教师按选课人数排序所有开设过的课程
+void course_managemenu();		// 教师课程管理菜单-5个功能
+void cm_list1();				// 教师查询课程菜单
+void cm_list2();				// 教师根据课程名查询所有开设的课程
+void cm_add();					// 教师添加课程
+void cm_edit();					// 教师修改课程菜单
+void cm_delete();				// 教师在未开始选课前，可以进行删除操作
+void pm_edit();					// 教师个人信息管理菜单
 
-//==========================================
+//==================================================================================
 //公共功能
 
 int check_password(int who, char* ID, char* password);
 int check_classId(char* str);
-void select_class(char* query);
-void teacher_login();   // 教师登录模块
-void teacher_reg();		//教师注册模块
-void teacher_mainmenu();  // 教师主菜单-3个大功能选单
-void select_managemenu();  // 选课管理选单-5个小功能
-void sm_mycourse();    //  查询查询教师自己开设过的课程的选课情况
-void sm_findcourse();   //  查询选择某门课程的学生信息
-void sm_lessthan30delete();  //  选课人数少于30则删除
-void sm_sortcourse();   //  统计选课信息
-void sm_rankcourse();   //排序选课信息
-void course_managemenu();  // 课程管理选单-4个小功能
-void cm_list1();     //  课程查询显示
-void cm_list2();    // 课程查询操作
-void cm_add();     //  加课
-void cm_edit();     //  改课选单
-void cm_delete();    //  未开课前删课
-void personal_managemenu();  // 个人信息管理选单-2个小功能
-void pm_edit();   //  改密码
-int getState_selecting();		// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
-int getState_starting(char*, char*);		// 获取开课状态 0为未开课，1为已开课
+void select_class(char* query);			// 传入查询语句打印查询结果
+void teacher_login();					// 教师登录模块
+void teacher_reg();						// 教师注册模块
+void teacher_mainmenu();				// 教师主菜单-3个大功能
+void select_managemenu();				// 教师选课管理选单-6个功能
+void sm_mycourse();						// 查询查询教师自己开设过的课程的选课情况
+void sm_findcourse();					// 查询选择某门课程的学生信息
+void sm_lessthan30delete();				// 选课人数少于30则删除
+void sm_sortcourse();					// 统计选课信息
+void sm_rankcourse();					// 排序选课信息
+void course_managemenu();				// 课程管理选单-4个小功能
+void cm_list1();						// 课程查询显示
+void cm_list2();						// 课程查询操作
+void cm_add();							// 加课
+void cm_edit();							// 改课选单
+void cm_delete();						// 未开课前删课
+void personal_managemenu();				// 个人信息管理选单-2个小功能
+void pm_edit();							// 改密码
+int getState_selecting();				// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
+int getState_starting(char*, char*);	// 获取开课状态 0为未开课，1为已开课
 int check_password(int, char*, char*);	// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
-int check_phone(char*);
-int check_classId(char*);
-int check_teachId(char*);
+int check_phone(char*);					// 检查电话号码是否为11位
+int check_classId(char*);				// 检查学生ID是否为10位
+int check_teachId(char*);				// 检查教师ID是否为10位
 int check_timeClash(char*, char*, char*, char*, char*, char*);
+										//快捷判断两个课时间重叠与否，输入格式：
+										//一课的开课时间、结课时间、具体上课时间段、二课的开课时间、结课时间、具体上课时间段；有冲突返回1
 time_t convert_dateToTT(int, int, int, int, int, int);
-int scanf_pw(char*);
-void pw_encode(char* code);
-void pw_decode(char* code);
+										// 将可读时间转为time_t
+int scanf_pw(char*);					// 输入密码用*代替显示，输入为待赋值字符串数组
+void pw_encode(char* code);				// 
+void pw_decode(char* code);				// 
 //==========================================
 //全局变量声明
 
