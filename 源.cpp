@@ -105,10 +105,10 @@ MYSQL_ROW Row3;
 MYSQL_ROW Row4;
 MYSQL_ROW Row5;
 char stuID[11];
-char teachID[100];
-char nowName[20], nowSchool[20];			//登录进来先获取自己的名字和学院方便后续使用
+char teachID[50];
+char nowName[20], nowSchool[50];			//登录进来先获取自己的名字和学院方便后续使用
 
-char dbIP[50] = "", dbUser[50] = "", dbPassWd[50] = "", dbName[50] = "";
+char dbIP[50], dbUser[50], dbPassWd[50], dbName[50];
 int dbPort = 3306;
 
 int currYear = 2020, currTerm = 1;			// 当前上课学期
@@ -1959,7 +1959,12 @@ void config_init() {
 	do
 	{
 		flag = 0;
-		sprintf(dbIP, "");
+		sprintf(dbIP, "");	// 每次执行都先清除保证留空默认可以生效
+		sprintf(dbName, "");
+		sprintf(dbPassWd, "");
+		dbPort = 0;
+		sprintf(dbUser, "");
+
 		system("title 学生选课管理系统 - 首次使用设置系统");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 欢迎使用学生选课管理系统 ●○●○●○\n");
