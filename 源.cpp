@@ -9,7 +9,7 @@
 
 void config_init();				// 若配置文件存在则读取，否则进行首次运行配置程序
 void readCFG();
-//
+
 int check_stuId(char* str);
 int showinfo();
 void student_login();
