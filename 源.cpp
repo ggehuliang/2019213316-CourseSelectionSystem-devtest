@@ -3052,21 +3052,22 @@ void cm_add() {
 	char classId[20], name[50], credit[10], learnTime[20], property[10]
 		, startTime[100], endTime[100], time[100], classroom[20]
 		, limit[5], intro[500], book[50];
-	char term[20];
+	char term[50];
 	char query[1000];
 	float in_f;
 	int in, in1,ret;
 	int reflag = 0;					//部分语句块变为一就重新执行的标志
 	int numClass1, numClass2;		//[1]为必修，[2]为选修课数量
 	char in_s[20];
+	printf("请选择开课时间——\n");
 	do {
 		reflag = 0;
-		printf("请选择开课时间——\n学年部分（输入1-9）：202");
+		printf("\n学年部分（输入0-8）：202");
 		in = _getch();
-		if (in < 58 && in>47)
+		if (in <= '9' && in >= '0')
 		{
-			printf("%d\n", in);
-			sprintf(startTime, "202%d-202%d学年第", in, in + 1);
+			printf("%c\n", in);
+			sprintf(startTime, "202%c-202%c学年第", in, in + 1);
 			continue;
 		}
 		else
@@ -3082,13 +3083,14 @@ void cm_add() {
 	{
 		reflag = 0;
 		printf("开课学期（输入1或2）：第  学期\b\b\b\b\b\b");
-		if (_getch() == '1')
+		in = _getch();
+		if (in == '1')
 		{
 			printf("一\n");
 			strcat(startTime, "一学期");
 			continue;
 		}
-		else if (_getch() == '2')
+		else if (in == '2')
 		{
 			printf("二\n");
 			strcat(startTime, "二学期");
@@ -3123,29 +3125,34 @@ void cm_add() {
 
 	printf("\n选择课程性质：");
 	printf("\n1、必修\n2、选修\n\n请选择本课程性质(1/2）:");
-	ret = scanf("%d", &in);
-	while (ret != 1 || in > 2 || in < 1 || (in == 2 && numClass2 > 1))
+	do
 	{
-		if (numClass2 > 1) {
-			printf("您本学期的选修课开课数量已达上限！\n");
-		}
-		while (getchar() != '\n');
+		reflag = 0;
+		in = _getch();
+		if (in == '1')
 		{
-			printf("无效，请重新输入：");
-			ret = scanf("%d", &in);
+			printf("必修\n");
+			sprintf(property, "%s", "必修");
+			continue;
 		}
-	}
-	if (in == 1)
-	{
-		sprintf(property, "%s", "必修");
-	}
-	else
-	{
-		sprintf(property, "%s", "选修");
+		else if (in == '2')
+		{
+			if (numClass2 > 1) {
+				printf("您本学期的选修课开课数量已达上限！\n");
+				reflag = 1;
+				continue;
+			}
+			printf("选修\n");
+			sprintf(property, "%s", "选修");
+			continue;
+		}
+		else
+		{
+			reflag = 1;
+			printf("\n无效，请重新输入！");
+		}
 
-	}
-
-	fflush(stdin);
+	} while (reflag);
 
 	do
 	{
@@ -3234,9 +3241,9 @@ void cm_add() {
 		printf("\n该课程最终结课时间：%s\n\n", endTime);
 
 		printf("\n时间表：\n1、8:00-8:50\n2、9:00-9:50\n3、10:00-10:50\n4、11:00-11:50\n5、13:30-14:20\n6、14:30-15:20\n7、15:30-16:20\n8、16:30-17:20\n9、18:30-19:20\n10、19:30-20:20");
-		printf("\n输入格式：[周几(1-7)] [第几(1-10)节]\n若具体上课时间为每周三第五节，则输入应为：3 5");
+		printf("\n输入格式：[周几(1-7)]-[第几(1-10)节]\n若具体上课时间为每周三第五节，则输入应为：3-5");
 		printf("\n请输入具体上课时间段：");
-		ret = scanf("%d %d", &in, &in1);
+		ret = scanf("%d-%d", &in, &in1);
 		while (ret != 2 || in > 7 || in < 1 || in1 < 1 || in1 > 10)
 		{
 			while (getchar() != '\n');
@@ -3338,11 +3345,9 @@ void cm_add() {
 		sprintf(classroom, "%d-%d", in, in1);
 		sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where 上课地点='%s'"
 			, classroom);					//准备验证是否有相同教室的课
-		if (check_classClash(query)) {		//若有，则判断时间是否冲突
-			sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where 上课地点='%s'"
-				, classroom);
-			mysql_query(&mysql, query);
-			result = mysql_store_result(&mysql);
+		mysql_query(&mysql, query);
+		result = mysql_store_result(&mysql);
+		if (mysql_num_rows(result)) {		//若有，则判断时间是否冲突
 			while (nextRow = mysql_fetch_row(result))
 			{
 				if (check_timeClash(nextRow[0], nextRow[1], nextRow[2], startTime, endTime, time))
@@ -3385,10 +3390,9 @@ void cm_add() {
 	printf("请输入课程教材：");
 	scanf("%s", book);
 
-	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, `学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, `上课时间段`, `上课地点`, `课程简介`, `教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"
+	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, `学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, `上课时间段`, `上课地点`, `限制人数`, `已选人数`, `课程简介`, `教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"
 		, classId, nowSchool, name, credit, learnTime, property, nowName
-		, startTime, endTime, time, classroom, intro, book);
-	printf(query);
+		, startTime, endTime, time, classroom, limit, "0", intro, book);
 
 	if (mysql_query(&mysql, query))
 	{
@@ -3398,6 +3402,9 @@ void cm_add() {
 	{
 		printf("\n加课成功！\n");
 	}
+	printf("\n按任意键返回上层菜单……");
+	system("pause>nul");
+	course_managemenu();
 }
 //验证课id是否满足6位数字，符合则返回1
 int check_classId(char* str)
