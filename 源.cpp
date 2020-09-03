@@ -386,7 +386,7 @@ void student_reg()
 	strcat(query, "'");
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
-	while (result)
+	while (mysql_num_rows(result) != 0)
 	{
 		printf("此学号已注册!请更换学号:");
 		scanf("%s", stuID);
@@ -759,9 +759,10 @@ void student_query_course()
 
 void student_query_result()
 {
-	//select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=2019222222)
-	//or c.`课程编号`=(select s.class2 from students s where stuID=2019222222) 
-	//or c.`课程编号`=(select s.class3 from students s where stuID=2019222222)
+	//sql语句为
+	//select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=??????????)
+	//or c.`课程编号`=(select s.class2 from students s where stuID=??????????) 
+	//or c.`课程编号`=(select s.class3 from students s where stuID=??????????)
 	system("cls");
 	char query[500] = "select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=";
 	strcat(query, stuID);
@@ -790,7 +791,7 @@ void student_delete_course()
 	printf("\n请输入课程编号以删除课程:");
 	scanf("%s", classID);
 	check_class_exist(classID);
-	//取出学生想删除课的开课时间和上课时间段======================================================================================================
+	//取出学生想删除课的开课时间和上课时间段
 	char query12[100] = "select 开课时间,上课时间段 from classes where 课程编号='";
 	strcat(query12, classID);
 	strcat(query12, "'");
@@ -801,7 +802,7 @@ void student_delete_course()
 	{
 		Row5 = mysql_fetch_row(result7);
 	}
-	//===========================================================================================
+	
 	while (getState_starting(Row5[0], Row5[1]) == 1)
 	{
 		printf("此课程已开课，无法删除！\n");
@@ -819,7 +820,7 @@ void student_delete_course()
 			Row5 = mysql_fetch_row(result7);
 		}
 	}
-	//=============================================================================================
+
 	char query[100] = "select class1,class2,class3 from students where stuID='";
 	strcat(query, stuID);
 	strcat(query, "'");
@@ -3036,7 +3037,6 @@ void cm_add() {
 		sprintf(limit, "100");
 	}
 
-
 	printf("请输入课程介绍：");
 	scanf("%s", intro);
 
@@ -3056,8 +3056,6 @@ void cm_add() {
 	{
 		printf("\n加课成功！\n");
 	}
-
-
 }
 //验证课id是否满足6位数字，符合则返回1
 int check_classId(char* str)
