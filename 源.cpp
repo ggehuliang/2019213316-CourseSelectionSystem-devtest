@@ -290,7 +290,7 @@ void sql()
 // 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
 int check_password(int who, char* ID, char* password) 
 {
-	char query[200] = "SELECT name FROM ";
+	char query[300] = "SELECT name FROM ";
 	if (who) {
 		strcat(query, "teachers WHERE teachID='");
 		strcat(query, ID);
@@ -303,6 +303,7 @@ int check_password(int who, char* ID, char* password)
 	}
 	strcat(query, " AND passwd=");
 	strcat(query, "'");
+	pw_encode(password);
 	strcat(query, password);
 	strcat(query, "'");
 	mysql_query(&mysql, query);  // 同时匹配用户名和密码查询
@@ -494,6 +495,7 @@ void student_reg()
 
 	printf("请输入密码:");
 	scanf_pw(passwd);
+	pw_encode(passwd);
 	char query7[200] = "update students set passwd=' ";
 	strcat(query7, passwd);
 	strcat(query7, "' where stuID='");
@@ -971,7 +973,8 @@ void student_manage_course()
 				printf("两次输入的密码不一致，请重新确认：");
 				scanf("%s", passwd1);
 			}
-			char query1[200] = "update students set passwd=' ";
+			pw_encode(passwd);
+			char query1[200] = "update students set passwd='";
 			strcat(query1, passwd);
 			strcat(query1, "' where stuID='");
 			strcat(query1, stuID);
@@ -2012,7 +2015,10 @@ void config_init() {
 		printf("\n打开配置文件失败！请尝试手动删除cfg配置文件后重试！");
 		return;
 	}
-	fprintf(outFile, "# 学生选课管理系统配置文件\n# 手动修改请遵从文件格式（包括行数）\n\n# 数据库地址\n%s\n\n# 端口号\n%d\n\n# 用户名\n%s\n\n# 密码\n%s\n\n# 库名\n%s\n\n# 当前学期信息（学年、学期、开学时间、选课开始时间、结束时间）\n202%d\n%d\n%ld\n%ld\n%ld", dbIP, dbPort, dbUser, dbPassWd, dbName, currYear, currTerm, currStart, selecStart, selecEnd);
+	char enpw[50];
+	strcpy(enpw, dbPassWd);
+	pw_encode(enpw);
+	fprintf(outFile, "# 学生选课管理系统配置文件\n# 手动修改请遵从文件格式（包括行数）\n\n# 数据库地址\n%s\n\n# 端口号\n%d\n\n# 用户名\n%s\n\n# 密码\n%s\n\n# 库名\n%s\n\n# 当前学期信息（学年、学期、开学时间、选课开始时间、结束时间）\n202%d\n%d\n%ld\n%ld\n%ld", dbIP, dbPort, dbUser, enpw, dbName, currYear, currTerm, currStart, selecStart, selecEnd);
 	fclose(outFile);
 	printf("\n\n首次使用设置完毕，按任意键开始使用系统……");
 	system("pause>nul");
@@ -2051,6 +2057,7 @@ void readCFG() {
 			sprintf(dbUser, record);
 			break;
 		case 14:
+			pw_decode(record);
 			sprintf(dbPassWd, record);
 			break;
 		case 17:
@@ -3214,19 +3221,30 @@ void teacher_reg()
 int scanf_pw(char* str)
 {
 	int i;
-	for (i = 0; i != 100; i++)
+	for (i = 0;; )
 	{
 		str[i] = _getch();
 		if (str[i] == 13)
 		{
 			str[i] = '\0';
 			break;
-		}else if(str[i] == 8)
-		{
-			printf("\b");
 		}
-		else {
+		else if (str[i] == 8 || str[i] == 127)
+		{
+
+			if (i > 0)	//若减后不为0都能往前 
+			{
+				i--;
+				printf("\b");
+				printf(" ");
+				printf("\b");
+				str[i] = '\0';
+			}
+		}
+		//保证输入字符串长度不大于20且不为莫名其妙的字符
+		else if (i < 20 && str[i] < 127 && str[i] >39) {
 			printf("*");
+			i++;
 		}
 	}
 	printf("\n");
