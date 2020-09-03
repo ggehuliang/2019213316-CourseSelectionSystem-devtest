@@ -27,6 +27,7 @@ void student_manage_course();
 void student_search_specific_imformation();
 void select_class(char* query);
 int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char* time2_sweek, char* time2_eweek, char* time2_day);
+void check_class_exist(char* classID);
 
 int check_classId(char* str);
 void select_class(char* query);
@@ -491,7 +492,6 @@ int check_phone(char* str)
 
 void student_select_course()
 {
-	MYSQL_RES* result8;
 	system("cls");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 学生选课 ●○●○●○\n");
@@ -502,24 +502,9 @@ void student_select_course()
 	select_class(query);
 	printf("\n请输入您想选的课程编号：");
 	scanf("%s", classID);
-	//判断是否有这门课
-	char query10[100] = "select * from classes where 课程编号='";
-	strcat(query10, classID);
-	strcat(query10, "'");
-	mysql_store_result(&mysql);
-	mysql_query(&mysql, query10);
-	result8 = mysql_store_result(&mysql);
-	while (mysql_num_rows(result8) == 0)
-	{
-		printf("无此课程，请重新输入！\n");
-		scanf("%s", classID);
-		char query10[100] = "select * from classes where 课程编号='";
-		strcat(query10, classID);
-		strcat(query10, "'");
-		mysql_store_result(&mysql);
-		mysql_query(&mysql, query10);
-		result8 = mysql_store_result(&mysql);
-	}
+	//判断是否有这门课-------------------------------------------------------------------------------
+	check_class_exist(classID);
+	
 	//把学生之前选的课从表中取出，存到字符串中
 	char query1[100] = "select class1,class2,class3 from students where stuID='";
 	strcat(query1, stuID);
@@ -948,15 +933,47 @@ void student_manage_course()
 		}
 	}
 }
-
+//----------------------------------------------------------------------------------------
 void student_search_specific_imformation()
 {
+	char classID[100];
 	system("cls");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 查看课程详细信息--学生 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-
-
+	printf("\n全部课程如下：\n");
+	char query[50] = "select * from classes";
+	select_class(query);
+	printf("输入课程编号以查看该课程的详细信息\n");
+	scanf("%s", classID);
+	check_class_exist(classID);
+	mysql_query(&mysql, query);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			int row = mysql_num_rows(result);
+			int column = mysql_num_fields(result);
+			for (int i = 0; field = mysql_fetch_field(result); i++) {
+				//获得属性名 
+				if (i > 6)
+				{
+					printf("%-30s", field->name);
+					printf(" |");
+				}
+			}//----------------------------------------------------------------------------------------------------------------------------------------
+			printf("\n");
+			while (nextRow = mysql_fetch_row(result)) {
+				for (int j = 7; j < column ; j++) {
+					printf("%-30s", nextRow[j]);
+					printf(" |");
+				}
+				printf("\n");
+			}
+		}
+	}
 }
 
 void select_class(char* query)
@@ -1093,6 +1110,27 @@ int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char*
 	}
 }
 
+void check_class_exist(char * classID)
+{
+	MYSQL_RES* result8;
+	char query10[100] = "select * from classes where 课程编号='";
+	strcat(query10, classID);
+	strcat(query10, "'");
+	mysql_store_result(&mysql);
+	mysql_query(&mysql, query10);
+	result8 = mysql_store_result(&mysql);
+	while (mysql_num_rows(result8) == 0)
+	{
+		printf("无此课程，请重新输入！\n");
+		scanf("%s", classID);
+		char query10[100] = "select * from classes where 课程编号='";
+		strcat(query10, classID);
+		strcat(query10, "'");
+		mysql_store_result(&mysql);
+		mysql_query(&mysql, query10);
+		result8 = mysql_store_result(&mysql);
+	}
+}
 void teacher_mainmenu()
 {
 	system("cls");
