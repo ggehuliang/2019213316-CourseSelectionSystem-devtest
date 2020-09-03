@@ -758,9 +758,10 @@ void student_query_course()
 
 void student_query_result()
 {
-	//select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=2019222222)
-	//or c.`课程编号`=(select s.class2 from students s where stuID=2019222222) 
-	//or c.`课程编号`=(select s.class3 from students s where stuID=2019222222)
+	//sql语句为
+	//select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=??????????)
+	//or c.`课程编号`=(select s.class2 from students s where stuID=??????????) 
+	//or c.`课程编号`=(select s.class3 from students s where stuID=??????????)
 	system("cls");
 	char query[500] = "select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=";
 	strcat(query, stuID);
@@ -818,7 +819,7 @@ void student_delete_course()
 			Row5 = mysql_fetch_row(result7);
 		}
 	}
-	//=============================================================================================
+
 	char query[100] = "select class1,class2,class3 from students where stuID='";
 	strcat(query, stuID);
 	strcat(query, "'");
@@ -3003,7 +3004,6 @@ void cm_add() {
 		sprintf(limit, "100");
 	}
 
-
 	printf("请输入课程介绍：");
 	scanf("%s", intro);
 
@@ -3023,8 +3023,6 @@ void cm_add() {
 	{
 		printf("\n加课成功！\n");
 	}
-
-
 }
 //验证课id是否满足6位数字，符合则返回1
 int check_classId(char* str)
