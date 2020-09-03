@@ -11,7 +11,7 @@ void config_init();				// 若配置文件存在则读取，否则进行首次运
 void readCFG();
 
 int check_stuId(char* str);
-int showinfo();
+int main_entrance();
 void student_login();
 void sql();
 int check_password(int who, char* ID, char* password);
@@ -93,30 +93,19 @@ time_t currStart, selecStart, selecEnd;		// 当前学期开课时间、选课始
 int main()
 {
 	mysql_init(&mysql);		// 初始化mysql
+
 	config_init();
 
 	sql();
 	
-
-	switch (showinfo())
-	{
-	case 1:
-		system("cls");
-		student_login();
-		break;
-	case 2:
-		system("cls");
-		teacher_login();
-		break;
-	case 3:
-		exit(0);
-	}
-	return 0;
+	main_entrance();
+	
 }
 
-int showinfo()
+int main_entrance()
 {
 	int option;
+	system("cls");
 	system("title 学生选课管理系统 - 入口");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
@@ -135,8 +124,20 @@ int showinfo()
 			ret = scanf("%d", &option);
 		}
 	}
-
-	return option;
+	switch (option)
+	{
+	case 1:
+		system("cls");
+		student_login();
+		break;
+	case 2:
+		system("cls");
+		teacher_login();
+		break;
+	case 3:
+		exit(0);
+	}
+	return 0;
 }
 
 void student_login()
@@ -149,7 +150,7 @@ void student_login()
 	printf("\n请选择您要进行的操作:\n");
 	printf("  ① - 登录\n");
 	printf("  ② - 注册\n");
-	printf("  ③ - 退出程序\n\n");
+	printf("  ③ - 返回上层\n\n");
 	printf("请输入1，2或3：");
 	int ret1 = scanf("%d", &option1);
 	while (ret1 != 1 || option1 > 3 || option1 < 1)
@@ -222,7 +223,9 @@ void student_login()
 		student_login();
 	}
 	else if (option1 == 3)
-		exit(0);
+	{
+		main_entrance();
+	}
 }
 
 int check_stuId(char* str)
@@ -308,7 +311,7 @@ void student_mainmenu()
 	printf("  ④ - 删除选课结果\n");
 	printf("  ⑤ - 个人信息管理\n");
 	printf("  ⑥ - 查看课程详细信息\n\n");
-	printf("  ⑦ - 退出程序\n");
+	printf("  ⑦ - 退出登录\n");
 	printf("请输入1，2，3，4，5，6或7：");
 	int ret2 = scanf("%d", &a);
 	while (ret2 != 1 || a > 7 || a < 1)
@@ -362,7 +365,9 @@ void student_mainmenu()
 		student_mainmenu();
 	}
 	else if (a == 7)
-		exit(0);
+	{
+		main_entrance();
+	}
 }
 
 void student_reg()
@@ -1191,7 +1196,7 @@ void teacher_mainmenu()
 	printf("  ① - 选课管理\n");
 	printf("  ② - 课程管理\n");
 	printf("  ③ - 个人信息管理\n\n");
-	printf("  ④ - 返回上一个菜单\n\n");
+	printf("  ④ - 退出登录\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1，2，3或4:");
 	while (scanf("%d", &option2) != 1 || option2 > 4 || option2 < 1)
@@ -1211,7 +1216,7 @@ void teacher_mainmenu()
 		pm_edit();
 		break;
 	case 4:
-		showinfo();
+		main_entrance();
 		break;
 	}
 
@@ -1979,8 +1984,8 @@ void config_init() {
 	}
 	fprintf(outFile, "# 学生选课管理系统配置文件\n# 手动修改请遵从文件格式（包括行数）\n\n# 数据库地址\n%s\n\n# 端口号\n%d\n\n# 用户名\n%s\n\n# 密码\n%s\n\n# 库名\n%s\n\n# 当前学期信息（学年、学期、开学时间、选课开始时间、结束时间）\n202%d\n%d\n%ld\n%ld\n%ld", dbIP, dbPort, dbUser, dbPassWd, dbName, currYear, currTerm, currStart, selecStart, selecEnd);
 	fclose(outFile);
-	printf("\n\n首次使用设置完毕，按回车开始使用系统……");
-	getchar();
+	printf("\n\n首次使用设置完毕，按任意键开始使用系统……");
+	system("pause>nul");
 }
 
 // 读取配置文件
