@@ -257,8 +257,14 @@ void student_login()
 		scanf_pw(stu_passwd);
 		while (check_password(0, stuID, stu_passwd) == 0)
 		{
-			printf("密码错误!请重新输入密码：");
+			printf("密码错误!请重新输入密码：(若返回上一级，输入ctrl+q)");
 			scanf("%s", stu_passwd);
+			if (stu_passwd[0] == 17)//返回上一级
+			{
+				system("cls");
+				student_login();
+				return;
+			}
 		}
 		student_mainmenu();
 	}
@@ -555,7 +561,7 @@ void student_reg()
 	mysql_query(&mysql, query8);
 
 	printf("\n注册成功！\n");
-
+	system("pause");
 }
 
 int check_phone(char* str)
@@ -1142,14 +1148,41 @@ void select_class(char* query)
 			int column = mysql_num_fields(result);
 			for (int i = 0; field = mysql_fetch_field(result), i < 7; i++) {
 				//获得属性名 
-				printf("%10s", field->name);
-				printf(" |");
+				if (i == 0)
+				{
+					printf("%-8s", field->name);
+					printf(" |");
+				}
+				else if (i == 1||i==2)
+				{
+					printf("%-20s", field->name);
+					printf(" |");
+				}
+				else
+				{
+					printf("%-8s", field->name);
+					printf(" |");
+				}
 			}
+
 			printf("\n");
 			while (nextRow = mysql_fetch_row(result)) {
 				for (int j = 0; j < column - 8; j++) {
-					printf("%10s", nextRow[j]);
-					printf(" |");
+					if (j == 0)
+					{
+						printf("%-8s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 1 || j == 2)
+					{
+						printf("%-20s", nextRow[j]);
+						printf(" |");
+					}
+					else
+					{
+						printf("%-8s", nextRow[j]);
+						printf(" |");
+					}
 				}
 				printf("\n");
 			}
@@ -1937,7 +1970,7 @@ int getState_starting(char* sweek, char* stime) {
 	{
 		return 0;
 	}
-	else 
+	else
 	{
 		return 1;
 	}
@@ -2267,7 +2300,7 @@ void teacher_login() {
 				}
 				if (!check_password(1, teachID, password))
 				{
-					printf("密码错误！请重试！(若返回上一级，请按ctrl+q)\n");
+					printf("用户名或密码错误！请重试！(若返回上一级，请按ctrl+q)\n");
 					flag = 1;
 				}
 			} while (flag);
@@ -2332,8 +2365,6 @@ void cm_list1()
 	default:
 		printf("无效，请重新输入!\n");
 	}
-
-
 }
 void cm_list2()
 {
@@ -2459,7 +2490,6 @@ void cm_edit() {
 		result = mysql_store_result(&mysql);
 		nextRow = mysql_fetch_row(result);
 		stu_num = atoi(nextRow[0]);
-		printf("\n---------%d----------\n", stu_num);
 		if (stu_num == 0)
 		{
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -2751,7 +2781,7 @@ void cm_delete() {
 				printf("无结果，请重新输入(若返回上一级，请按ctrl+q)\n");
 				mysql_free_result(result);
 			}
-			else 
+			else
 			{
 				flag = 0;
 			}
@@ -2862,7 +2892,7 @@ void pm_edit()
 		scanf("%s", passwd);
 		printf("请再次确认新的密码:\n");
 		scanf("%s", passwd1);
-		
+
 		while (strcmp(passwd, passwd1) != 0)
 		{
 			if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
