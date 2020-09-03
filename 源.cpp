@@ -25,6 +25,26 @@ void student_search_specific_imformation();
 void select_class(char* query);
 int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char* time2_sweek, char* time2_eweek, char* time2_day);
 
+int check_classId(char* str);
+void select_class(char* query);
+void teacher_login();   // 教师登录模块
+void teacher_mainmenu();  // 教师主菜单-3个大功能选单
+void select_managemenu();  // 选课管理选单-5个小功能
+void sm_mycourse();    //  查询查询教师自己开设过的课程的选课情况
+void sm_findcourse();   //  查询选择某门课程的学生信息
+void sm_lessthan30delete();  //  选课人数少于30则删除
+void sm_sortcourse();   //  统计选课信息
+void sm_rankcourse();   //排序选课信息
+void course_managemenu();  // 课程管理选单-4个小功能
+void cm_list1();     //  课程查询显示
+void cm_list2();    // 课程查询操作
+void cm_add();     //  加课
+void cm_edit();     //  改课选单
+void cm_delete();    //  未开课前删课
+void personal_managemenu();  // 个人信息管理选单-2个小功能
+void pm_edit();   //  改密码
+int  getState_selecting();  // 获取选课状态
+
 MYSQL mysql;     //创造一个MYSQL句柄
 MYSQL_RES* result;
 MYSQL_RES* result1;
