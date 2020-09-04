@@ -2033,6 +2033,10 @@ void config_init() {
 	{
 		flag = 0;
 		sprintf(dbIP, "");
+		sprintf(dbName, "");
+		sprintf(dbUser, "");
+		sprintf(dbPassWd, "");
+		sprintf(in, "");
 		system("title 学生选课管理系统 - 首次使用设置系统");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 欢迎使用学生选课管理系统 ●○●○●○\n");
@@ -2811,6 +2815,13 @@ void cm_delete() {
 	switch (option2)
 	{
 	case 1:
+		if (getState_selecting() != 0)
+		{
+			printf("非常抱歉，选课已开始，您不能进行删除操作\n");
+			printf("按任意键返回上一菜单...\n");
+			system("pause>nul");
+			cm_delete();
+		}
 		do {
 			printf("请输入您想要删除的课程的编号：");
 			scanf("%s", courseName);
@@ -2851,49 +2862,38 @@ void cm_delete() {
 			printf("\n");
 		}
 
-		if (getState_selecting() == 0)
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		printf("确认要删除该课程吗？\n");
+		printf("  ① - 是\n");
+		printf("  ② - 否\n\n");
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		printf("\n请输入1或2:");
+		ret1 = scanf("%d", &option2);
+		while (ret1 != 1 || option2 > 2 || option2 < 1)
 		{
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("确认要删除该课程吗？\n");
-			printf("  ① - 是\n");
-			printf("  ② - 否\n\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\n请输入1或2:");
-			ret1 = scanf("%d", &option2);
-			while (ret1 != 1 || option2 > 2 || option2 < 1)
+			while (getchar() != '\n');
 			{
-				while (getchar() != '\n');
-				{
-					printf("输入无效！请重新输入：");
-					ret1 = scanf("%d", &option2);
-				}
-			}
-			switch (option2)
-			{
-			case 1:
-				sprintf(query, "DELETE FROM `classes` WHERE `课程编号` = '%s'"
-					, courseName);
-				mysql_query(&mysql, query);
-				printf("删除成功！\n");
-				printf("按任意键返回上一菜单...\n");
-				system("pause>nul");
-				cm_delete();
-				break;
-			case 2:
-				cm_delete();
-				break;
-			default:
-				printf("无效，请重新输入!\n");
+				printf("输入无效！请重新输入：");
+				ret1 = scanf("%d", &option2);
 			}
 		}
-		else
+		switch (option2)
 		{
-			printf("非常抱歉，该课程选课已开始，您不能对进行删除操作\n");
+		case 1:
+			sprintf(query, "DELETE FROM `classes` WHERE `课程编号` = '%s'"
+				, courseName);
+			mysql_query(&mysql, query);
+			printf("删除成功！\n");
 			printf("按任意键返回上一菜单...\n");
 			system("pause>nul");
 			cm_delete();
+			break;
+		case 2:
+			cm_delete();
+			break;
+		default:
+			printf("无效，请重新输入!\n");
 		}
-
 		break;
 	case 2:
 		select_managemenu();
@@ -3240,8 +3240,8 @@ void cm_add() {
 		printf("\n该课程最终开课时间：%s", startTime);
 		printf("\n该课程最终结课时间：%s\n\n", endTime);
 
-		printf("\n时间表：\n1、8:00-8:50\n2、9:00-9:50\n3、10:00-10:50\n4、11:00-11:50\n5、13:30-14:20\n6、14:30-15:20\n7、15:30-16:20\n8、16:30-17:20\n9、18:30-19:20\n10、19:30-20:20");
-		printf("\n输入格式：[周几(1-7)]-[第几(1-10)节]\n若具体上课时间为每周三第五节，则输入应为：3-5");
+		printf("\n时间节次表：\n1、8:00-8:50\n2、9:00-9:50\n3、10:00-10:50\n4、11:00-11:50\n5、13:30-14:20\n6、14:30-15:20\n7、15:30-16:20\n8、16:30-17:20\n9、18:30-19:20\n10、19:30-20:20");
+		printf("\n输入格式：[周几(1-7)]-[第几(1-10)节]\n若具体上课时间为每周三第五节（13:30-14:20），则输入应为：3-5");
 		printf("\n请输入具体上课时间段：");
 		ret = scanf("%d-%d", &in, &in1);
 		while (ret != 2 || in > 7 || in < 1 || in1 < 1 || in1 > 10)
@@ -3249,7 +3249,7 @@ void cm_add() {
 			while (getchar() != '\n');
 			{
 				printf("无效，请重新输入：");
-				ret = scanf("%d %d", &in, &in1);
+				ret = scanf("%d-%d", &in, &in1);
 			}
 		}
 		switch (in) {		//周整型转字符串
@@ -3390,7 +3390,7 @@ void cm_add() {
 	printf("请输入课程教材：");
 	scanf("%s", book);
 
-	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, `学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, `上课时间段`, `上课地点`, `限制人数`, `已选人数`, `课程简介`, `教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"
+	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, `学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, `上课时间段`, `上课地点`, `限制人数`, `已选人数`, `课程简介`, `教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ,'%s', '%s', '%s', '%s', '%s')"
 		, classId, nowSchool, name, credit, learnTime, property, nowName
 		, startTime, endTime, time, classroom, limit, "0", intro, book);
 
@@ -3551,7 +3551,7 @@ int scanf_pw(char* str)
 	for (i = 0;; )
 	{
 		str[i] = _getch();
-		if (str[i] == 13)
+		if (str[i] == 13)	//如果是回车符就加结束字符
 		{
 			str[i] = '\0';
 			break;
