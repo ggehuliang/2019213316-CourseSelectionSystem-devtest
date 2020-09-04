@@ -224,7 +224,6 @@ void student_login()
 	else if (option1 == 2)
 	{
 		student_reg();
-		
 	}
 	else if (option1 == 3)
 	{
@@ -411,7 +410,6 @@ void student_reg()
 	strcat(query1, stuID);
 	strcat(query1, "'");
 	strcat(query1, ")");
-	mysql_query(&mysql, query1);
 
 	printf("请输入学院:");
 	s_gets(school, 20);
@@ -420,7 +418,6 @@ void student_reg()
 	strcat(query2, "' where stuID='");
 	strcat(query2, stuID);
 	strcat(query2, "'");
-	mysql_query(&mysql, query2);
 
 	printf("请输入专业:");
 	s_gets(major, 30);
@@ -429,7 +426,6 @@ void student_reg()
 	strcat(query3, "' where stuID='");
 	strcat(query3, stuID);
 	strcat(query3, "'");
-	mysql_query(&mysql, query3);
 
 	printf("请输入姓名:");
 	s_gets(name, 20);
@@ -438,7 +434,6 @@ void student_reg()
 	strcat(query4, "' where stuID='");
 	strcat(query4, stuID);
 	strcat(query4, "'");
-	mysql_query(&mysql, query4);
 
 	printf("请输入性别:");
 	s_gets(sexual, 2);
@@ -452,7 +447,6 @@ void student_reg()
 	strcat(query5, "' where stuID='");
 	strcat(query5, stuID);
 	strcat(query5, "'");
-	mysql_query(&mysql, query5);
 
 	printf("请输入电话:");
 	s_gets(phone, 11);
@@ -471,7 +465,6 @@ void student_reg()
 	strcat(query6, "' where stuID='");
 	strcat(query6, stuID);
 	strcat(query6, "'");
-	mysql_query(&mysql, query6);
 
 	printf("请输入密码:");
 	scanf_pw(passwd);
@@ -496,8 +489,7 @@ void student_reg()
 	strcat(query7, "' where stuID='");
 	strcat(query7, stuID);
 	strcat(query7, "'");
-	mysql_query(&mysql, query7);
-
+	
 	printf("请输入邮箱:");
 	s_gets(email, 30);
 	while (check_email(email) == 0)
@@ -515,6 +507,14 @@ void student_reg()
 	strcat(query8, "' where stuID='");
 	strcat(query8, stuID);
 	strcat(query8, "'");
+
+	mysql_query(&mysql, query1);
+	mysql_query(&mysql, query2);
+	mysql_query(&mysql, query3);
+	mysql_query(&mysql, query4);
+	mysql_query(&mysql, query5);
+	mysql_query(&mysql, query6);
+	mysql_query(&mysql, query7);
 	mysql_query(&mysql, query8);
 
 	printf("\n注册成功！\n");
@@ -1039,9 +1039,9 @@ void student_search_specific_imformation()
 	printf("输入课程编号以查看该课程的详细信息\n");
 	s_gets(classID, 11);
 	check_class_exist(classID);
-	char query[200] = "select * from classes where 课程编号='";
+	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数,教材信息,课程简介 from classes where 课程编号='";
 	strcat(query, classID);
-	strcat(classID, "'");
+	strcat(query, "'");
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	if (result)
@@ -1053,17 +1053,51 @@ void student_search_specific_imformation()
 			int column = mysql_num_fields(result);
 			for (int i = 0; field = mysql_fetch_field(result); i++) {
 				//获得属性名 
-				if (i > 6)
+				if (i == 0||i == 1)
 				{
-					printf("%-30s", field->name);
+					printf("%-27s", field->name);
 					printf(" |");
+				}
+				else if (i == 2)
+				{
+					printf("%-17s", field->name);
+					printf(" |");
+				}
+				else if( i == 3 || i == 4 || i == 5)
+				{
+					printf("%-8s", field->name);
+					printf(" |");
+				}
+				else 
+				{
+					printf(" %-20s", field->name);
+					printf("|");
 				}
 			}
 			printf("\n");
 			while (nextRow = mysql_fetch_row(result)) {
-				for (int j = 7; j < column; j++) {
-					printf("%-30s", nextRow[j]);
-					printf(" |");
+				for (int j = 0; j < column; j++) 
+				{
+					if (j == 0 || j == 1)
+					{
+						printf("%-27s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 2)
+					{
+						printf("%-17s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 3 || j == 4 || j == 5)
+					{
+						printf("%-8s", nextRow[j]);
+						printf(" |");
+					}
+					else
+					{
+						printf("%-20s", nextRow[j]);
+						printf(" |");
+					}
 				}
 				printf("\n");
 			}
@@ -3265,7 +3299,6 @@ void teacher_reg()
 	strcat(query1, teachID);
 	strcat(query1, "'");
 	strcat(query1, ")");
-	mysql_query(&mysql, query1);
 
 	printf("请输入学院:");
 	s_gets(school, 20);
@@ -3274,7 +3307,6 @@ void teacher_reg()
 	strcat(query2, "' where teachID='");
 	strcat(query2, teachID);
 	strcat(query2, "'");
-	mysql_query(&mysql, query2);
 
 	printf("请输入姓名:");
 	s_gets(name, 20);
@@ -3283,7 +3315,6 @@ void teacher_reg()
 	strcat(query4, "' where teachID='");
 	strcat(query4, teachID);
 	strcat(query4, "'");
-	mysql_query(&mysql, query4);
 
 	printf("请输入电话:");
 	s_gets(phone, 20);
@@ -3303,7 +3334,6 @@ void teacher_reg()
 	strcat(query6, "' where teachID='");
 	strcat(query6, teachID);
 	strcat(query6, "'");
-	mysql_query(&mysql, query6);
 
 	char passwd1[30];
 	printf("请输入密码:");
@@ -3329,7 +3359,6 @@ void teacher_reg()
 	strcat(query7, "' where teachID='");
 	strcat(query7, teachID);
 	strcat(query7, "'");
-	mysql_query(&mysql, query7);
 
 	printf("请输入邮箱:");
 	s_gets(email, 20);
@@ -3349,6 +3378,12 @@ void teacher_reg()
 	strcat(query8, "' where teachID='");
 	strcat(query8, teachID);
 	strcat(query8, "'");
+
+	mysql_query(&mysql, query1);
+	mysql_query(&mysql, query2);
+	mysql_query(&mysql, query4);
+	mysql_query(&mysql, query6);
+	mysql_query(&mysql, query7);
 	mysql_query(&mysql, query8);
 
 	printf("\n注册成功！\n");
