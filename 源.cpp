@@ -84,6 +84,7 @@ time_t convert_dateToTT(int, int, int, int, int, int);
 int scanf_pw(char*);
 void pw_encode(char* code);
 void pw_decode(char* code);
+int scanf_opt(int*, int, int);
 //==========================================
 //全局变量声明
 
@@ -128,8 +129,11 @@ int main()
 	return 0;
 }
 
+
 int main_entrance()
 {
+	char in_s[10];
+	int ret,flag;
 	int option;
 	system("cls");
 	system("title 学生选课管理系统 - 入口");
@@ -140,16 +144,8 @@ int main_entrance()
 	printf("  ① - 学生\n");
 	printf("  ② - 老师\n");
 	printf("  ③ - 退出程序\n\n");
-	printf("请输入1，2或3：");
-	int ret = scanf("%d", &option);
-	while (ret != 1 || option > 3 || option < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效，请您重新输入：");
-			ret = scanf("%d", &option);
-		}
-	}
+	printf("请选择您要进行的操作:");
+	scanf_opt(&option, 1, 3);
 	switch (option)
 	{
 	case 1:
@@ -179,16 +175,7 @@ void student_login()
 	printf("  ② - 注册\n");
 	printf("  ③ - 返回上层\n\n");
 	printf("请输入1，2或3：");
-	int ret1 = scanf("%d", &option1);
-	while (ret1 != 1 || option1 > 3 || option1 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option1);
-		}
-	}
-
+	scanf_opt(&option1, 1, 3);
 	if (option1 == 1)
 	{
 		system("cls");
@@ -3633,4 +3620,35 @@ void pw_decode(char* str)
 		de_result[j + 2] = (((unsigned char)table[str[i + 2]]) << 6) | ((unsigned char)table[str[i + 3]]); //取出第三个字符对应base64表的十进制数的后2位与第4个字符进行组合  
 	}
 	sprintf(str, "%s", de_result);
+}
+
+// 菜单选项输入，避免只读取空格前内容造成错误输入可以正常运行的BUG
+// 输入格式：选项option指针，最小选项，最大选项
+int scanf_opt(int* optPtr, int optMin, int optMax) {
+	int flag;
+	char in_s[10];
+	int i = 0;
+	do
+	{
+		flag = 0;
+		i = 0;
+		fgets(in_s, 3, stdin);
+		if (in_s)
+		{
+			while (in_s[i] != '\n' && in_s[i] != '\0')
+				i++;
+			if (in_s[i] == '\n')
+				in_s[i] = '\0';
+			else
+				rewind(stdin);
+		}
+		*optPtr = atoi(in_s);
+		if (strlen(in_s) != 1 || *optPtr > optMax || *optPtr < optMin)
+		{
+			printf("输入无效，请您重新输入：");
+			flag = 1;
+			continue;
+		}
+	} while (flag);
+	return 1;
 }
