@@ -44,8 +44,7 @@ void sm_lessthan30delete();		//  选课人数少于30则删除
 void sm_sortcourse();			//  统计选课信息
 void sm_rankcourse();			//	排序选课信息
 void course_managemenu();		// 课程管理选单-4个小功能
-void cm_list1();				//  课程查询显示
-void cm_list2();				// 课程查询操作
+void cm_list();					//  课程查询详情
 void cm_add();					//  加课
 void cm_edit();					//  改课选单
 void cm_delete();				//  未开课前删课
@@ -324,10 +323,9 @@ void student_mainmenu()
 	printf("  ③ - 查询选课结果\n");
 	printf("  ④ - 删除选课结果\n");
 	printf("  ⑤ - 个人信息管理\n");
-	printf("  ⑥ - 查看课程详细信息\n\n");
-	printf("  ⑦ - 退出登录\n");
-	printf("请输入1，2，3，4，5，6或7：");
-	scanf_opt(&option, 1, 7);
+	printf("  ⑥ - 退出登录\n");
+	printf("请输入1，2，3，4，5或6：");
+	scanf_opt(&option, 1, 6);
 	if (option == 1)
 	{
 		student_select_course();
@@ -461,11 +459,11 @@ void student_reg()
 
 	change_color(1, 14);
 	printf("请输入性别:");
-	s_gets(sexual, 2);
+	s_gets(sexual, 3);
 	while (strcmp(sexual, "男") != 0 && strcmp(sexual, "女") != 0)
 	{
 		printf("无效输入！请输入男或女:");
-		s_gets(sexual, 2);
+		s_gets(sexual, 3);
 	}
 	char query5[200] = "update students set sexual='";
 	strcat(query5, sexual);
@@ -479,7 +477,7 @@ void student_reg()
 	while (check_phone(phone) == 0)
 	{
 		printf("无效输入！请输入11位电话号:（若返回上一级，请按ctrl+q）");
-		s_gets(phone, 11);
+		s_gets(phone, 12);
 		if (phone[0] == 17)//返回上一级
 		{
 			system("cls");
@@ -745,9 +743,10 @@ void student_query_course()
 	printf("  ② - 根据开课学院查询\n");
 	printf("  ③ - 根据课余量排序所有课程\n");
 	printf("  ④ - 根据选课人数排序所有课程\n");
-	printf("  ⑤ - 返回学生主菜单\n\n");
-	printf("请输入1，2，3，4或5:");
-	scanf_opt(&option, 1, 5);
+	printf("  ⑤ - 查看课程详细信息\n\n");
+	printf("  ⑥ - 返回学生主菜单\n");
+	printf("请输入1，2，3，4，5或6:");
+	scanf_opt(&option, 1, 6);
 	if (option == 1)
 	{
 		system("cls");
@@ -821,6 +820,13 @@ void student_query_course()
 		student_query_course();
 	}
 	if (option == 5)
+	{
+		student_search_specific_imformation();
+		printf("请按任意键返回上一菜单\n");
+		system("pause > nul");
+		student_query_course();
+	}
+	if (option == 6)
 	{
 		system("cls");
 		student_mainmenu();
@@ -1082,7 +1088,7 @@ void student_manage_course()
 	}
 	}
 }
-
+/*
 void student_search_specific_imformation()
 {
 	char classID[100];
@@ -1161,6 +1167,126 @@ void student_search_specific_imformation()
 				}
 				printf("\n");
 			}
+		}
+	}
+}*/
+
+void student_search_specific_imformation()
+{
+	char classID[100];
+	system("cls");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\t\t\t○●○●○● 查看课程详细信息--学生 ●○●○●○\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\n全部课程如下：\n");
+	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
+	strcat(query3, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes");
+	select_class(query3);
+	printf("输入课程编号以查看该课程的详细信息\n");
+	s_gets(classID, 11);
+	check_class_exist(classID);
+	printf("\n\n");
+	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数 from classes where 课程编号='";
+	strcat(query, classID);
+	strcat(query, "'");
+	mysql_query(&mysql, query);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			int row = mysql_num_rows(result);
+			int column = mysql_num_fields(result);
+			for (int i = 0; field = mysql_fetch_field(result); i++) {
+				//获得属性名 
+				if (i == 0 || i == 1)
+				{
+					printf("%-27s", field->name);
+					printf(" |");
+				}
+				else if (i == 2)
+				{
+					printf("%-17s", field->name);
+					printf(" |");
+				}
+				else if (i == 3 || i == 4 || i == 5)
+				{
+					printf("%-8s", field->name);
+					printf(" |");
+				}
+				else
+				{
+					printf(" %-22s", field->name);
+					printf("|");
+				}
+			}
+			printf("\n");
+			while (nextRow = mysql_fetch_row(result)) {
+				for (int j = 0; j < column; j++)
+				{
+					if (j == 0 || j == 1)
+					{
+						printf("%-27s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 2)
+					{
+						printf("%-17s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 3 || j == 4 || j == 5)
+					{
+						printf("%-8s", nextRow[j]);
+						printf(" |");
+					}
+					else
+					{
+						printf("%-22s", nextRow[j]);
+						printf(" |");
+					}
+				}
+				printf("\n\n");
+			}
+		}
+	}
+	char query1[200] = "select 教材信息 from classes where 课程编号='";
+	strcat(query1, classID);
+	strcat(query1, "'");
+	mysql_query(&mysql, query1);
+	result2 = mysql_store_result(&mysql);
+	if (result2)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			field = mysql_fetch_field(result2);
+			//获得属性名 
+			printf("%s:", field->name);
+			printf("\n");
+			nextRow = mysql_fetch_row(result2);
+			printf("%s", nextRow[0]);
+			printf("\n\n");
+		}
+	}
+
+	char query2[200] = "select 课程简介 from classes where 课程编号='";
+	strcat(query2, classID);
+	strcat(query2, "'");
+	mysql_query(&mysql, query2);
+	result1 = mysql_store_result(&mysql);
+	if (result1)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			field = mysql_fetch_field(result1);
+				//获得属性名 
+			printf("%s:", field->name);
+			printf("\n");
+			nextRow = mysql_fetch_row(result1);
+			printf("%s", nextRow[0]);
+			printf("\n\n");
 		}
 	}
 }
@@ -1505,20 +1631,55 @@ void sm_findcourse()
 			}
 		} while (flag == 1);
 
-		for (int i = 0; field = mysql_fetch_field(result); i++)
+		if (result)
 		{
-			printf("%10s", field->name);
-			printf(" |");
-		}
-		printf("\n");
-		while (nextRow = mysql_fetch_row(result))
-		{
-			for (int j = 0; j < column; j++)
+			int fieldCount = mysql_field_count(&mysql);
+			if (fieldCount > 0)
 			{
-				printf("%10s", nextRow[j]);
-				printf(" |");
+				int row = mysql_num_rows(result);
+				int column = mysql_num_fields(result);
+				for (int i = 0; field = mysql_fetch_field(result), i < 7; i++) {
+					//获得属性名 
+					if (i == 0)
+					{
+						printf(" %-8s", field->name);
+						printf("|");
+					}
+					else if (i == 1 || i == 2)
+					{
+						printf(" %-20s", field->name);
+						printf("|");
+					}
+					else
+					{
+						printf(" %-8s", field->name);
+						printf("|");
+					}
+				}
+
+				printf("\n");
+				while (nextRow = mysql_fetch_row(result))
+				{
+					for (int j = 0; j < column - 8; j++) {
+						if (j == 0)
+						{
+							printf(" %-8s", nextRow[j]);
+							printf("|");
+						}
+						else if (j == 1 || j == 2)
+						{
+							printf(" %-20s", nextRow[j]);
+							printf("|");
+						}
+						else
+						{
+							printf(" %-8s", nextRow[j]);
+							printf("|");
+						}
+					}
+					printf("\n");
+				}
 			}
-			printf("\n");
 		}
 		do {
 			change_color(1, 14);
@@ -1546,16 +1707,52 @@ void sm_findcourse()
 		} while (flag == 1);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 		{
-			printf("%10s", field->name);
-			printf(" |");
+			if (i == 0)
+			{
+				printf(" %-10s", field->name);
+				printf("|");
+			}
+			else if (i == 1 || i == 2 || i == 5 || i == 6 || i == 7)
+			{
+				printf(" %-18s", field->name);
+				printf("|");
+			}
+			else if (i == 8 || i == 9 || i == 10)
+			{
+				printf(" %-13s", field->name);
+				printf("|");
+			}
+			else
+			{
+				printf(" %-10s", field->name);
+				printf("|");
+			}
 		}
 		printf("\n");
 		while (nextRow = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column; j++)
 			{
-				printf("%10s", nextRow[j]);
-				printf(" |");
+				if (j == 0)
+				{
+					printf(" %-10s", nextRow[j]);
+					printf("|");
+				}
+				else if (j == 1 || j == 2 || j == 5 || j == 6 || j == 7)
+				{
+					printf(" %-18s", nextRow[j]);
+					printf("|");
+				}
+				else if (j == 8 || j == 9 || j == 10)
+				{
+					printf(" %-13s", nextRow[j]);
+					printf("|");
+				}
+				else
+				{
+					printf(" %-10s", nextRow[j]);
+					printf("|");
+				}
 			}
 			printf("\n");
 		}
@@ -1594,16 +1791,52 @@ void sm_findcourse()
 		} while (flag == 1);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 		{
-			printf("%10s", field->name);
-			printf(" |");
+			if (i == 0)
+			{
+				printf(" %-10s", field->name);
+				printf("|");
+			}
+			else if (i == 1 || i == 2 || i == 5 || i == 6 || i == 7)
+			{
+				printf(" %-18s", field->name);
+				printf("|");
+			}
+			else if (i == 8 || i == 9 || i == 10)
+			{
+				printf(" %-13s", field->name);
+				printf("|");
+			}
+			else
+			{
+				printf(" %-10s", field->name);
+				printf("|");
+			}
 		}
 		printf("\n");
 		while (nextRow = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column; j++)
 			{
-				printf("%10s", nextRow[j]);
-				printf(" |");
+				if (j == 0)
+				{
+					printf(" %-10s", nextRow[j]);
+					printf("|");
+				}
+				else if (j == 1 || j == 2 || j == 5 || j == 6 || j == 7)
+				{
+					printf(" %-18s", nextRow[j]);
+					printf("|");
+				}
+				else if (j == 8 || j == 9 || j == 10)
+				{
+					printf(" %-13s", nextRow[j]);
+					printf("|");
+				}
+				else
+				{
+					printf(" %-10s", nextRow[j]);
+					printf("|");
+				}
 			}
 			printf("\n");
 		}
@@ -1680,20 +1913,56 @@ void sm_lessthan30delete()
 				flag = 0;
 			}
 		} while (flag == 1);
-		for (int i = 0; field = mysql_fetch_field(result); i++)
+
+		if (result)
 		{
-			printf("%10s", field->name);
-			printf(" |");
-		}
-		printf("\n");
-		while (nextRow = mysql_fetch_row(result))
-		{
-			for (int j = 0; j < column; j++)
+			int fieldCount = mysql_field_count(&mysql);
+			if (fieldCount > 0)
 			{
-				printf("%10s", nextRow[j]);
-				printf(" |");
+				int row = mysql_num_rows(result);
+				int column = mysql_num_fields(result);
+				for (int i = 0; field = mysql_fetch_field(result), i < 7; i++) {
+					//获得属性名 
+					if (i == 0)
+					{
+						printf(" %-8s", field->name);
+						printf("|");
+					}
+					else if (i == 1 || i == 2)
+					{
+						printf(" %-20s", field->name);
+						printf("|");
+					}
+					else
+					{
+						printf(" %-8s", field->name);
+						printf("|");
+					}
+				}
+
+				printf("\n");
+				while (nextRow = mysql_fetch_row(result))
+				{
+					for (int j = 0; j < column - 8; j++) {
+						if (j == 0)
+						{
+							printf(" %-8s", nextRow[j]);
+							printf("|");
+						}
+						else if (j == 1 || j == 2)
+						{
+							printf(" %-20s", nextRow[j]);
+							printf("|");
+						}
+						else
+						{
+							printf(" %-8s", nextRow[j]);
+							printf("|");
+						}
+					}
+					printf("\n");
+				}
 			}
-			printf("\n");
 		}
 
 		sprintf(query, "SELECT `已选人数` FROM `classes`WHERE 课程编号 = '%s'"
@@ -1849,7 +2118,7 @@ void course_managemenu()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
 	printf("\n请选择您需要的服务:\n");
-	printf("  ① - 查询响应课程\n");
+	printf("  ① - 查询相应课程\n");
 	printf("  ② - 添加您的课程\n");
 	printf("  ③ - 修改您的课程\n");
 	printf("  ④ - 删除您的课程(选课开始前)\n\n");
@@ -1860,7 +2129,7 @@ void course_managemenu()
 	switch (option2)
 	{
 	case 1:
-		cm_list1();
+		cm_list();
 		break;
 	case 2:
 		cm_add();
@@ -2017,7 +2286,7 @@ void config_init() {
 		return;				// 如果配置文件存在则跳过首次使用设置部分，进入读配置部分
 	}
 
-	int flag = 0;
+	int ret=0,flag = 0;
 	do
 	{
 		flag = 0;
@@ -2040,7 +2309,6 @@ void config_init() {
 		{
 			sprintf(dbIP, "127.0.0.1");
 		}
-		while (getchar() != '\n'); {}
 
 		change_color(1, 14);
 		printf("请输入MySQL数据库端口号（留空默认为3306）：");
@@ -2050,7 +2318,6 @@ void config_init() {
 			sprintf(in, "3306");
 		}
 		dbPort = atoi(in);
-		while (getchar() != '\n'); {}
 
 		change_color(1, 14);
 		printf("请输入MySQL数据库用户名（留空默认为root）：");
@@ -2059,7 +2326,6 @@ void config_init() {
 		{
 			sprintf(dbUser, "root");
 		}
-		while (getchar() != '\n'); {}
 
 		change_color(1, 14);
 		printf("请输入MySQL数据库密码：");
@@ -2068,7 +2334,6 @@ void config_init() {
 		{
 			sprintf(dbPassWd, "123456");
 		}
-		while (getchar() != '\n'); {}
 
 		change_color(1, 14);
 		printf("请输入MySQL数据库库名称（留空默认为courseselectionsystem）：");
@@ -2077,7 +2342,7 @@ void config_init() {
 		{
 			sprintf(dbName, "courseselectionsystem");
 		}
-		while (getchar() != '\n'); {}
+
 		if (!mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd, dbName, dbPort, NULL, 0))
 		{
 			printf("\n\n数据库连接失败！请确认配置是否正确，按回车重新配置……\n");
@@ -2086,35 +2351,51 @@ void config_init() {
 		mysql_close(&mysql);
 	} while (flag);
 
-	change_color(1, 14);
-	printf("\n\n学期部分——\n");
-	printf("\n当前学年（输入一位数后回车即可）：202");
-	int ret = scanf("%d", &ini);
-	rewind(stdin);
-	while (ret != 1 || ini > 9 || ini < 0)
-	{
-		while (getchar() != '\n');
+
+	do {
+		flag = 0;
+		printf("\n\n学期部分——\n");
+		printf("\n当前学年（输入0-8）：202");
+		ini = _getch();
+		if (ini <= '8' && ini >= '0')
 		{
-			printf("无效，请重新输入：");
-			ret = scanf("%d", &ini);
-			rewind(stdin);
+			printf("%c\n", ini);
+			currYear = ini - 48;
+			continue;
 		}
-	}
-	currYear = ini;
-	change_color(1, 14);
-	printf("\n第？学期（输入1或2）：");
-	ret = scanf("%d", &ini);
-	rewind(stdin);
-	while (ret != 1 || ini > 2 || ini < 1)
-	{
-		while (getchar() != '\n');
+		else
 		{
-			printf("无效，请重新输入：");
-			ret = scanf("%d", &ini);
-			rewind(stdin);
+			printf("\n无效，请重新输入！\n");
+			flag = 1;
+			continue;
 		}
-	}
-	currTerm = ini;
+
+	} while (flag);
+
+	do
+	{
+		flag = 0;
+		printf("\n当前学期（输入1或2）：202%d-202%d学年第  学期\b\b\b\b\b\b",currYear,currYear+1);
+		ini = _getch();
+		if (ini == '1')
+		{
+			printf("一\n");
+			currTerm = 1;
+			continue;
+		}
+		else if (ini == '2')
+		{
+			printf("二\n");
+			currTerm = 2;
+			continue;
+		}
+		else
+		{
+			flag = 1;
+			printf("\n无效，请重新输入！");
+		}
+
+	} while (flag);
 
 	int date[5];
 	char tmp[10];
@@ -3119,7 +3400,8 @@ void cm_add()
 		if (in <= '9' && in >= '0')
 		{
 			printf("%c\n", in);
-			sprintf(startTime, "202%c-202%c学年第", in, in + 1);
+			in -= 48;
+			sprintf(startTime, "202%d-202%d学年第", in, in + 1);
 			continue;
 		}
 		else
@@ -3135,7 +3417,7 @@ void cm_add()
 	{
 		reflag = 0;
 		change_color(1, 14);
-		printf("\n开课学期（输入1或2）：第  学期\b\b\b\b\b\b");
+		printf("\n开课学期（输入1或2）：202%d-202%d学年第  学期\b\b\b\b\b\b", in, in + 1);
 		in = _getch();
 		if (in == '1')
 		{
@@ -3220,11 +3502,8 @@ void cm_add()
 		s_gets(classId,11);
 		while (!check_classId(classId))
 		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效！请重新输入：");
-				s_gets(classId, 11);
-			}
+			printf("输入无效！请重新输入：");
+			s_gets(classId, 11);
 		}
 		//准备验证是否有相同ID的课
 		sprintf(query, "select 课程性质 from classes where 课程编号='%s'", classId);
@@ -3245,12 +3524,9 @@ void cm_add()
 	rewind(stdin);
 	while (ret != 1 || in_f > 4.0 || in_f < 1.0)
 	{
-		while (getchar() != '\n');
-		{
-			printf("无效，请重新输入：");
-			ret = scanf("%f", &in_f);
-			rewind(stdin);
-		}
+		printf("无效，请重新输入：");
+		ret = scanf("%f", &in_f);
+		rewind(stdin);
 	}
 	sprintf(credit, "%.1f", in_f);			// 学分浮点转字符串
 
@@ -3260,12 +3536,9 @@ void cm_add()
 	rewind(stdin);
 	while (ret != 1)
 	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效，请重新输入：");
-			ret = scanf("%f", &in_f);
-			rewind(stdin);
-		}
+		printf("输入无效，请重新输入：");
+		ret = scanf("%f", &in_f);
+		rewind(stdin);
 	}
 	sprintf(learnTime, "%.1f", in_f);		// 学时浮点转字符串
 
@@ -3278,12 +3551,9 @@ void cm_add()
 		rewind(stdin);
 		while (ret != 1 || in > 20 || in < 1)
 		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效，请重新输入：");
-				ret = scanf("%d", &in);
-				rewind(stdin);
-			}
+			printf("输入无效，请重新输入：");
+			ret = scanf("%d", &in);
+			rewind(stdin);
 		}
 
 		int sw;
@@ -3299,12 +3569,9 @@ void cm_add()
 		rewind(stdin);
 		while (ret != 1 || in > 20 || in < 1 || in < sw)
 		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效，请重新输入：");
-				ret = scanf("%d", &in);
-				rewind(stdin);
-			}
+			printf("输入无效，请重新输入：");
+			ret = scanf("%d", &in);
+			rewind(stdin);
 		}
 		sprintf(in_s, "第%d周", in);		//周次整型转字符串
 		strcat(endTime, in_s);
@@ -3320,12 +3587,9 @@ void cm_add()
 		rewind(stdin);
 		while (ret != 2 || in > 7 || in < 1 || in1 < 1 || in1 > 10)
 		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效，请重新输入：");
-				ret = scanf("%d-%d", &in, &in1);
-				rewind(stdin);
-			}
+			printf("输入无效，请重新输入：");
+			ret = scanf("%d-%d", &in, &in1);
+			rewind(stdin);
 		}
 		switch (in) {		//周整型转字符串
 		case 1:
@@ -3413,11 +3677,8 @@ void cm_add()
 		ret = scanf("%d-%d", &in, &in1);
 		while (ret != 2 || in > 2 || in < 1 || in1 < 100 || in1 > 999)
 		{
-			while (getchar() != '\n');
-			{
-				printf("无效，请重新输入：");
-				ret = scanf("%d-%d", &in, &in1);
-			}
+			printf("无效，请重新输入：");
+			ret = scanf("%d-%d", &in, &in1);
 		}
 		sprintf(classroom, "%d-%d", in, in1);
 		sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where 上课地点='%s'"
@@ -3449,12 +3710,9 @@ void cm_add()
 	rewind(stdin);
 	while (ret != 1 || !(in == 80 || in == 100))
 	{
-		while (getchar() != '\n');
-		{
-			printf("无效，请重新输入：");
-			ret = scanf("%d", &in);
-			rewind(stdin);
-		}
+		printf("无效，请重新输入：");
+		ret = scanf("%d", &in);
+		rewind(stdin);
 	}
 	if (in == 80)
 	{
@@ -3468,8 +3726,8 @@ void cm_add()
 	s_gets(intro,499);
 
 	change_color(1, 14);
-	printf("请输入课程教材：");
-	s_gets(book,20);
+	printf("请输入课程教材（50字以内）：");
+	s_gets(book,100);
 
 	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, `学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, `上课时间段`, `上课地点`, `限制人数`, `已选人数`, `课程简介`, `教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ,'%s', '%s', '%s', '%s', '%s')"
 		, classId, nowSchool, name, credit, learnTime, property, nowName
@@ -3691,7 +3949,8 @@ int scanf_pw(char* str)
 }
 
 
-
+//字符串原地使用base64进行加密
+//输入格式：字符串指针
 void pw_encode(char* str)
 {
 	long lenth;
@@ -3703,6 +3962,7 @@ void pw_encode(char* str)
 
 	//计算经过base64编码后的字符串长度  
 	str_lenth = strlen(str);
+
 	if (str_lenth % 3 == 0)
 		lenth = str_lenth / 3 * 4;
 	else
@@ -3714,10 +3974,19 @@ void pw_encode(char* str)
 	//以3个8位字符为一组进行编码  
 	for (i = 0, j = 0; i < lenth - 2; j += 3, i += 4)
 	{
-		en_result[i] = base64_table[str[j] >> 2]; //取出第一个字符的前6位并找出对应的结果字符  
-		en_result[i + 1] = base64_table[(str[j] & 0x3) << 4 | (str[j + 1] >> 4)]; //将第一个字符的后位与第二个字符的前4位进行组合并找到对应的结果字符  
-		en_result[i + 2] = base64_table[(str[j + 1] & 0xf) << 2 | (str[j + 2] >> 6)]; //将第二个字符的后4位与第三个字符的前2位组合并找出对应的结果字符  
-		en_result[i + 3] = base64_table[str[j + 2] & 0x3f]; //取出第三个字符的后6位并找出结果字符  
+		//取出第一个字符的前6位并找出对应的结果字符 
+		en_result[i] 
+			= base64_table[str[j] >> 2]; 
+
+		//将第一个字符的后位与第二个字符的前4位进行组合并找到对应的结果字符
+		en_result[i + 1] 
+			= base64_table[(str[j] & 0x3) << 4 | (str[j + 1] >> 4)];
+
+		//将第二个字符的后4位与第三个字符的前2位组合并找出对应的结果字符
+		en_result[i + 2] = base64_table[(str[j + 1] & 0xf) << 2 | (str[j + 2] >> 6)];
+
+		//取出第三个字符的后6位并找出结果字符
+		en_result[i + 3] = base64_table[str[j + 2] & 0x3f];
 	}
 
 	switch (str_lenth % 3)
@@ -3734,6 +4003,8 @@ void pw_encode(char* str)
 	sprintf(str, "%s", en_result);
 }
 
+//字符串原地使用base64进行解密
+//输入格式：字符串指针
 void pw_decode(char* str)
 {
 	//根据base64表，以字符找到对应的十进制数据  
@@ -3743,21 +4014,22 @@ void pw_decode(char* str)
 	char* de_result;
 	int i, j;
 	int table[] = { 0,0,0,0,0,0,0,0,0,0,0,0,
-			 0,0,0,0,0,0,0,0,0,0,0,0,
-			 0,0,0,0,0,0,0,0,0,0,0,0,
-			 0,0,0,0,0,0,0,62,0,0,0,
-			 63,52,53,54,55,56,57,58,
-			 59,60,61,0,0,0,0,0,0,0,0,
-			 1,2,3,4,5,6,7,8,9,10,11,12,
-			 13,14,15,16,17,18,19,20,21,
-			 22,23,24,25,0,0,0,0,0,0,26,
-			 27,28,29,30,31,32,33,34,35,
-			 36,37,38,39,40,41,42,43,44,
-			 45,46,47,48,49,50,51
+					0,0,0,0,0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,62,0,0,0,
+					63,52,53,54,55,56,57,58,
+					59,60,61,0,0,0,0,0,0,0,0,
+					1,2,3,4,5,6,7,8,9,10,11,12,
+					13,14,15,16,17,18,19,20,21,
+					22,23,24,25,0,0,0,0,0,0,26,
+					27,28,29,30,31,32,33,34,35,
+					36,37,38,39,40,41,42,43,44,
+					45,46,47,48,49,50,51
 	};
 
 	//计算解码后的字符串长度  
 	lenth = strlen(str);
+
 	//判断编码后的字符串后是否有=  
 	if (strstr(str, "=="))
 		str_lenth = lenth / 4 * 3 - 2;
@@ -3772,9 +4044,17 @@ void pw_decode(char* str)
 	//以4个字符为一位进行解码  
 	for (i = 0, j = 0; i < lenth - 2; j += 3, i += 4)
 	{
-		de_result[j] = ((unsigned char)table[str[i]]) << 2 | (((unsigned char)table[str[i + 1]]) >> 4); //取出第一个字符对应base64表的十进制数的前6位与第二个字符对应base64表的十进制数的后2位进行组合  
-		de_result[j + 1] = (((unsigned char)table[str[i + 1]]) << 4) | (((unsigned char)table[str[i + 2]]) >> 2); //取出第二个字符对应base64表的十进制数的后4位与第三个字符对应bas464表的十进制数的后4位进行组合  
-		de_result[j + 2] = (((unsigned char)table[str[i + 2]]) << 6) | ((unsigned char)table[str[i + 3]]); //取出第三个字符对应base64表的十进制数的后2位与第4个字符进行组合  
+		//取出第一个字符对应base64表的十进制数的前6位与第二个字符对应base64表的十进制数的后2位进行组合  
+		de_result[j] = 
+			((unsigned char)table[str[i]]) << 2 | (((unsigned char)table[str[i + 1]]) >> 4); 
+		
+		//取出第二个字符对应base64表的十进制数的后4位与第三个字符对应bas464表的十进制数的后4位进行组合
+		de_result[j + 1] = 
+			(((unsigned char)table[str[i + 1]]) << 4) | (((unsigned char)table[str[i + 2]]) >> 2);   
+
+		//取出第三个字符对应base64表的十进制数的后2位与第4个字符进行组合
+		de_result[j + 2] = 
+			(((unsigned char)table[str[i + 2]]) << 6) | ((unsigned char)table[str[i + 3]]);   
 	}
 	sprintf(str, "%s", de_result);
 }
@@ -3820,7 +4100,7 @@ char* s_gets(char* str, int n)
 	{
 		i = 0;
 		flag = 0;
-		in = fgets(str, n + 1, stdin);
+		in = fgets(str, n + 2, stdin);
 		if (in)
 		{
 			while (str[i] != '\n' && str[i] != '\0')
@@ -3852,4 +4132,87 @@ void change_color(int text, int bg)
 {
 	bg <<= 4;
 	SetConsoleTextAttribute(consolehwnd, bg + text);
+}
+
+void cm_list()
+{
+	char classID[100];
+	system("cls");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\t\t\t○●○●○● 课程查询 - 教师 ●○●○●○\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\n全部课程如下：\n");
+	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
+	strcat(query3, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes");
+	select_class(query3);
+	printf("输入课程编号以查看该课程的详细信息\n");
+	s_gets(classID, 11);
+	check_class_exist(classID);
+	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数,教材信息,课程简介 from classes where 课程编号='";
+	strcat(query, classID);
+	strcat(query, "'");
+	mysql_query(&mysql, query);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			int row = mysql_num_rows(result);
+			int column = mysql_num_fields(result);
+			for (int i = 0; field = mysql_fetch_field(result); i++) {
+				//获得属性名 
+				if (i == 0 || i == 1)
+				{
+					printf("%-27s", field->name);
+					printf(" |");
+				}
+				else if (i == 2)
+				{
+					printf("%-17s", field->name);
+					printf(" |");
+				}
+				else if (i == 3 || i == 4 || i == 5)
+				{
+					printf("%-8s", field->name);
+					printf(" |");
+				}
+				else
+				{
+					printf(" %-20s", field->name);
+					printf("|");
+				}
+			}
+			printf("\n");
+			while (nextRow = mysql_fetch_row(result)) {
+				for (int j = 0; j < column; j++)
+				{
+					if (j == 0 || j == 1)
+					{
+						printf("%-27s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 2)
+					{
+						printf("%-17s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 3 || j == 4 || j == 5)
+					{
+						printf("%-8s", nextRow[j]);
+						printf(" |");
+					}
+					else
+					{
+						printf("%-20s", nextRow[j]);
+						printf(" |");
+					}
+				}
+				printf("\n");
+			}
+		}
+	}
+	printf("\n按任意键返回上一菜单...\n");
+	system("pause>nul");
+	course_managemenu();
 }
