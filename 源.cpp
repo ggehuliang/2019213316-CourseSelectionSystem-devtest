@@ -1932,7 +1932,7 @@ void config_init() {
 		return;				// 如果配置文件存在则跳过首次使用设置部分，进入读配置部分
 	}
 
-	int flag = 0;
+	int ret=0,flag = 0;
 	do
 	{
 		flag = 0;
@@ -1953,7 +1953,6 @@ void config_init() {
 		{
 			sprintf(dbIP, "127.0.0.1");
 		}
-		while (getchar() != '\n'); {}
 
 		printf("请输入MySQL数据库端口号（留空默认为3306）：");
 		s_gets(in, 20);
@@ -1962,7 +1961,6 @@ void config_init() {
 			sprintf(in, "3306");
 		}
 		dbPort = atoi(in);
-		while (getchar() != '\n'); {}
 
 		printf("请输入MySQL数据库用户名（留空默认为root）：");
 		s_gets(dbUser, 20);
@@ -1970,7 +1968,6 @@ void config_init() {
 		{
 			sprintf(dbUser, "root");
 		}
-		while (getchar() != '\n'); {}
 
 		printf("请输入MySQL数据库密码：");
 		s_gets(dbPassWd, 20);
@@ -1978,7 +1975,6 @@ void config_init() {
 		{
 			sprintf(dbPassWd, "123456");
 		}
-		while (getchar() != '\n'); {}
 
 		printf("请输入MySQL数据库库名称（留空默认为courseselectionsystem）：");
 		s_gets(dbName, 30);
@@ -1986,7 +1982,7 @@ void config_init() {
 		{
 			sprintf(dbName, "courseselectionsystem");
 		}
-		while (getchar() != '\n'); {}
+
 		if (!mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd, dbName, dbPort, NULL, 0))
 		{
 			printf("\n\n数据库连接失败！请确认配置是否正确，按回车重新配置……\n");
@@ -1996,33 +1992,50 @@ void config_init() {
 	} while (flag);
 
 
-	printf("\n\n学期部分——\n");
-	printf("\n当前学年（输入一位数后回车即可）：202");
-	int ret = scanf("%d", &ini);
-	rewind(stdin);
-	while (ret != 1 || ini > 9 || ini < 0)
-	{
-		while (getchar() != '\n');
+	do {
+		flag = 0;
+		printf("\n\n学期部分——\n");
+		printf("\n当前学年（输入0-8）：202");
+		ini = _getch();
+		if (ini <= '8' && ini >= '0')
 		{
-			printf("无效，请重新输入：");
-			ret = scanf("%d", &ini);
-			rewind(stdin);
+			printf("%c\n", ini);
+			currYear = ini - 48;
+			continue;
 		}
-	}
-	currYear = ini;
-	printf("\n第？学期（输入1或2）：");
-	ret = scanf("%d", &ini);
-	rewind(stdin);
-	while (ret != 1 || ini > 2 || ini < 1)
-	{
-		while (getchar() != '\n');
+		else
 		{
-			printf("无效，请重新输入：");
-			ret = scanf("%d", &ini);
-			rewind(stdin);
+			printf("\n无效，请重新输入！\n");
+			flag = 1;
+			continue;
 		}
-	}
-	currTerm = ini;
+
+	} while (flag);
+
+	do
+	{
+		flag = 0;
+		printf("\n当前学期（输入1或2）：202%d-202%d学年第  学期\b\b\b\b\b\b",currYear,currYear+1);
+		ini = _getch();
+		if (ini == '1')
+		{
+			printf("一\n");
+			currTerm = 1;
+			continue;
+		}
+		else if (ini == '2')
+		{
+			printf("二\n");
+			currTerm = 2;
+			continue;
+		}
+		else
+		{
+			flag = 1;
+			printf("\n无效，请重新输入！");
+		}
+
+	} while (flag);
 
 	int date[5];
 	char tmp[10];
@@ -2951,7 +2964,8 @@ void cm_add()
 		if (in <= '9' && in >= '0')
 		{
 			printf("%c\n", in);
-			sprintf(startTime, "202%c-202%c学年第", in, in + 1);
+			in -= 48;
+			sprintf(startTime, "202%d-202%d学年第", in, in + 1);
 			continue;
 		}
 		else
@@ -2966,7 +2980,7 @@ void cm_add()
 	do
 	{
 		reflag = 0;
-		printf("\n开课学期（输入1或2）：第  学期\b\b\b\b\b\b");
+		printf("\n开课学期（输入1或2）：202%d-202%d学年第  学期\b\b\b\b\b\b", in, in + 1);
 		in = _getch();
 		if (in == '1')
 		{
@@ -3044,11 +3058,8 @@ void cm_add()
 		s_gets(classId,11);
 		while (!check_classId(classId))
 		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效！请重新输入：");
-				s_gets(classId, 11);
-			}
+			printf("输入无效！请重新输入：");
+			s_gets(classId, 11);
 		}
 		//准备验证是否有相同ID的课
 		sprintf(query, "select 课程性质 from classes where 课程编号='%s'", classId);
@@ -3067,12 +3078,9 @@ void cm_add()
 	rewind(stdin);
 	while (ret != 1 || in_f > 4.0 || in_f < 1.0)
 	{
-		while (getchar() != '\n');
-		{
-			printf("无效，请重新输入：");
-			ret = scanf("%f", &in_f);
-			rewind(stdin);
-		}
+		printf("无效，请重新输入：");
+		ret = scanf("%f", &in_f);
+		rewind(stdin);
 	}
 	sprintf(credit, "%.1f", in_f);			// 学分浮点转字符串
 
@@ -3081,12 +3089,9 @@ void cm_add()
 	rewind(stdin);
 	while (ret != 1)
 	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效，请重新输入：");
-			ret = scanf("%f", &in_f);
-			rewind(stdin);
-		}
+		printf("输入无效，请重新输入：");
+		ret = scanf("%f", &in_f);
+		rewind(stdin);
 	}
 	sprintf(learnTime, "%.1f", in_f);		// 学时浮点转字符串
 
@@ -3098,12 +3103,9 @@ void cm_add()
 		rewind(stdin);
 		while (ret != 1 || in > 20 || in < 1)
 		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效，请重新输入：");
-				ret = scanf("%d", &in);
-				rewind(stdin);
-			}
+			printf("输入无效，请重新输入：");
+			ret = scanf("%d", &in);
+			rewind(stdin);
 		}
 
 		int sw;
@@ -3118,12 +3120,9 @@ void cm_add()
 		rewind(stdin);
 		while (ret != 1 || in > 20 || in < 1 || in < sw)
 		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效，请重新输入：");
-				ret = scanf("%d", &in);
-				rewind(stdin);
-			}
+			printf("输入无效，请重新输入：");
+			ret = scanf("%d", &in);
+			rewind(stdin);
 		}
 		sprintf(in_s, "第%d周", in);		//周次整型转字符串
 		strcat(endTime, in_s);
@@ -3138,12 +3137,9 @@ void cm_add()
 		rewind(stdin);
 		while (ret != 2 || in > 7 || in < 1 || in1 < 1 || in1 > 10)
 		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效，请重新输入：");
-				ret = scanf("%d-%d", &in, &in1);
-				rewind(stdin);
-			}
+			printf("输入无效，请重新输入：");
+			ret = scanf("%d-%d", &in, &in1);
+			rewind(stdin);
 		}
 		switch (in) {		//周整型转字符串
 		case 1:
@@ -3229,11 +3225,8 @@ void cm_add()
 		ret = scanf("%d-%d", &in, &in1);
 		while (ret != 2 || in > 2 || in < 1 || in1 < 100 || in1 > 999)
 		{
-			while (getchar() != '\n');
-			{
-				printf("无效，请重新输入：");
-				ret = scanf("%d-%d", &in, &in1);
-			}
+			printf("无效，请重新输入：");
+			ret = scanf("%d-%d", &in, &in1);
 		}
 		sprintf(classroom, "%d-%d", in, in1);
 		sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where 上课地点='%s'"
@@ -3264,12 +3257,9 @@ void cm_add()
 	rewind(stdin);
 	while (ret != 1 || !(in == 80 || in == 100))
 	{
-		while (getchar() != '\n');
-		{
-			printf("无效，请重新输入：");
-			ret = scanf("%d", &in);
-			rewind(stdin);
-		}
+		printf("无效，请重新输入：");
+		ret = scanf("%d", &in);
+		rewind(stdin);
 	}
 	if (in == 80)
 	{
@@ -3493,7 +3483,8 @@ int scanf_pw(char* str)
 }
 
 
-
+//字符串原地使用base64进行加密
+//输入格式：字符串指针
 void pw_encode(char* str)
 {
 	long lenth;
@@ -3505,6 +3496,7 @@ void pw_encode(char* str)
 
 	//计算经过base64编码后的字符串长度  
 	str_lenth = strlen(str);
+
 	if (str_lenth % 3 == 0)
 		lenth = str_lenth / 3 * 4;
 	else
@@ -3516,10 +3508,19 @@ void pw_encode(char* str)
 	//以3个8位字符为一组进行编码  
 	for (i = 0, j = 0; i < lenth - 2; j += 3, i += 4)
 	{
-		en_result[i] = base64_table[str[j] >> 2]; //取出第一个字符的前6位并找出对应的结果字符  
-		en_result[i + 1] = base64_table[(str[j] & 0x3) << 4 | (str[j + 1] >> 4)]; //将第一个字符的后位与第二个字符的前4位进行组合并找到对应的结果字符  
-		en_result[i + 2] = base64_table[(str[j + 1] & 0xf) << 2 | (str[j + 2] >> 6)]; //将第二个字符的后4位与第三个字符的前2位组合并找出对应的结果字符  
-		en_result[i + 3] = base64_table[str[j + 2] & 0x3f]; //取出第三个字符的后6位并找出结果字符  
+		//取出第一个字符的前6位并找出对应的结果字符 
+		en_result[i] 
+			= base64_table[str[j] >> 2]; 
+
+		//将第一个字符的后位与第二个字符的前4位进行组合并找到对应的结果字符
+		en_result[i + 1] 
+			= base64_table[(str[j] & 0x3) << 4 | (str[j + 1] >> 4)];
+
+		//将第二个字符的后4位与第三个字符的前2位组合并找出对应的结果字符
+		en_result[i + 2] = base64_table[(str[j + 1] & 0xf) << 2 | (str[j + 2] >> 6)];
+
+		//取出第三个字符的后6位并找出结果字符
+		en_result[i + 3] = base64_table[str[j + 2] & 0x3f];
 	}
 
 	switch (str_lenth % 3)
@@ -3536,6 +3537,8 @@ void pw_encode(char* str)
 	sprintf(str, "%s", en_result);
 }
 
+//字符串原地使用base64进行解密
+//输入格式：字符串指针
 void pw_decode(char* str)
 {
 	//根据base64表，以字符找到对应的十进制数据  
@@ -3545,21 +3548,22 @@ void pw_decode(char* str)
 	char* de_result;
 	int i, j;
 	int table[] = { 0,0,0,0,0,0,0,0,0,0,0,0,
-			 0,0,0,0,0,0,0,0,0,0,0,0,
-			 0,0,0,0,0,0,0,0,0,0,0,0,
-			 0,0,0,0,0,0,0,62,0,0,0,
-			 63,52,53,54,55,56,57,58,
-			 59,60,61,0,0,0,0,0,0,0,0,
-			 1,2,3,4,5,6,7,8,9,10,11,12,
-			 13,14,15,16,17,18,19,20,21,
-			 22,23,24,25,0,0,0,0,0,0,26,
-			 27,28,29,30,31,32,33,34,35,
-			 36,37,38,39,40,41,42,43,44,
-			 45,46,47,48,49,50,51
+					0,0,0,0,0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,62,0,0,0,
+					63,52,53,54,55,56,57,58,
+					59,60,61,0,0,0,0,0,0,0,0,
+					1,2,3,4,5,6,7,8,9,10,11,12,
+					13,14,15,16,17,18,19,20,21,
+					22,23,24,25,0,0,0,0,0,0,26,
+					27,28,29,30,31,32,33,34,35,
+					36,37,38,39,40,41,42,43,44,
+					45,46,47,48,49,50,51
 	};
 
 	//计算解码后的字符串长度  
 	lenth = strlen(str);
+
 	//判断编码后的字符串后是否有=  
 	if (strstr(str, "=="))
 		str_lenth = lenth / 4 * 3 - 2;
@@ -3574,9 +3578,17 @@ void pw_decode(char* str)
 	//以4个字符为一位进行解码  
 	for (i = 0, j = 0; i < lenth - 2; j += 3, i += 4)
 	{
-		de_result[j] = ((unsigned char)table[str[i]]) << 2 | (((unsigned char)table[str[i + 1]]) >> 4); //取出第一个字符对应base64表的十进制数的前6位与第二个字符对应base64表的十进制数的后2位进行组合  
-		de_result[j + 1] = (((unsigned char)table[str[i + 1]]) << 4) | (((unsigned char)table[str[i + 2]]) >> 2); //取出第二个字符对应base64表的十进制数的后4位与第三个字符对应bas464表的十进制数的后4位进行组合  
-		de_result[j + 2] = (((unsigned char)table[str[i + 2]]) << 6) | ((unsigned char)table[str[i + 3]]); //取出第三个字符对应base64表的十进制数的后2位与第4个字符进行组合  
+		//取出第一个字符对应base64表的十进制数的前6位与第二个字符对应base64表的十进制数的后2位进行组合  
+		de_result[j] = 
+			((unsigned char)table[str[i]]) << 2 | (((unsigned char)table[str[i + 1]]) >> 4); 
+		
+		//取出第二个字符对应base64表的十进制数的后4位与第三个字符对应bas464表的十进制数的后4位进行组合
+		de_result[j + 1] = 
+			(((unsigned char)table[str[i + 1]]) << 4) | (((unsigned char)table[str[i + 2]]) >> 2);   
+
+		//取出第三个字符对应base64表的十进制数的后2位与第4个字符进行组合
+		de_result[j + 2] = 
+			(((unsigned char)table[str[i + 2]]) << 6) | ((unsigned char)table[str[i + 3]]);   
 	}
 	sprintf(str, "%s", de_result);
 }
@@ -3623,7 +3635,7 @@ char* s_gets(char* str, int n)
 		i = 0;
 		flag = 0;
 		in = fgets(str, n + 1, stdin);
-		if (in)
+		if (in)		//如果是空指针就直接返回
 		{
 			while (str[i] != '\n' && str[i] != '\0')
 				i++;
