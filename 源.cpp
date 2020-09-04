@@ -1411,8 +1411,19 @@ void teacher_mainmenu()
 	change_color(1, 14);
 	printf("\n请选择您需要的服务:\n");
 	printf("  ① - 选课管理\n");
+	printf("\t-查看开设的课程\n");
+	printf("\t-查询学生信息\n");
+	printf("\t-删除课程(选课结束后)\n");
+	printf("\t-统计课程数目\n");
+	printf("\t-排序课程\n\n");
 	printf("  ② - 课程管理\n");
-	printf("  ③ - 个人信息管理\n\n");
+	printf("\t-查询课程\n");
+	printf("\t-添加课程\n");
+	printf("\t-修改课程\n");
+	printf("\t-删除课程(选课开始前)\n\n");
+	printf("  ③ - 个人信息管理\n");
+	printf("\t-密码\n");
+	printf("\t-邮箱\n\n");
 	printf("  ④ - 退出登录\n\n");
 	printf("\n请输入1，2，3或4:");
 	scanf_opt(&option2, 1, 4);
@@ -1635,8 +1646,8 @@ void sm_findcourse()
 			printf("\n");
 		}
 		printf("\n");
-		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3   FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
-			, courseName, courseName, courseName);
+		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,(select 课程名称 from classes where 课程编号=(select class1 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课1,(select 课程名称 from classes where 课程编号=(select class2 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课2,(select 课程名称 from classes where 课程编号=(select class3 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课3   FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
+			, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName);
 		mysql_query(&mysql, query1);
 		result = mysql_store_result(&mysql);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
@@ -1700,9 +1711,10 @@ void sm_findcourse()
 				printf(" |");
 			}
 			printf("\n");
-		}//===========================================================================================================
+		}
 		printf("\n");
-		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3   FROM `students`WHERE name = '%s'", studentName);
+		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,(select 课程名称 from classes where 课程编号=(select class1 from students where  name = '%s')) 选课1,(select 课程名称 from classes where 课程编号=(select class2 from students where  name = '%s')) 选课2,(select 课程名称 from classes where 课程编号=(select class3 from students where name = '%s')) 选课3   FROM `students`WHERE name = '%s'"
+			, studentName, studentName, studentName, studentName);
 		mysql_query(&mysql, query1);
 		result = mysql_store_result(&mysql);
 		column = mysql_num_fields(result);
@@ -1714,7 +1726,7 @@ void sm_findcourse()
 		printf("\n");
 		while (nextRow = mysql_fetch_row(result))
 		{
-			for (int j = 0; j < column + 1; j++)
+			for (int j = 0; j < column ; j++)
 			{
 				printf("%17s", nextRow[j]);
 				printf(" |");
