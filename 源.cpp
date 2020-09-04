@@ -1463,6 +1463,8 @@ int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char*
 	}
 }
 
+// 根据id查询课程是否存在，不存在会一直提示输入
+// 只能用于学生部分功能！
 void check_class_exist(char* classID)
 {
 	MYSQL_RES* result8;
@@ -1723,7 +1725,7 @@ void sm_findcourse()
 			printf("\n");
 		}
 		printf("\n");
-		sprintf(query1, "SELECT phone 学生电话, passwd 密码,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3   FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
+		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3   FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
 			, courseName, courseName, courseName);
 		mysql_query(&mysql, query1);
 		result = mysql_store_result(&mysql);
@@ -1790,7 +1792,7 @@ void sm_findcourse()
 			printf("\n");
 		}//===========================================================================================================
 		printf("\n");
-		sprintf(query1, "SELECT phone 学生电话, passwd 密码,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3   FROM `students`WHERE name = '%s'", studentName);
+		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3   FROM `students`WHERE name = '%s'", studentName);
 		mysql_query(&mysql, query1);
 		result = mysql_store_result(&mysql);
 		column = mysql_num_fields(result);
@@ -2646,7 +2648,25 @@ void cm_list()
 	select_class(query3);
 	printf("输入课程编号以查看该课程的详细信息\n");
 	s_gets(classID, 11);
-	check_class_exist(classID);
+	MYSQL_RES* result8;
+	do {
+		char query10[100] = "select * from classes where 课程编号='";
+		strcat(query10, classID);
+		strcat(query10, "'");
+		mysql_store_result(&mysql);
+		mysql_query(&mysql, query10);
+		result8 = mysql_store_result(&mysql);
+		if (mysql_num_rows(result8) == 0)
+		{
+			printf("无此课程，请重新输入！(若返回上一级，请按ctrl+q)\n");
+			s_gets(classID, 11);
+			if (classID[0] == 17)
+			{
+				system("cls");
+				course_managemenu();
+			}
+		}
+	} while (mysql_num_rows(result8) == 0);
 	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数,教材信息,课程简介 from classes where 课程编号='";
 	strcat(query, classID);
 	strcat(query, "'");
@@ -2862,7 +2882,6 @@ void cm_edit() {
 				printf("修改成功！\n");
 				printf("按任意键返回上一菜单...\n");
 				system("pause>nul");
-				sm_findcourse();
 				cm_edit();
 				break;
 
