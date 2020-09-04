@@ -1608,8 +1608,8 @@ void teacher_findcourse()
 				system("cls");
 				teacher_findcourse();
 			}
-			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,"
-				"sexual 性别  FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
+			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别"
+				" FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
 				, courseName, courseName, courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
@@ -1641,8 +1641,16 @@ void teacher_findcourse()
 			printf("\n");
 		}
 		printf("\n");
-		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,(select 课程名称 from classes where 课程编号=(select class1 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课1,(select 课程名称 from classes where 课程编号=(select class2 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课2,(select 课程名称 from classes where 课程编号=(select class3 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课3   FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
-			, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName, courseName);
+		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,"
+			"(select 课程名称 from classes where 课程编号="
+			"(select class1 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课1,"
+			"(select 课程名称 from classes where 课程编号="
+			"(select class2 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课2,"
+			"(select 课程名称 from classes where 课程编号="
+			"(select class3 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课3 "
+			"FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
+			, courseName, courseName, courseName, courseName, courseName, courseName
+			, courseName, courseName, courseName, courseName, courseName, courseName);
 		mysql_query(&mysql, query1);
 		result = mysql_store_result(&mysql);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
@@ -1676,7 +1684,8 @@ void teacher_findcourse()
 				system("cls");
 				teacher_findcourse();
 			}
-			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别  FROM `students`WHERE name = '%s'",studentName);
+			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别 "
+				"FROM `students`WHERE name = '%s'",studentName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 
@@ -1708,7 +1717,11 @@ void teacher_findcourse()
 			printf("\n");
 		}
 		printf("\n");
-		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,(select 课程名称 from classes where 课程编号=(select class1 from students where  name = '%s')) 选课1,(select 课程名称 from classes where 课程编号=(select class2 from students where  name = '%s')) 选课2,(select 课程名称 from classes where 课程编号=(select class3 from students where name = '%s')) 选课3   FROM `students`WHERE name = '%s'"
+		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,"
+			"(select 课程名称 from classes where 课程编号=(select class1 from students where  name = '%s')) 选课1,"
+			"(select 课程名称 from classes where 课程编号=(select class2 from students where  name = '%s')) 选课2,"
+			"(select 课程名称 from classes where 课程编号=(select class3 from students where name = '%s')) 选课3"
+			" FROM `students`WHERE name = '%s'"
 			, studentName, studentName, studentName, studentName);
 		mysql_query(&mysql, query1);
 		result = mysql_store_result(&mysql);
