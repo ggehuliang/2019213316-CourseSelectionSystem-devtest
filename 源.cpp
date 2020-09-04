@@ -3252,6 +3252,7 @@ void pm_edit()
 				s_gets(passwd1, 20);
 			}
 		}
+		pw_encode(passwd);
 		char query1[200] = "update teachers set passwd='";
 		strcat(query1, passwd);
 		strcat(query1, "' where teachID='");
