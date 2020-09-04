@@ -317,9 +317,8 @@ void student_mainmenu()
 	printf("  ③ - 查询选课结果\n");
 	printf("  ④ - 删除选课结果\n");
 	printf("  ⑤ - 个人信息管理\n");
-	printf("  ⑥ - 查看课程详细信息\n\n");
-	printf("  ⑦ - 退出登录\n");
-	printf("请输入1，2，3，4，5，6或7：");
+	printf("  ⑥ - 退出登录\n");
+	printf("请输入1，2，3，4，5或6：");
 	scanf_opt(&option, 1, 7);
 	if (option == 1)
 	{
@@ -357,13 +356,6 @@ void student_mainmenu()
 		student_mainmenu();
 	}
 	else if (option == 6)
-	{
-		student_search_specific_imformation();
-		printf("请按任意键返回上一菜单\n");
-		system("pause > nul");
-		student_mainmenu();
-	}
-	else if (option == 7)
 	{
 		main_entrance();
 	}
@@ -715,8 +707,9 @@ void student_query_course()
 	printf("  ② - 根据开课学院查询\n");
 	printf("  ③ - 根据课余量排序所有课程\n");
 	printf("  ④ - 根据选课人数排序所有课程\n");
-	printf("  ⑤ - 返回学生主菜单\n");
-	printf("请输入1，2，3，4或5:");
+	printf("  ⑤ - 查看课程详细信息\n\n");
+	printf("  ⑥ - 返回学生主菜单\n");
+	printf("请输入1，2，3，4，5或6:");
 	scanf_opt(&option, 1, 5);
 	if (option == 1)
 	{
@@ -783,6 +776,13 @@ void student_query_course()
 		student_query_course();
 	}
 	if (option == 5)
+	{
+		student_search_specific_imformation();
+		printf("请按任意键返回上一菜单\n");
+		system("pause > nul");
+		student_query_course();
+	}
+	if (option == 6)
 	{
 		system("cls");
 		student_mainmenu();
