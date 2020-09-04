@@ -70,7 +70,7 @@ void pw_encode(char* code);
 void pw_decode(char* code);
 int scanf_opt(int*, int, int);
 char* s_gets(char*, int);
-
+void change_color(int, int);
 //==========================================
 //全局变量声明
 
@@ -101,6 +101,7 @@ int dbPort = 3306;
 int currYear = 2020, currTerm = 1;			// 当前上课学期
 time_t currStart, selecStart, selecEnd;		// 当前学期开课时间、选课始终时间
 
+HANDLE consolehwnd;							//更改颜色需要用到的窗口句柄
 
 int main()
 {
@@ -109,6 +110,9 @@ int main()
 	config_init();
 
 	sql();
+
+	consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);//初始化更改颜色
+	system("color e1");
 
 	main_entrance();
 
@@ -123,9 +127,11 @@ int main_entrance()
 	int option;
 	system("cls");
 	system("title 学生选课管理系统 - 入口");
+	change_color(4, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	change_color(1, 14);
 	printf("\n请选择您的身份:\n");
 	printf("  ① - 学生\n");
 	printf("  ② - 老师\n");
@@ -3573,4 +3579,19 @@ char* s_gets(char* str, int n)
 		}
 	} while (flag);
 	return in;
+}
+
+//更改下一次输出的颜色
+//输入格式：文字颜色，背景颜色
+//0 = 黑色       8  = 灰色
+//1 = 蓝色       9  = 淡蓝色
+//2 = 绿色       10 = 淡绿色
+//3 = 浅绿色     11 = 淡浅绿色
+//4 = 红色       12 = 淡红色
+//5 = 紫色       13 = 淡紫色
+//6 = 黄色       14 = 淡黄色
+//7 = 白色       15 = 亮白色
+void change_color(int text, int bg) {
+	bg <<= 4;
+	SetConsoleTextAttribute(consolehwnd, bg + text);
 }
