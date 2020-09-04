@@ -115,7 +115,6 @@ int dbPort = 3306;
 int currYear = 2020, currTerm = 1;			// 当前上课学期
 time_t currStart, selecStart, selecEnd;		// 当前学期开课时间、选课始终时间
 
-
 int main()
 {
 	mysql_init(&mysql);		// 初始化mysql
