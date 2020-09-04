@@ -3531,9 +3531,10 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 char* s_gets(char* str, int n)
 {
 	char* in;
-	int flag,i = 0;
+	int flag,i;
 	do 
 	{
+		int i = 0;
 		flag = 0;
 		in = fgets(str, n + 1, stdin);
 		if (in)
