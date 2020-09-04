@@ -1076,13 +1076,15 @@ void student_search_specific_imformation()
 	printf("\t\t\t○●○●○● 查看课程详细信息--学生 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n全部课程如下：\n");
+	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
+	strcat(query3, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes");
+	select_class(query3);
 	printf("输入课程编号以查看该课程的详细信息\n");
 	scanf("%s", classID);
 	check_class_exist(classID);
-	char query[100] = "select * from classes where classID='";
+	char query[200] = "select * from classes where 课程编号='";
 	strcat(query, classID);
 	strcat(classID, "'");
-	select_class(query);
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	if (result)
@@ -1096,14 +1098,14 @@ void student_search_specific_imformation()
 				//获得属性名 
 				if (i > 6)
 				{
-					printf("%-50s", field->name);
+					printf("%-30s", field->name);
 					printf(" |");
 				}
 			}
 			printf("\n");
 			while (nextRow = mysql_fetch_row(result)) {
 				for (int j = 7; j < column; j++) {
-					printf("%-50s", nextRow[j]);
+					printf("%-30s", nextRow[j]);
 					printf(" |");
 				}
 				printf("\n");
