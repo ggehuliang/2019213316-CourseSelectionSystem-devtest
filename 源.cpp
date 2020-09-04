@@ -319,7 +319,7 @@ void student_mainmenu()
 	printf("  ⑤ - 个人信息管理\n");
 	printf("  ⑥ - 退出登录\n");
 	printf("请输入1，2，3，4，5或6：");
-	scanf_opt(&option, 1, 7);
+	scanf_opt(&option, 1, 6);
 	if (option == 1)
 	{
 		student_select_course();
@@ -434,11 +434,11 @@ void student_reg()
 	strcat(query4, "'");
 
 	printf("请输入性别:");
-	s_gets(sexual, 2);
+	s_gets(sexual, 3);
 	while (strcmp(sexual, "男") != 0 && strcmp(sexual, "女") != 0)
 	{
 		printf("无效输入！请输入男或女:");
-		s_gets(sexual, 2);
+		s_gets(sexual, 3);
 	}
 	char query5[200] = "update students set sexual='";
 	strcat(query5, sexual);
@@ -451,7 +451,7 @@ void student_reg()
 	while (check_phone(phone) == 0)
 	{
 		printf("无效输入！请输入11位电话号:（若返回上一级，请按ctrl+q）");
-		s_gets(phone, 11);
+		s_gets(phone, 12);
 		if (phone[0] == 17)//返回上一级
 		{
 			system("cls");
@@ -710,7 +710,7 @@ void student_query_course()
 	printf("  ⑤ - 查看课程详细信息\n\n");
 	printf("  ⑥ - 返回学生主菜单\n");
 	printf("请输入1，2，3，4，5或6:");
-	scanf_opt(&option, 1, 5);
+	scanf_opt(&option, 1, 6);
 	if (option == 1)
 	{
 		system("cls");
@@ -1030,7 +1030,7 @@ void student_manage_course()
 	}
 	}
 }
-
+/*
 void student_search_specific_imformation()
 {
 	char classID[100];
@@ -1107,6 +1107,126 @@ void student_search_specific_imformation()
 				}
 				printf("\n");
 			}
+		}
+	}
+}*/
+
+void student_search_specific_imformation()
+{
+	char classID[100];
+	system("cls");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\t\t\t○●○●○● 查看课程详细信息--学生 ●○●○●○\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\n全部课程如下：\n");
+	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
+	strcat(query3, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes");
+	select_class(query3);
+	printf("输入课程编号以查看该课程的详细信息\n");
+	s_gets(classID, 11);
+	check_class_exist(classID);
+	printf("\n\n");
+	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数 from classes where 课程编号='";
+	strcat(query, classID);
+	strcat(query, "'");
+	mysql_query(&mysql, query);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			int row = mysql_num_rows(result);
+			int column = mysql_num_fields(result);
+			for (int i = 0; field = mysql_fetch_field(result); i++) {
+				//获得属性名 
+				if (i == 0 || i == 1)
+				{
+					printf("%-27s", field->name);
+					printf(" |");
+				}
+				else if (i == 2)
+				{
+					printf("%-17s", field->name);
+					printf(" |");
+				}
+				else if (i == 3 || i == 4 || i == 5)
+				{
+					printf("%-8s", field->name);
+					printf(" |");
+				}
+				else
+				{
+					printf(" %-22s", field->name);
+					printf("|");
+				}
+			}
+			printf("\n");
+			while (nextRow = mysql_fetch_row(result)) {
+				for (int j = 0; j < column; j++)
+				{
+					if (j == 0 || j == 1)
+					{
+						printf("%-27s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 2)
+					{
+						printf("%-17s", nextRow[j]);
+						printf(" |");
+					}
+					else if (j == 3 || j == 4 || j == 5)
+					{
+						printf("%-8s", nextRow[j]);
+						printf(" |");
+					}
+					else
+					{
+						printf("%-22s", nextRow[j]);
+						printf(" |");
+					}
+				}
+				printf("\n\n");
+			}
+		}
+	}
+	char query1[200] = "select 教材信息 from classes where 课程编号='";
+	strcat(query1, classID);
+	strcat(query1, "'");
+	mysql_query(&mysql, query1);
+	result2 = mysql_store_result(&mysql);
+	if (result2)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			field = mysql_fetch_field(result2);
+			//获得属性名 
+			printf("%s:", field->name);
+			printf("\n");
+			nextRow = mysql_fetch_row(result2);
+			printf("%s", nextRow[0]);
+			printf("\n\n");
+		}
+	}
+
+	char query2[200] = "select 课程简介 from classes where 课程编号='";
+	strcat(query2, classID);
+	strcat(query2, "'");
+	mysql_query(&mysql, query2);
+	result1 = mysql_store_result(&mysql);
+	if (result1)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			field = mysql_fetch_field(result1);
+				//获得属性名 
+			printf("%s:", field->name);
+			printf("\n");
+			nextRow = mysql_fetch_row(result1);
+			printf("%s", nextRow[0]);
+			printf("\n\n");
 		}
 	}
 }
@@ -3282,8 +3402,8 @@ void cm_add()
 	printf("请输入课程介绍（500字内）：");
 	s_gets(intro,499);
 
-	printf("请输入课程教材：");
-	s_gets(book,20);
+	printf("请输入课程教材（50字以内）：");
+	s_gets(book,100);
 
 	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, `学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, `上课时间段`, `上课地点`, `限制人数`, `已选人数`, `课程简介`, `教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ,'%s', '%s', '%s', '%s', '%s')"
 		, classId, nowSchool, name, credit, learnTime, property, nowName
@@ -3622,7 +3742,7 @@ char* s_gets(char* str, int n)
 	{
 		i = 0;
 		flag = 0;
-		in = fgets(str, n + 1, stdin);
+		in = fgets(str, n + 2, stdin);
 		if (in)
 		{
 			while (str[i] != '\n' && str[i] != '\0')
