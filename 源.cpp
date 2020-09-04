@@ -303,7 +303,7 @@ int check_password(int who, char* ID, char* password)
 void student_mainmenu()
 {
 	system("cls");
-	int a;
+	int option;
 	system("title 学生选课管理系统 - 学生主菜单");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 功能界面--学生 ●○●○●○\n");
@@ -318,58 +318,50 @@ void student_mainmenu()
 	printf("  ⑥ - 查看课程详细信息\n\n");
 	printf("  ⑦ - 退出登录\n");
 	printf("请输入1，2，3，4，5，6或7：");
-	int ret2 = scanf("%d", &a);
-	while (ret2 != 1 || a > 7 || a < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret2 = scanf("%d", &a);
-		}
-	}
-	if (a == 1)
+	scanf_opt(&option, 1, 7);
+	if (option == 1)
 	{
 		student_select_course();
 		printf("请按任意键返回上一菜单\n");
 		system("pause > nul");
 		student_mainmenu();
 	}
-	else if (a == 2)
+	else if (option == 2)
 	{
 		student_query_course();
 		printf("请按任意键返回上一菜单\n");
 		system("pause > nul");
 		student_mainmenu();
 	}
-	else if (a == 3)
+	else if (option == 3)
 	{
 		student_query_result();
 		printf("请按任意键返回上一菜单\n");
 		system("pause > nul");
 		student_mainmenu();
 	}
-	else if (a == 4)
+	else if (option == 4)
 	{
 		student_delete_course();
 		printf("请按任意键返回上一菜单\n");
 		system("pause > nul");
 		student_mainmenu();
 	}
-	else if (a == 5)
+	else if (option == 5)
 	{
 		student_manage_course();
 		printf("请按任意键返回上一菜单\n");
 		system("pause > nul");
 		student_mainmenu();
 	}
-	else if (a == 6)
+	else if (option == 6)
 	{
 		student_search_specific_imformation();
 		printf("请按任意键返回上一菜单\n");
 		system("pause > nul");
 		student_mainmenu();
 	}
-	else if (a == 7)
+	else if (option == 7)
 	{
 		main_entrance();
 	}
@@ -693,7 +685,7 @@ void student_select_course()
 void student_query_course()
 {
 	system("cls");
-	int a;
+	int option;
 	system("title 学生选课管理系统 - 学生查课");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 查询课程 ●○●○●○\n");
@@ -705,16 +697,8 @@ void student_query_course()
 	printf("  ④ - 根据选课人数排序所有课程\n");
 	printf("  ⑤ - 返回学生主菜单\n");
 	printf("请输入1，2，3，4或5:");
-	int ret3 = scanf("%d", &a);
-	while (ret3 != 1 || a > 5 || a < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret3 = scanf("%d", &a);
-		}
-	}
-	if (a == 1)
+	scanf_opt(&option, 1, 5);
+	if (option == 1)
 	{
 		system("cls");
 		char class_name[20];
@@ -732,7 +716,7 @@ void student_query_course()
 		system("pause > nul");
 		student_query_course();
 	}
-	if (a == 2)
+	if (option == 2)
 	{
 		system("cls");
 		char school_name[20];
@@ -750,7 +734,7 @@ void student_query_course()
 		system("pause > nul");
 		student_query_course();
 	}
-	if (a == 3)
+	if (option == 3)
 	{
 		system("cls");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -764,7 +748,7 @@ void student_query_course()
 		system("pause > nul");
 		student_query_course();
 	}
-	if (a == 4)
+	if (option == 4)
 	{
 		system("cls");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -778,7 +762,7 @@ void student_query_course()
 		system("pause > nul");
 		student_query_course();
 	}
-	if (a == 5)
+	if (option == 5)
 	{
 		system("cls");
 		student_mainmenu();
@@ -906,7 +890,7 @@ void student_delete_course()
 void student_manage_course()
 {
 	system("cls");
-	int num;
+	int option;
 	char phone[20];
 	char passwd[20];
 	char passwd1[20];
@@ -921,17 +905,8 @@ void student_manage_course()
 	printf("  ③ - 邮箱\n");
 	printf("  ④ - 返回学生主菜单\n");
 	printf("\n请输入1，2，3或4：");
-	int ret4 = scanf("%d", &num);
-	while (ret4 != 1 || num > 4 || num < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效!请重新输入：");
-			ret4 = scanf("%d", &num);
-		}
-	}
-
-	switch (num)
+	scanf_opt(&option, 1, 4);
+	switch (option)
 	{
 	case 1:
 	{
@@ -1290,15 +1265,7 @@ void teacher_mainmenu()
 	printf("  ④ - 退出登录\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1，2，3或4:");
-	int ret1 = scanf("%d", &option2);
-	while (ret1 != 1 || option2 > 4 || option2 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option2);
-		}
-	}
+	scanf_opt(&option2, 1, 4);
 	switch (option2)
 	{
 	case 1:
@@ -1333,16 +1300,7 @@ void select_managemenu() {
 	printf("  ⑥ - 返回上一个菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1,2,3,4,5或6:");
-	int ret1 = scanf("%d", &option2);
-	while (ret1 != 1 || option2 > 6 || option2 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option2);
-		}
-	}
-
+	scanf_opt(&option2, 1, 6);
 	switch (option2)
 	{
 	case 1:
@@ -1402,15 +1360,7 @@ void sm_findcourse()
 	printf("  ③ - 返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1，2或3:");
-	int ret1 = scanf("%d", &option2);
-	while (ret1 != 1 || option2 > 3 || option2 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option2);
-		}
-	}
+	scanf_opt(&option2, 1, 3);
 	switch (option2)
 	{
 	case 1:
@@ -1575,15 +1525,7 @@ void sm_lessthan30delete() {
 	printf("  ② - 返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	int ret1 = scanf("%d", &option2);
-	while (ret1 != 1 || option2 > 2 || option2 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option2);
-		}
-	}
+	scanf_opt(&option2, 1, 2);
 	switch (option2)
 	{
 	case 1:
@@ -1645,15 +1587,7 @@ void sm_lessthan30delete() {
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
 
-				ret1 = scanf("%d", &option2);
-				while (ret1 != 1 || option2 > 2 || option2 < 1)
-				{
-					while (getchar() != '\n');
-					{
-						printf("输入无效！请重新输入：");
-						ret1 = scanf("%d", &option2);
-					}
-				}
+				scanf_opt(&option2, 1, 2);
 
 				switch (option2)
 				{
@@ -1783,15 +1717,7 @@ void course_managemenu()
 	printf("  ⑤ - 返回上一个菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1,2,3,4或5:");
-	int ret1 = scanf("%d", &option2);
-	while (ret1 != 1 || option2 > 5 || option2 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option2);
-		}
-	}
+	scanf_opt(&option2, 1, 5);
 	char query1[200] = "SELECT * FROM `classes` LIMIT 0, 1000";
 	switch (option2)
 	{
@@ -2230,15 +2156,7 @@ void teacher_login() {
 		printf("  ② - 注册\n");
 		printf("  ③ - 返回上层\n\n");
 		printf("请输入1，2或3：");
-		int ret1 = scanf("%d", &option1);
-		while (ret1 != 1 || option1 > 3 || option1 < 1)
-		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效！请重新输入：");
-				ret1 = scanf("%d", &option1);
-			}
-		}
+		scanf_opt(&option1, 1, 3);
 		if (option1 == 1)
 		{
 			int flag = 0;
@@ -2317,15 +2235,7 @@ void cm_list1()
 	printf("  ② - 返回上一个菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	int ret1 = scanf("%d", &option2);
-	while (ret1 != 1 || option2 > 2 || option2 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option2);
-		}
-	}
+	scanf_opt(&option2, 1, 2);
 	switch (option2)
 	{
 	case 1:
@@ -2409,16 +2319,7 @@ void cm_edit() {
 	printf("  ② - 结束修改并返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	int ret1 = scanf("%d", &option2);
-	while (ret1 != 1 || option2 > 2 || option2 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option2);
-		}
-	}
-	int ret2;
+	scanf_opt(&option2, 1, 2);
 	switch (option2)
 	{
 	case 1:
@@ -2475,15 +2376,7 @@ void cm_edit() {
 			printf("  ④ - 返回上一个菜单\n\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			printf("请输入1，2，3或4:");
-			ret1 = scanf("%d", &option2);
-			while (ret1 != 1 || option2 > 4 || option2 < 1)
-			{
-				while (getchar() != '\n');
-				{
-					printf("输入无效！请重新输入：");
-					ret1 = scanf("%d", &option2);
-				}
-			}
+			scanf_opt(&option2, 1, 4);
 			char content[1000];
 			switch (option2)
 			{
@@ -2531,15 +2424,7 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				ret1 = scanf("%d", &option2);
-				while (ret1 != 1 || option2 > 2 || option2 < 1)
-				{
-					while (getchar() != '\n');
-					{
-						printf("输入无效！请重新输入：");
-						ret1 = scanf("%d", &option2);
-					}
-				}
+				scanf_opt(&option2, 1, 2);
 				switch (option2)
 				{
 				case 1:
@@ -2565,15 +2450,7 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				ret2 = scanf("%d", &option2);
-				while (ret2 != 1 || option2 > 2 || option2 < 1)
-				{
-					while (getchar() != '\n');
-					{
-						printf("输入无效！请重新输入：");
-						ret2 = scanf("%d", &option2);
-					}
-				}
+				scanf_opt(&option2, 1, 2);
 				switch (option2)
 				{
 				case 1:
@@ -2618,15 +2495,7 @@ void cm_edit() {
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 				printf("\n请输入1或2:");
-				ret1 = scanf("%d", &option2);
-				while (ret1 != 1 || option2 > 2 || option2 < 1)
-				{
-					while (getchar() != '\n');
-					{
-						printf("输入无效！请重新输入：");
-						ret1 = scanf("%d", &option2);
-					}
-				}
+				scanf_opt(&option2, 1, 2);
 				switch (option2)
 				{
 				case 1:
@@ -2665,15 +2534,7 @@ void cm_edit() {
 					printf("  ② - 否\n\n");
 					printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 					printf("\n请输入1或2:");
-					ret1 = scanf("%d", &option2);
-					while (ret1 != 1 || option2 > 2 || option2 < 1)
-					{
-						while (getchar() != '\n');
-						{
-							printf("输入无效！请重新输入：");
-							ret1 = scanf("%d", &option2);
-						}
-					}
+					scanf_opt(&option2, 1, 2);
 					switch (option2)
 					{
 					case 1:
@@ -2728,15 +2589,7 @@ void cm_delete() {
 	printf("  ② - 返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1或2:");
-	int ret1 = scanf("%d", &option2);
-	while (ret1 != 1 || option2 > 2 || option2 < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("输入无效！请重新输入：");
-			ret1 = scanf("%d", &option2);
-		}
-	}
+	scanf_opt(&option2, 1, 2);
 	switch (option2)
 	{
 	case 1:
@@ -2793,15 +2646,7 @@ void cm_delete() {
 		printf("  ② - 否\n\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\n请输入1或2:");
-		ret1 = scanf("%d", &option2);
-		while (ret1 != 1 || option2 > 2 || option2 < 1)
-		{
-			while (getchar() != '\n');
-			{
-				printf("输入无效！请重新输入：");
-				ret1 = scanf("%d", &option2);
-			}
-		}
+		scanf_opt(&option2, 1, 2);
 		switch (option2)
 		{
 		case 1:
@@ -2831,7 +2676,7 @@ void cm_delete() {
 void pm_edit()
 {
 	system("cls");
-	int num;
+	int option2;
 	char passwd[20];
 	char passwd1[20];
 	char email[50];
@@ -2844,17 +2689,8 @@ void pm_edit()
 	printf("  ② - 邮箱\n");
 	printf("  ③ - 返回上一个菜单\n\n");
 	printf("\n请输入1，2或3：");
-	int ret4 = scanf("%d", &num);
-	while (ret4 != 1 || num > 3 || num < 1)
-	{
-		while (getchar() != '\n');
-		{
-			printf("无效，请重新输入!\n");
-			ret4 = scanf("%d", &num);
-		}
-	}
-
-	switch (num)
+	scanf_opt(&option2, 1, 3);
+	switch (option2)
 	{
 	case 1:
 	{
