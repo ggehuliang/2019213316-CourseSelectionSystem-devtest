@@ -368,14 +368,6 @@ void student_mainmenu()
 	}
 	else if (option == 6)
 	{
-		student_search_specific_imformation();
-		change_color(1, 14);
-		printf("请按任意键返回上一菜单\n");
-		system("pause > nul");
-		student_mainmenu();
-	}
-	else if (option == 7)
-	{
 		main_entrance();
 	}
 }
