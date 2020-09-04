@@ -310,12 +310,16 @@ void student_mainmenu()
 	change_color(1, 14);
 	printf("\n请选择你需要的操作：\n\n");
 	printf("  ① - 学生选课\n");
-	printf("  ② - 查询课程 \n");
+	printf("                 ┌ 根据课程名查询\n");
+	printf("                 ├ 根据开课学院查询\n");
+	printf("  ② - 查询课程 ─┼ 根据课余量排序所有课程\n");
+	printf("                 ├ 根据选课人数排序所有课程\n");
+	printf("                 └ 查询课程详细信息\n\n");
 	printf("  ③ - 查询选课结果\n");
 	printf("  ④ - 删除选课结果\n");
-	printf("  ⑤ - 个人信息管理\n");
-	printf("  ⑥ - 退出登录\n");
-	printf("请输入1，2，3，4，5或6：");
+	printf("  ⑤ - 个人信息管理\n\n");
+	printf("  ⑥ - 退出登录\n\n");
+	printf(" 请输入1，2，3，4，5或6：");
 	scanf_opt(&option, 1, 6);
 	if (option == 1)
 	{
@@ -1404,22 +1408,20 @@ void teacher_mainmenu()
 	printf("\n登录成功，欢迎您，\n%s 的 %s 老师。\n", nowSchool, nowName);
 	change_color(1, 14);
 	printf("\n请选择您需要的服务:\n");
-	printf("  ① - 选课管理\n");
-	printf("\t-查看开设的课程\n");
-	printf("\t-查询学生信息\n");
-	printf("\t-删除课程(选课结束后)\n");
-	printf("\t-统计课程数目\n");
-	printf("\t-排序课程\n\n");
-	printf("  ② - 课程管理\n");
-	printf("\t-查询课程\n");
-	printf("\t-添加课程\n");
-	printf("\t-修改课程\n");
-	printf("\t-删除课程(选课开始前)\n\n");
-	printf("  ③ - 个人信息管理\n");
-	printf("\t-密码\n");
-	printf("\t-邮箱\n\n");
-	printf("  ④ - 退出登录\n\n");
-	printf("\n请输入1，2，3或4:");
+	printf("  \n");
+	printf("              ┌ 查看开设的课程\n");
+	printf("              ├ 查询学生信息\n");
+	printf(" ① 选课管理──┼ 删除课程(选课结束后)\n");
+	printf("              ├ 统计课程数目\n");
+	printf("              └ 排序课程\n\n");
+	printf("              ┌ 查询课程\n");
+	printf(" ② 课程管理──┼ 添加课程\n");
+	printf("              ├ 修改课程\n");
+	printf("              └ 删除课程(选课开始前)\n\n");
+	printf(" ③ 信息管理──┬ 修改密码\n");
+	printf("              └ 修改邮箱\n\n");
+	printf(" ④ 退出登录\n\n");
+	printf("\n  请输入1，2，3或4:");
 	scanf_opt(&option2, 1, 4);
 	switch (option2)
 	{
