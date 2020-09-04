@@ -248,7 +248,8 @@ int check_stuId(char* str)
 
 void sql_connect()
 {
-	if (!(mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd, dbName, dbPort, NULL, 0))) {
+	if (!(mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd
+		, dbName, dbPort, NULL, 0))) {
 		printf("无法连接到数据库，错误代码: %s\n", mysql_error(&mysql));
 		getchar();
 		exit(1);
@@ -365,7 +366,8 @@ void student_mainmenu()
 void student_register()
 {
 	system("cls");
-	char stuID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
+	char stuID[11], school[50], major[50], name[50], sexual[5]
+		, phone[100], passwd[100], email[100];
 	system("title 学生选课管理系统 - 学生注册");
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -583,7 +585,9 @@ void student_select_course()
 	}
 	else {
 		//判断从表中取出的那些课的是不是和学生现在想选的课有重复
-		if (((Row[0] != NULL) && (strcmp(classID, Row[0]) == 0)) || ((Row[1] != NULL) && (strcmp(classID, Row[1]) == 0)) || ((Row[2] != NULL) && (strcmp(classID, Row[2]) == 0)))//strcmp,如果有重复,class1ID==classID||....||....
+		if (((Row[0] != NULL) && (strcmp(classID, Row[0]) == 0)) 
+			|| ((Row[1] != NULL) && (strcmp(classID, Row[1]) == 0)) 
+			|| ((Row[2] != NULL) && (strcmp(classID, Row[2]) == 0)))//strcmp,如果有重复,class1ID==classID||....||....
 		{
 			printf("\n您已选过该课程！\n\n");
 		}
@@ -1604,7 +1608,8 @@ void teacher_findcourse()
 				system("cls");
 				teacher_findcourse();
 			}
-			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别  FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
+			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,"
+				"sexual 性别  FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
 				, courseName, courseName, courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
@@ -3345,13 +3350,15 @@ void teacher_course_add()
 	} while (reflag);
 
 	mysql_store_result(&mysql);				//清除数据防止出错
-	sprintf(query, "select 课程编号,课程性质 from classes where 开课教师='%s' and 课程性质='必修' and 开课时间 like '%s"
+	sprintf(query, "select 课程编号,课程性质 from classes where "
+		"开课教师='%s' and 课程性质='必修' and 开课时间 like '%s"
 		, nowName, startTime);
 	strcat(query, "%'");
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	numClass1 = mysql_num_rows(result);		// 取所选学期必修课已开数
-	sprintf(query, "select 课程编号,课程性质 from classes where 开课教师='%s' and 课程性质='选修' and 开课时间 like '%s"
+	sprintf(query, "select 课程编号,课程性质 from classes where "
+		"开课教师='%s' and 课程性质='选修' and 开课时间 like '%s"
 		, nowName, startTime);
 	strcat(query, "%'");
 	mysql_query(&mysql, query);
@@ -3409,7 +3416,8 @@ void teacher_course_add()
 			s_gets(classId, 11);
 		}
 		//准备验证是否有相同ID的课
-		sprintf(query, "select 课程性质 from classes where 课程编号='%s'", classId);
+		sprintf(query, "select 课程性质 from classes where "
+			"课程编号='%s'", classId);
 	} while (check_classClash(query));
 
 	do
@@ -3418,7 +3426,8 @@ void teacher_course_add()
 		printf("请输入课程名称：");
 		s_gets(name, 20);
 		//准备验证是否有相同名字的课
-		sprintf(query, "select 课程性质 from classes where 课程名称='%s'", name);
+		sprintf(query, "select 课程性质 from classes where "
+			"课程名称='%s'", name);
 	} while (check_classClash(query));
 
 	change_color(1, 14);
@@ -3483,8 +3492,11 @@ void teacher_course_add()
 		printf("\n该课程最终开课时间：%s", startTime);
 		printf("\n该课程最终结课时间：%s\n\n", endTime);
 
-		printf("\n时间节次表：\n1、8:00-8:50\n2、9:00-9:50\n3、10:00-10:50\n4、11:00-11:50\n5、13:30-14:20\n6、14:30-15:20\n7、15:30-16:20\n8、16:30-17:20\n9、18:30-19:20\n10、19:30-20:20");
-		printf("\n输入格式：[周几(1-7)]-[第几(1-10)节]\n若具体上课时间为每周三第五节（13:30-14:20），则输入应为：3-5");
+		printf("\n时间节次表：\n1、8:00-8:50\n2、9:00-9:50\n3、10:00-10:50\n"
+			"4、11:00-11:50\n5、13:30-14:20\n6、14:30-15:20\n7、15:30-16:20\n"
+			"8、16:30-17:20\n9、18:30-19:20\n10、19:30-20:20");
+		printf("\n输入格式：[周几(1-7)]-[第几(1-10)节]\n"
+			"若具体上课时间为每周三第五节（13:30-14:20），则输入应为：3-5");
 		printf("\n请输入具体上课时间段：");
 		ret = scanf("%d-%d", &in, &in1);
 		rewind(stdin);
@@ -3556,7 +3568,8 @@ void teacher_course_add()
 		change_color(1, 14);
 		printf("\n该课程最终上课时间段为：%s", time);
 
-		sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where 开课教师='%s' and 上课时间段='%s' and 开课时间 like '%s"
+		sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where "
+			"开课教师='%s' and 上课时间段='%s' and 开课时间 like '%s"
 			, nowName, time, term);
 		strcat(query, "%'");				//准备取出该老师该学期可能有时间冲突的课
 		mysql_query(&mysql, query);
@@ -3576,7 +3589,8 @@ void teacher_course_add()
 		}
 
 		change_color(1, 14);
-		printf("\n\n上课地点格式：楼号-房间号。1表示教一楼2表示教二楼；房间号为3位数字\n请输入上课地点：");
+		printf("\n\n上课地点格式：楼号-房间号。1表示教一楼2表示教二楼；房间号为3位数字"
+			"\n请输入上课地点：");
 		ret = scanf("%d-%d", &in, &in1);
 		while (ret != 2 || in > 2 || in < 1 || in1 < 100 || in1 > 999)
 		{
@@ -3584,8 +3598,8 @@ void teacher_course_add()
 			ret = scanf("%d-%d", &in, &in1);
 		}
 		sprintf(classroom, "%d-%d", in, in1);
-		sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where 上课地点='%s'"
-			, classroom);					//准备验证是否有相同教室的课
+		sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where "
+			"上课地点='%s'", classroom);					//准备验证是否有相同教室的课
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
 		if (mysql_num_rows(result)) {		//若有，则判断时间是否冲突
@@ -3632,7 +3646,11 @@ void teacher_course_add()
 	printf("请输入课程教材（50字以内）：");
 	s_gets(book,100);
 
-	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, `学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, `上课时间段`, `上课地点`, `限制人数`, `已选人数`, `课程简介`, `教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ,'%s', '%s', '%s', '%s', '%s')"
+	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, "
+		"`学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, "
+		"`上课时间段`, `上课地点`, `限制人数`, `已选人数`, `课程简介`, `"
+		"教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', "
+		"'%s', '%s' ,'%s', '%s', '%s', '%s', '%s')"
 		, classId, nowSchool, name, credit, learnTime, property, nowName
 		, startTime, endTime, time, classroom, limit, "0", intro, book);
 
