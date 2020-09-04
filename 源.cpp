@@ -320,6 +320,11 @@ void student_mainmenu()
 	printf("\n请选择你需要的操作：\n\n");
 	printf("  ① - 学生选课\n");
 	printf("  ② - 查询课程 \n");
+	printf("   -根据课程名查询\n");
+	printf("   -根据开课学院查询\n");
+	printf("   -根据课余量排序所有课程\n");
+	printf("   -根据选课人数排序所有课程\n");
+	printf("   -查询课程详细信息\n");
 	printf("  ③ - 查询选课结果\n");
 	printf("  ④ - 删除选课结果\n");
 	printf("  ⑤ - 个人信息管理\n");
