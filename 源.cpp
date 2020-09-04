@@ -1333,7 +1333,6 @@ void teacher_mainmenu()
 	printf("  ② - 课程管理\n");
 	printf("  ③ - 个人信息管理\n\n");
 	printf("  ④ - 退出登录\n\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1，2，3或4:");
 	int ret1 = scanf("%d", &option2);
 	while (ret1 != 1 || option2 > 4 || option2 < 1)
@@ -1376,7 +1375,6 @@ void select_managemenu() {
 	printf("  ④ - 统计您自己开设过的课程数目\n");
 	printf("  ⑤ - 按选课人数排序所有开设过的课程\n\n");
 	printf("  ⑥ - 返回上一个菜单\n\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n请输入1,2,3,4,5或6:");
 	int ret1 = scanf("%d", &option2);
 	while (ret1 != 1 || option2 > 6 || option2 < 1)
@@ -1417,12 +1415,12 @@ void sm_mycourse()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 开设课程查询界面 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("以下是您开设的课程\n");
+	printf("\n以下是您开设的课程\n");
 	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
 	strcat(query, nowName);
 	strcat(query, "'");
 	select_class(query);//打印相应查询内容
-	printf("按任意键返回上一菜单...\n");
+	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
 	select_managemenu();
 }
@@ -1430,8 +1428,6 @@ void sm_mycourse()
 void sm_findcourse()
 {
 	system("cls");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t○●○●○● 学生信息查询界面 ●○●○●○\n");
 	int column;
 	int row;
 	int flag = 0;
@@ -1439,9 +1435,10 @@ void sm_findcourse()
 	char courseName[200] = "";
 	char studentName[200] = "";
 	char query[200];
-
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\n请选择您的查询方式:\n\n");
+	printf("\t\t\t○●○●○● 学生信息查询界面 ●○●○●○\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\n请选择您的查询方式:\n");
 	printf("  ① - 根据课程名称查询\n");
 	printf("  ② - 根据学生姓名查询\n");
 	printf("  ③ - 返回上一菜单\n\n");
@@ -1461,7 +1458,7 @@ void sm_findcourse()
 	case 1:
 		do
 		{
-			printf("请输入您想要查询的课程名称：");
+			printf("\n请输入您想要查询的课程名称：");
 			scanf("%s", courseName);
 			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -1500,7 +1497,7 @@ void sm_findcourse()
 			printf("\n");
 		}
 		do {
-			printf("请输入您想要查询相应学生信息的课程编号：");
+			printf("\n请输入您想要查询相应学生信息的课程编号：");
 			scanf("%s", courseName);
 			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -1538,13 +1535,13 @@ void sm_findcourse()
 			printf("\n");
 		}
 
-		printf("按任意键返回上一菜单...\n");
+		printf("\n按任意键返回上一菜单...\n");
 		system("pause>nul");
 		sm_findcourse();
 		break;
 	case 2:
 		do {
-			printf("请输入您想要查询的学生名称：");
+			printf("\n请输入您想要查询的学生名称：");
 			scanf("%s", studentName);
 			if (studentName[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -1583,7 +1580,7 @@ void sm_findcourse()
 			}
 			printf("\n");
 		}
-		printf("按任意键返回上一菜单...\n");
+		printf("\n按任意键返回上一菜单...\n");
 		system("pause>nul");
 		sm_findcourse();
 		break;
@@ -1600,7 +1597,7 @@ void sm_lessthan30delete() {
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 开设课程删除界面 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("以下是您开设的课程\n");
+	printf("\n以下是您开设的课程\n");
 	int column;
 	int row;
 	int stu_num;
@@ -1615,7 +1612,7 @@ void sm_lessthan30delete() {
 	strcat(query, "'");
 	select_class(query);//打印相应内容
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("请选择您需要的服务:\n\n");
+	printf("\n请选择您需要的服务:\n\n");
 	printf("  ① - 进行课程的删除\n");
 	printf("  ② - 返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1633,7 +1630,7 @@ void sm_lessthan30delete() {
 	{
 	case 1:
 		do {
-			printf("请输入您想要删除的课程的编号：");
+			printf("\n请输入您想要删除的课程的编号：");
 			scanf("%s", courseName);
 			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -1684,7 +1681,7 @@ void sm_lessthan30delete() {
 			if (stu_num < 30)
 			{
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-				printf("确认要删除该课程以及相应学生选课信息吗？\n");
+				printf("\n确认要删除该课程以及相应学生选课信息吗？\n");
 				printf("  ① - 是\n");
 				printf("  ② - 否\n\n");
 				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1744,8 +1741,8 @@ void sm_lessthan30delete() {
 					}
 
 
-					printf("删除成功！\n");
-					printf("按任意键返回上一菜单...\n");
+					printf("\n删除成功！\n");
+					printf("\n按任意键返回上一菜单...\n");
 					system("pause>nul");
 					cm_delete();
 					break;
@@ -1758,8 +1755,8 @@ void sm_lessthan30delete() {
 			}
 			else
 			{
-				printf("非常抱歉，该课程选课人数已超过三十人，您不能对进行删除操作\n");
-				printf("按任意键返回上一菜单...\n");
+				printf("\n非常抱歉，该课程选课人数已超过三十人，您不能对此课程进行删除操作\n");
+				printf("\n按任意键返回上一菜单...\n");
 				system("pause>nul");
 				cm_delete();
 				break;
@@ -1767,8 +1764,8 @@ void sm_lessthan30delete() {
 		}
 		else
 		{
-			printf("非常抱歉，该课程选课未结束，您不能对进行删除操作\n");
-			printf("按任意键返回上一菜单...\n");
+			printf("\n非常抱歉，该课程选课未结束，您不能对此课程进行删除操作\n");
+			printf("\n按任意键返回上一菜单...\n");
 			system("pause>nul");
 			cm_delete();
 		}
@@ -1802,12 +1799,11 @@ void sm_rankcourse() {
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 开设课程排序界面 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("以下是您开设课程的排序结果\n");
+	printf("\n以下是您开设课程的排序结果\n");
 	sprintf(query4, "select * from `classes` where `开课教师` = '%s' order by `已选人数` "
 		, nowName);
 	select_class(query4);
-	printf("以上是您开设课程的排序结果\n");
-	printf("按任意键返回上一菜单...\n");
+	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
 	select_managemenu();
 }
@@ -2074,7 +2070,7 @@ void config_init() {
 		}
 	}
 	currYear = ini;
-	printf("第？学期（输入1或2）：");
+	printf("\n第？学期（输入1或2）：");
 	ret = scanf("%d", &ini);
 	while (ret != 1 || ini > 2 || ini < 1)
 	{
@@ -2090,7 +2086,7 @@ void config_init() {
 	char tmp[10];
 	do {
 		flag = 0;
-		printf("输入当前学期开学时间（格式yyyy-mm-dd，如输入2020-8-31，必须为周一）：");
+		printf("\n输入当前学期开学时间（格式yyyy-mm-dd，如输入2020-8-31，必须为周一）：");
 		ret = scanf("%d-%d-%d", &date[0], &date[1], &date[2]);
 		while (ret != 3)
 		{
@@ -2120,14 +2116,14 @@ void config_init() {
 
 	do {
 		flag = 0;
-		printf("输入当前选课开始时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
+		printf("\n输入当前选课开始时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
 		ret = scanf("%d-%d-%d-%d:%d"
 			, &date[0], &date[1], &date[2], &date[3], &date[4]);
 		while (ret != 5)
 		{
 			while (getchar() != '\n');
 			{
-				printf("无效，请重新输入：");
+				printf("输入无效，请重新输入：");
 				ret = scanf("%d-%d-%d-%d:%d"
 					, &date[0], &date[1], &date[2], &date[3], &date[4]);
 			}
@@ -2148,14 +2144,14 @@ void config_init() {
 
 	do {
 		flag = 0;
-		printf("输入当前选课结束时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
+		printf("\n输入当前选课结束时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
 		ret = scanf("%d-%d-%d-%d:%d"
 			, &date[0], &date[1], &date[2], &date[3], &date[4]);
 		while (ret != 5)
 		{
 			while (getchar() != '\n');
 			{
-				printf("无效，请重新输入：");
+				printf("输入无效，请重新输入：");
 				ret = scanf("%d-%d-%d-%d:%d"
 					, &date[0], &date[1], &date[2], &date[3], &date[4]);
 			}
@@ -2165,14 +2161,14 @@ void config_init() {
 			|| date[4] < 0 || date[4]>59)
 		{
 			flag = 1;
-			printf("不符合日期规范，请重新输入。");
+			printf("\n不符合日期规范，请重新输入。");
 			continue;
 		}
 
 		selecEnd = convert_dateToTT(date[0], date[1], date[2], date[3], date[4], 0);
 		if (selecEnd < selecStart) {
 			flag = 1;
-			printf("选课结束时间不能早于开课时间，请重新输入。");
+			printf("\n选课结束时间不能早于开课时间，请重新输入。");
 			continue;
 		}
 	} while (flag);
@@ -2294,7 +2290,7 @@ void teacher_login() {
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			do {
 				flag = 0;
-				printf("请输入用户名：");
+				printf("\n请输入用户名：");
 				scanf("%s", teachID);
 				if (teachID[0] == 17)//若返回上一级，请按ctrl+q
 				{
@@ -2437,7 +2433,7 @@ void cm_edit() {
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 开设课程修改界面 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("以下是您开设的课程\n");
+	printf("\n以下是您开设的课程\n");
 	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
 	int column;
 	int stu_num;
@@ -2449,7 +2445,7 @@ void cm_edit() {
 	strcat(query, "'");
 	select_class(query);//打印相应查询内容
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("请选择您需要的服务:\n\n");
+	printf("\n请选择您需要的服务:\n\n");
 	printf("  ① - 修改课程内容\n");
 	printf("  ② - 结束修改并返回上一菜单\n\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -2468,7 +2464,7 @@ void cm_edit() {
 	{
 	case 1:
 		do {
-			printf("请输入您想要修改的课程的编号：");
+			printf("\n请输入您想要修改的课程的编号：");
 			scanf("%s", courseName);
 			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -2519,7 +2515,7 @@ void cm_edit() {
 			printf("  ③ - 限制人数\n\n");
 			printf("  ④ - 返回上一个菜单\n\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("请输入1，2，3或4:");
+			printf("\n请输入1，2，3或4:");
 			ret1 = scanf("%d", &option2);
 			while (ret1 != 1 || option2 > 4 || option2 < 1)
 			{
@@ -2964,7 +2960,7 @@ void pm_edit()
 		strcat(query2, "' where teachID='");
 		strcat(query2, teachID);
 		strcat(query2, "'");
-		mysql_query(&mysql, query2);
+		mysql_query(&mysql, query2);	//将更改后的邮箱存至mysql数据库
 		printf("\n修改成功!\n");
 		printf("按任意键返回上一菜单...\n");
 		system("pause>nul");
@@ -3013,12 +3009,12 @@ int check_classClash(char* query) {
 	return 0;
 }
 //加课
-void cm_add() {
+void cm_add()
+{
 	system("cls");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 课程添加界面 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-
 	char classId[20], name[50], credit[10], learnTime[20], property[10]
 		, startTime[100], endTime[100], time[100], classroom[20]
 		, limit[5], intro[500], book[50];
@@ -3029,7 +3025,7 @@ void cm_add() {
 	int reflag = 0;					//部分语句块变为一就重新执行的标志
 	int numClass1, numClass2;		//[1]为必修，[2]为选修课数量
 	char in_s[20];
-	printf("请选择开课时间——\n");
+	printf("\n请选择开课时间——\n");
 	do {
 		reflag = 0;
 		printf("\n学年部分（输入0-8）：202");
@@ -3052,7 +3048,7 @@ void cm_add() {
 	do
 	{
 		reflag = 0;
-		printf("开课学期（输入1或2）：第  学期\b\b\b\b\b\b");
+		printf("\n开课学期（输入1或2）：第  学期\b\b\b\b\b\b");
 		in = _getch();
 		if (in == '1')
 		{
@@ -3126,7 +3122,7 @@ void cm_add() {
 
 	do
 	{
-		printf("请输入课程编号（6位数字）：");
+		printf("\n请输入课程编号（6位数字）：");
 		ret = scanf("%s", classId);
 		while (ret != 1 || !check_classId(classId))
 		{
@@ -3161,13 +3157,13 @@ void cm_add() {
 	}
 	sprintf(credit, "%.1f", in_f);			// 学分浮点转字符串
 
-	printf("请输入课程学时（允许一位小数）：");
+	printf("\n请输入课程学时（允许一位小数）：");
 	ret = scanf("%f", &in_f);
 	while (ret != 1)
 	{
 		while (getchar() != '\n');
 		{
-			printf("无效，请重新输入：");
+			printf("输入无效，请重新输入：");
 			ret = scanf("%f", &in_f);
 		}
 	}
@@ -3176,13 +3172,13 @@ void cm_add() {
 	do
 	{
 		reflag = 0;							//防止无限循环
-		printf("请输入开课周次（输入1-20间整数）：");
+		printf("\n请输入开课周次（输入1-20间整数）：");
 		ret = scanf("%d", &in);
 		while (ret != 1 || in > 20 || in < 1)
 		{
 			while (getchar() != '\n');
 			{
-				printf("无效，请重新输入：");
+				printf("输入无效，请重新输入：");
 				ret = scanf("%d", &in);
 			}
 		}
@@ -3194,13 +3190,13 @@ void cm_add() {
 		strcpy(endTime, startTime);			//开课结课时间同一学期直接复制
 		strcat(startTime, in_s);
 
-		printf("请输入结课周次（输入1-20间整数）：");
+		printf("\n请输入结课周次（输入1-20间整数）：");
 		ret = scanf("%d", &in);
 		while (ret != 1 || in > 20 || in < 1 || in < sw)
 		{
 			while (getchar() != '\n');
 			{
-				printf("无效，请重新输入：");
+				printf("输入无效，请重新输入：");
 				ret = scanf("%d", &in);
 			}
 		}
@@ -3218,7 +3214,7 @@ void cm_add() {
 		{
 			while (getchar() != '\n');
 			{
-				printf("无效，请重新输入：");
+				printf("输入无效，请重新输入：");
 				ret = scanf("%d-%d", &in, &in1);
 			}
 		}
@@ -3354,10 +3350,10 @@ void cm_add() {
 		sprintf(limit, "100");
 	}
 
-	printf("请输入课程介绍：");
+	printf("\n请输入课程介绍：");
 	scanf("%s", intro);
 
-	printf("请输入课程教材：");
+	printf("\n请输入课程教材：");
 	scanf("%s", book);
 
 	sprintf(query, "INSERT INTO `classes` (`课程编号`, `开课学院`, `课程名称`, `学分`, `学时`, `课程性质`, `开课教师`, `开课时间`, `结课时间`, `上课时间段`, `上课地点`, `限制人数`, `已选人数`, `课程简介`, `教材信息`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' ,'%s', '%s', '%s', '%s', '%s')"
