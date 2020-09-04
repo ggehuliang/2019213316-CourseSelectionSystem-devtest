@@ -106,12 +106,12 @@ int main()
 {
 	mysql_init(&mysql);		// 初始化mysql
 
+	consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);//初始化更改颜色
+	system("color e1");
+
 	config_init();
 
 	sql();
-
-	consolehwnd = GetStdHandle(STD_OUTPUT_HANDLE);//初始化更改颜色
-	system("color e1");
 
 	main_entrance();
 
@@ -1020,9 +1020,9 @@ void student_manage_course()
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
 		printf("\n请输入新的密码：");
-		s_gets(passwd, 20);
-		printf("请再次确认新的密码:");
-		s_gets(passwd1, 20);
+		scanf_pw(passwd);
+		printf("请再次确认新的密码：");
+		scanf_pw(passwd1);
 		do {
 			if (strcmp(passwd, passwd1) != 0)
 			{
@@ -3234,9 +3234,9 @@ void pm_edit()
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
 		printf("\n请输入新的密码：");
-		s_gets(passwd, 20);
-		printf("请再次确认新的密码:\n");
-		s_gets(passwd1, 20);
+		scanf_pw(passwd);
+		printf("请再次确认新的密码：");
+		scanf_pw(passwd1);
 
 		while (strcmp(passwd, passwd1) != 0)
 		{
