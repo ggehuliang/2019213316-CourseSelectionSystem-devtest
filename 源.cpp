@@ -179,6 +179,12 @@ void student_login()
 				system("cls");
 				student_login();
 			}
+			if (check_stuId(stuID) == 0)
+			{
+				printf("无效输入！请输入10位数字(若返回上一级，请按ctrl+q)\n");
+				flag = 1;
+				continue;
+			}
 			char query[100] = "select name,school from students where stuID='";
 			strcat(query, stuID);
 			strcat(query, "'");
@@ -192,20 +198,12 @@ void student_login()
 				sprintf(nowSchool, nextRow[1]);
 			}
 
-			while (mysql_num_rows(result) == 0 || check_stuId(stuID) == 0)
+			if (mysql_num_rows(result) == 0)
 			{
-				if (check_stuId(stuID) == 0)
-				{
-					printf("无效输入！请输入10位数字(若返回上一级，请按ctrl+q)\n");
-					flag = 1;
-				}
-				else if (mysql_num_rows(result) == 0)
-				{
-					printf("此学号未注册，请重新输入！(若返回上一级，请按ctrl+q)\n");
-					flag = 1;
-
-				}
+				printf("此学号未注册，请重新输入！(若返回上一级，请按ctrl+q)\n");
+				flag = 1;
 			}
+			
 		} while (flag);
 
 		printf("请输入密码：");
