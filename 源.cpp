@@ -1039,7 +1039,7 @@ void student_search_specific_imformation()
 	printf("输入课程编号以查看该课程的详细信息\n");
 	s_gets(classID, 11);
 	check_class_exist(classID);
-	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数,课程简介,教材信息 from classes where 课程编号='";
+	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数,教材信息,课程简介 from classes where 课程编号='";
 	strcat(query, classID);
 	strcat(query, "'");
 	mysql_query(&mysql, query);
