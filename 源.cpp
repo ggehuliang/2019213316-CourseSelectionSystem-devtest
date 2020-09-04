@@ -35,6 +35,7 @@ int check_email(char* str);
 //教师功能
 
 void teacher_login();			// 教师登录模块
+void teacher_reg();				// 教师注册模块
 void teacher_mainmenu();		// 教师主菜单-3个大功能选单
 void select_managemenu();		// 选课管理选单-5个小功能
 void sm_mycourse();				//  查询查询教师自己开设过的课程的选课情况
@@ -225,9 +226,7 @@ void student_login()
 	else if (option1 == 2)
 	{
 		student_reg();
-		printf("\n请按任意键返回上一菜单");
-		system("pause > nul");
-		student_login();
+		
 	}
 	else if (option1 == 3)
 	{
@@ -386,7 +385,7 @@ void student_reg()
 			if (stuID[0] == 17)//若返回上一级，请按ctrl+q
 			{
 				system("cls");
-				teacher_login();
+				student_login();
 				return;
 			}
 		}
@@ -403,7 +402,7 @@ void student_reg()
 			if (stuID[0] == 17)//若返回上一级，请按ctrl+q
 			{
 				system("cls");
-				teacher_login();
+				student_login();
 				return;
 			}
 		}
@@ -478,6 +477,21 @@ void student_reg()
 
 	printf("请输入密码:");
 	scanf_pw(passwd);
+	char passwd1[30];
+	printf("请再次确认密码:");
+	scanf_pw(passwd1);
+	do {
+		if (strcmp(passwd, passwd1) != 0)
+		{
+			printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按ctrl+q）");
+			s_gets(passwd1, 20);
+			if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				student_reg();
+			}
+		}
+	} while (strcmp(passwd, passwd1) != 0);
 	pw_encode(passwd);
 	char query7[200] = "update students set passwd='";
 	strcat(query7, passwd);
@@ -506,7 +520,9 @@ void student_reg()
 	mysql_query(&mysql, query8);
 
 	printf("\n注册成功！\n");
-
+	printf("\n请按任意键返回上一菜单");
+	system("pause > nul");
+	student_login();
 }
 
 int check_phone(char* str)
@@ -2210,9 +2226,7 @@ void teacher_login() {
 		else if (option1 == 2)
 		{
 			teacher_reg();
-			printf("\n请按任意键返回上一菜单\n");
-			system("pause > nul");
-			teacher_login();
+			
 		}
 		else if (option1 == 3)
 		{
@@ -3270,8 +3284,25 @@ void teacher_reg()
 	strcat(query6, "'");
 	mysql_query(&mysql, query6);
 
+	char passwd1[30];
 	printf("请输入密码:");
 	scanf_pw(passwd);
+
+	printf("请再次确认密码:");
+	scanf_pw(passwd1);
+	do {
+		if (strcmp(passwd, passwd1) != 0)
+		{
+			printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按ctrl+q）");
+			s_gets(passwd1, 20);
+			if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				teacher_reg();
+			}
+		}
+	} while (strcmp(passwd, passwd1) != 0);
+	pw_encode(passwd);
 	char query7[200] = "update teachers set passwd='";
 	strcat(query7, passwd);
 	strcat(query7, "' where teachID='");
@@ -3300,6 +3331,9 @@ void teacher_reg()
 	mysql_query(&mysql, query8);
 
 	printf("\n注册成功！\n");
+	printf("\n请按任意键返回上一菜单\n");
+	system("pause > nul");
+	teacher_login();
 
 }
 
