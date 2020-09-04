@@ -1524,6 +1524,7 @@ void sm_findcourse()
 	char courseName[200] = "";
 	char studentName[200] = "";
 	char query[200];
+	char query1[200];
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 学生信息查询界面 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1620,7 +1621,7 @@ void sm_findcourse()
 				system("cls");
 				sm_findcourse();
 			}
-			sprintf(query, "SELECT * FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
+			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别  FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
 				, courseName, courseName, courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
@@ -1635,58 +1636,42 @@ void sm_findcourse()
 				flag = 0;
 			}
 		} while (flag == 1);
+
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 		{
-			if (i == 0)
-			{
-				printf(" %-10s", field->name);
-				printf("|");
-			}
-			else if (i == 1 || i == 2 || i == 5 || i == 6 || i == 7)
-			{
-				printf(" %-18s", field->name);
-				printf("|");
-			}
-			else if (i == 8 || i == 9 || i == 10)
-			{
-				printf(" %-13s", field->name);
-				printf("|");
-			}
-			else
-			{
-				printf(" %-10s", field->name);
-				printf("|");
-			}
+			printf("%17s", field->name);
+			printf(" |");
 		}
 		printf("\n");
 		while (nextRow = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column; j++)
 			{
-				if (j == 0)
-				{
-					printf(" %-10s", nextRow[j]);
-					printf("|");
-				}
-				else if (j == 1 || j == 2 || j == 5 || j == 6 || j == 7)
-				{
-					printf(" %-18s", nextRow[j]);
-					printf("|");
-				}
-				else if (j == 8 || j == 9 || j == 10)
-				{
-					printf(" %-13s", nextRow[j]);
-					printf("|");
-				}
-				else
-				{
-					printf(" %-10s", nextRow[j]);
-					printf("|");
-				}
+				printf("%17s", nextRow[j]);
+				printf(" |");
 			}
 			printf("\n");
 		}
-
+		printf("\n");
+		sprintf(query1, "SELECT phone 学生电话, passwd 密码,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3   FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
+			, courseName, courseName, courseName);
+		mysql_query(&mysql, query1);
+		result = mysql_store_result(&mysql);
+		for (int i = 0; field = mysql_fetch_field(result); i++)
+		{
+			printf("%17s", field->name);
+			printf(" |");
+		}
+		printf("\n");
+		while (nextRow = mysql_fetch_row(result))
+		{
+			for (int j = 0; j < column+1; j++)
+			{
+				printf("%17s", nextRow[j]);
+				printf(" |");
+			}
+			printf("\n");
+		}
 		printf("\n按任意键返回上一菜单...\n");
 		system("pause>nul");
 		sm_findcourse();
@@ -1700,9 +1685,7 @@ void sm_findcourse()
 				system("cls");
 				sm_findcourse();
 			}
-			char query[200] = "SELECT * FROM `students`WHERE name = '";
-			strcat(query, studentName);
-			strcat(query, "'");
+			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别  FROM `students`WHERE name = '%s'",studentName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 
@@ -1717,54 +1700,39 @@ void sm_findcourse()
 				flag = 0;
 			}
 		} while (flag == 1);
+
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 		{
-			if (i == 0)
-			{
-				printf(" %-10s", field->name);
-				printf("|");
-			}
-			else if (i == 1 || i == 2 || i == 5 || i == 6 || i == 7)
-			{
-				printf(" %-18s", field->name);
-				printf("|");
-			}
-			else if (i == 8 || i == 9 || i == 10)
-			{
-				printf(" %-13s", field->name);
-				printf("|");
-			}
-			else
-			{
-				printf(" %-10s", field->name);
-				printf("|");
-			}
+			printf("%17s", field->name);
+			printf(" |");
 		}
 		printf("\n");
 		while (nextRow = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column; j++)
 			{
-				if (j == 0)
-				{
-					printf(" %-10s", nextRow[j]);
-					printf("|");
-				}
-				else if (j == 1 || j == 2 || j == 5 || j == 6 || j == 7)
-				{
-					printf(" %-18s", nextRow[j]);
-					printf("|");
-				}
-				else if (j == 8 || j == 9 || j == 10)
-				{
-					printf(" %-13s", nextRow[j]);
-					printf("|");
-				}
-				else
-				{
-					printf(" %-10s", nextRow[j]);
-					printf("|");
-				}
+				printf("%17s", nextRow[j]);
+				printf(" |");
+			}
+			printf("\n");
+		}//===========================================================================================================
+		printf("\n");
+		sprintf(query1, "SELECT phone 学生电话, passwd 密码,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3   FROM `students`WHERE name = '%s'", studentName);
+		mysql_query(&mysql, query1);
+		result = mysql_store_result(&mysql);
+		column = mysql_num_fields(result);
+		for (int i = 0; field = mysql_fetch_field(result); i++)
+		{
+			printf("%17s", field->name);
+			printf(" |");
+		}
+		printf("\n");
+		while (nextRow = mysql_fetch_row(result))
+		{
+			for (int j = 0; j < column + 1; j++)
+			{
+				printf("%17s", nextRow[j]);
+				printf(" |");
 			}
 			printf("\n");
 		}
