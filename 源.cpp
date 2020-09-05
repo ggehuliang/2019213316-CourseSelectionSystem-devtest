@@ -525,7 +525,8 @@ void student_select_course()
 	change_color(1, 14);
 	printf("\n课程信息如下：\n");
 	char query[200];
-	sprintf(query, "select * from classes");
+	sprintf(query, "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,"
+		"(限制人数-已选人数) 余课量,学分,学分,学分,学分,学分,学分,学分,学分 from classes");
 	student_select_class(query);
 	printf("\n请输入您想选的课程编号：");
 	s_gets(classID, 30);
