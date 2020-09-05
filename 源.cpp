@@ -78,7 +78,7 @@ void change_color(int, int);									// 快捷更改接下来输出信息的颜�
 MYSQL mysql;										// 全局mysql连接
 MYSQL_RES* result;									// 查询返回结果集
 MYSQL_FIELD* field;									// 结果集取出列存放
-MYSQL_ROW Row;	// 结果集取出行存放
+MYSQL_ROW Row,Row1;	// 结果集取出行存放
 
 char stuID[11];	
 char teachID[20];
@@ -829,6 +829,7 @@ void student_delete_course()
 	}
 
 	sprintf(query, "select class1,class2,class3 from students where stuID='%s'", stuID);
+	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	if (result)
 		Row = mysql_fetch_row(result);
