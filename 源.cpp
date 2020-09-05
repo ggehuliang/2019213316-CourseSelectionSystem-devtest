@@ -78,7 +78,7 @@ void change_color(int, int);									// 快捷更改接下来输出信息的颜�
 MYSQL mysql;										// 全局mysql连接
 MYSQL_RES* result;									// 查询返回结果集
 MYSQL_FIELD* field;									// 结果集取出列存放
-MYSQL_ROW Row,Row1, Row2, Row3, Row4, Row5;	// 结果集取出行存放
+MYSQL_ROW Row;	// 结果集取出行存放
 
 char stuID[11];	
 char teachID[20];
@@ -214,6 +214,7 @@ void student_login()
 		{
 			change_color(4, 14);
 			printf("密码错误!请重新输入密码：(若返回上一级，输入ctrl+q)");
+			change_color(1, 14);
 			s_gets(stu_passwd, 20);	//若首次密码输入错误则明文显示
 			if (stu_passwd[0] == 17)//返回上一级
 			{
@@ -250,6 +251,7 @@ void sql_connect()
 	if (!(mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd
 		, dbName, dbPort, NULL, 0))) {
 		printf("无法连接到数据库，错误代码: %s\n", mysql_error(&mysql));
+		change_color(1, 14);
 		getchar();
 		exit(1);
 	}
@@ -302,6 +304,7 @@ void student_mainmenu()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 功能界面--学生 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	change_color(4, 14);
 	printf("\n登录成功，欢迎您，\n%s 的 %s 同学。\n", nowSchool, nowName);
 	change_color(1, 14);
 	printf("\n请选择你需要的操作：\n\n");
@@ -381,6 +384,7 @@ void student_register()
 		{
 			change_color(4, 14);
 			printf("无效输入！请输入10位数字:(若返回上一级，请按ctrl+q)");
+			change_color(1, 14);
 			s_gets(stuID, 11);
 			if (stuID[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -396,6 +400,7 @@ void student_register()
 		{
 			change_color(4, 14);
 			printf("此学号已注册!请更换学号:(若返回上一级，请按ctrl+q)");
+			change_color(1, 14);
 			s_gets(stuID, 11);
 			if (stuID[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -417,6 +422,7 @@ void student_register()
 	{
 		change_color(4, 14);
 		printf("无效输入！请输入男或女:");
+		change_color(1, 14);
 		s_gets(sexual, 3);
 	}
 	change_color(1, 14);
@@ -426,6 +432,7 @@ void student_register()
 	{
 		change_color(4, 14);
 		printf("无效输入！请输入11位电话号:（若返回上一级，请按ctrl+q）");
+		change_color(1, 14);
 		s_gets(phone, 12);
 		if (phone[0] == 17)//返回上一级
 		{
@@ -461,6 +468,7 @@ void student_register()
 	{
 		change_color(4, 14);
 		printf("无效输入！请按照***@***.***格式输入:（若返回上一级，请按ctrl+q）");
+		change_color(1, 14);
 		s_gets(email, 30);
 		if (email[0] == 17)//返回上一级
 		{
@@ -506,6 +514,7 @@ int check_phone(char* str)
 void student_select_course()
 {
 	MYSQL_RES* result1, * result2, * result3, * result4, * result5;
+	MYSQL_ROW Row1 = NULL, Row2 = NULL, Row3 = NULL, Row4 = NULL, Row5 = NULL;
 	system("cls");
 	system("title 学生选课管理系统 - 学生选课");
 	change_color(5, 14);
@@ -874,6 +883,7 @@ void student_manage_info()
 		{
 			change_color(4, 14);
 			printf("输入无效！请输入11位电话号：(若返回上一级，请按ctrl+q)");
+			change_color(1, 14);
 			s_gets(phone, 11);
 			if (phone[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -887,7 +897,7 @@ void student_manage_info()
 		strcat(query, stuID);
 		strcat(query, "'");
 		mysql_query(&mysql, query);
-		change_color(4, 14);
+		change_color(2, 14);
 		printf("\n修改成功!\n");
 		change_color(1, 14);
 		printf("请按任意键返回上一菜单\n");
@@ -927,7 +937,7 @@ void student_manage_info()
 		strcat(query1, stuID);
 		strcat(query1, "'");
 		mysql_query(&mysql, query1);
-		change_color(4, 14);
+		change_color(2, 14);
 		printf("\n修改成功!\n\n");
 		change_color(1, 14);
 		printf("请按任意键返回上一菜单\n");
@@ -949,6 +959,7 @@ void student_manage_info()
 		{
 			change_color(4, 14);
 			printf("无效输入！请按照***@***.***格式输入：（若返回上一级，请按ctrl+q）");
+			change_color(1, 14);
 			s_gets(email, 30);
 			if (email[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -962,7 +973,7 @@ void student_manage_info()
 		strcat(query2, stuID);
 		strcat(query2, "'");
 		mysql_query(&mysql, query2);
-		change_color(4, 14);
+		change_color(2, 14);
 		printf("\n修改成功!\n");
 		change_color(1, 14);
 		printf("\n请按任意键返回上一菜单\n");
@@ -1230,6 +1241,7 @@ void student_check_class_exist(char* classID)
 		{
 			change_color(4, 14);
 			printf("无此课程，请重新输入！(若返回上一级，请按ctrl+q)\n");
+			change_color(1, 14);
 			s_gets(classID, 11);
 			if(classID[0]==17)
 			{
@@ -1249,6 +1261,7 @@ void teacher_mainmenu()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 教师主菜单 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	change_color(4, 14);
 	printf("\n登录成功，欢迎您，\n%s 的 %s 老师。\n", nowSchool, nowName);
 	change_color(1, 14);
 	printf("\n请选择您需要的服务:\n\n");
@@ -1650,7 +1663,7 @@ void teacher_30delete()
 						mysql_query(&mysql, query2);//class3
 					}
 
-					change_color(4, 14);
+					change_color(2, 14);
 					printf("\n删除成功！\n");
 					change_color(1, 14);
 					printf("\n按任意键返回上一菜单...\n");
@@ -1998,6 +2011,7 @@ void config_init() {
 			{
 				change_color(4, 14);
 				printf("无效，请重新输入：");
+				change_color(1, 14);
 				ret = scanf("%d-%d-%d", &date[0], &date[1], &date[2]);
 				rewind(stdin);
 			}
@@ -2035,6 +2049,7 @@ void config_init() {
 			{
 				change_color(4, 14);
 				printf("输入无效，请重新输入：");
+				change_color(1, 14);
 				ret = scanf("%d-%d-%d-%d:%d"
 					, &date[0], &date[1], &date[2], &date[3], &date[4]);
 				rewind(stdin);
@@ -2066,6 +2081,7 @@ void config_init() {
 			{
 				change_color(4, 14);
 				printf("输入无效，请重新输入：");
+				change_color(1, 14);
 				ret = scanf("%d-%d-%d-%d:%d"
 					, &date[0], &date[1], &date[2], &date[3], &date[4]);
 				rewind(stdin);
@@ -2206,6 +2222,7 @@ void teacher_login() {
 				flag = 0;
 				change_color(1, 14);
 				printf("请输入用户名：");
+				change_color(1, 14);
 				s_gets(teachID,11);
 				if (teachID[0] == 17)//若返回上一级，请按ctrl+q
 				{
@@ -2420,7 +2437,7 @@ void teacher_course_edit() {
 				sprintf(query, "UPDATE `classes` SET `教材信息`='%s' WHERE`课程编号`='%s'"
 					, content, courseName);
 				mysql_query(&mysql, query);
-				change_color(4, 14);
+				change_color(2, 14);
 				printf("修改成功！\n");
 				change_color(1, 14);
 				printf("按任意键返回上一菜单...\n");
@@ -2436,7 +2453,7 @@ void teacher_course_edit() {
 				sprintf(query, "UPDATE `classes` SET `课程简介`='%s' WHERE`课程编号`='%s'"
 					, content, courseName);
 				mysql_query(&mysql, query);
-				change_color(4, 14);
+				change_color(2, 14);
 				printf("修改成功！\n");
 				change_color(1, 14);
 				printf("按任意键返回上一菜单...\n");
@@ -2473,7 +2490,7 @@ void teacher_course_edit() {
 					sprintf(query, "UPDATE `classes` SET `限制人数`='100' WHERE`课程编号`='%s'"
 						, courseName);
 					mysql_query(&mysql, query);
-					change_color(4, 14);
+					change_color(2, 14);
 					printf("修改成功！\n");
 					change_color(1, 14);
 					printf("按任意键返回上一菜单...\n");
@@ -2506,7 +2523,7 @@ void teacher_course_edit() {
 					sprintf(query, "UPDATE `classes` SET `限制人数`='80' WHERE`课程编号`='%s'"
 						, courseName);
 					mysql_query(&mysql, query);
-					change_color(4, 14);
+					change_color(2, 14);
 					printf("修改成功！\n");
 					change_color(1, 14);
 					printf("按任意键返回上一菜单...\n");
@@ -2561,7 +2578,7 @@ void teacher_course_edit() {
 					sprintf(query, "UPDATE `classes` SET `限制人数`='100' WHERE`课程编号`='%s'"
 						, courseName);
 					mysql_query(&mysql, query);
-					change_color(4, 14);
+					change_color(2, 14);
 					printf("修改成功！\n");
 					change_color(1, 14);
 					printf("按任意键返回上一菜单...\n");
@@ -2609,7 +2626,7 @@ void teacher_course_edit() {
 						sprintf(query, "UPDATE `classes` SET `限制人数`='80' WHERE`课程编号`='%s'"
 							, courseName);
 						mysql_query(&mysql, query);
-						change_color(4, 14);
+						change_color(2, 14);
 						printf("修改成功！\n");
 						change_color(1, 14);
 						printf("按任意键返回上一菜单...\n");
@@ -2724,7 +2741,7 @@ void teacher_course_delete() {
 			sprintf(query, "DELETE FROM `classes` WHERE `课程编号` = '%s'"
 				, courseName);
 			mysql_query(&mysql, query);
-			change_color(4, 14);
+			change_color(2, 14);
 			printf("删除成功！\n");
 			change_color(1, 14);
 			printf("按任意键返回上一菜单...\n");
@@ -2801,7 +2818,7 @@ void teacher_manage_info()
 		pw_encode(passwd);
 		sprintf(query, "update teachers set passwd='%s' where teachID='%s'", passwd, teachID);
 		mysql_query(&mysql, query);
-		change_color(4, 14);
+		change_color(2, 14);
 		printf("\n修改成功!\n");
 		change_color(1, 14);
 		printf("按任意键返回上一菜单...\n");
@@ -2830,12 +2847,13 @@ void teacher_manage_info()
 			{
 				change_color(4, 14);
 				printf("无效输入！请按照***@***.***格式输入:");
+				change_color(1, 14);
 				s_gets(email, 20);
 			}
 		}
 		sprintf(query, "update teachers set email='%s' where teachID='%s'", email, teachID);
 		mysql_query(&mysql, query);	//将更改后的邮箱存至mysql数据库
-		change_color(4, 14);
+		change_color(2, 14);
 		printf("\n修改成功!\n");
 		change_color(1, 14);
 		printf("按任意键返回上一菜单...\n");
@@ -3023,6 +3041,7 @@ void teacher_course_add()
 		{
 			change_color(4, 14);
 			printf("输入无效！请重新输入：");
+			change_color(1, 14);
 			s_gets(classId, 11);
 		}
 		//准备验证是否有相同ID的课
@@ -3048,19 +3067,21 @@ void teacher_course_add()
 	{
 		change_color(4, 14);
 		printf("无效，请重新输入：");
+		change_color(1, 14);
 		ret = scanf("%f", &in_f);
 		rewind(stdin);
 	}
 	sprintf(credit, "%.1f", in_f);			// 学分浮点转字符串
 
 	change_color(1, 14);
-	printf("\n请输入课程学时（允许一位小数）：");
+	printf("请输入课程学时（允许一位小数）：");
 	ret = scanf("%f", &in_f);
 	rewind(stdin);
 	while (ret != 1)
 	{
 		change_color(4, 14);
 		printf("输入无效，请重新输入：");
+		change_color(1, 14);
 		ret = scanf("%f", &in_f);
 		rewind(stdin);
 	}
@@ -3069,14 +3090,16 @@ void teacher_course_add()
 	do
 	{
 		reflag = 0;		//防止无限循环
+		strcpy(startTime, term);			//将之前存好的学期重新写入避免循环后重复拼入
 		change_color(1, 14);
-		printf("\n请输入开课周次（输入1-20间整数）：");
+		printf("请输入开课周次（输入1-20间整数）：");
 		ret = scanf("%d", &in);
 		rewind(stdin);
 		while (ret != 1 || in > 20 || in < 1)
 		{
 			change_color(4, 14);
 			printf("输入无效，请重新输入：");
+			change_color(1, 14);
 			ret = scanf("%d", &in);
 			rewind(stdin);
 		}
@@ -3089,13 +3112,14 @@ void teacher_course_add()
 		strcat(startTime, in_s);
 
 		change_color(1, 14);
-		printf("\n请输入结课周次（输入1-20间整数）：");
+		printf("请输入结课周次（输入1-20间整数）：");
 		ret = scanf("%d", &in);
 		rewind(stdin);
 		while (ret != 1 || in > 20 || in < 1 || in < sw)
 		{
 			change_color(4, 14);
 			printf("输入无效，请重新输入：");
+			change_color(1, 14);
 			ret = scanf("%d", &in);
 			rewind(stdin);
 		}
@@ -3118,6 +3142,7 @@ void teacher_course_add()
 		{
 			change_color(4, 14);
 			printf("输入无效，请重新输入：");
+			change_color(1, 14);
 			ret = scanf("%d-%d", &in, &in1);
 			rewind(stdin);
 		}
@@ -3212,6 +3237,7 @@ void teacher_course_add()
 		{
 			change_color(4, 14);
 			printf("无效，请重新输入：");
+			change_color(1, 14);
 			ret = scanf("%d-%d", &in, &in1);
 		}
 		sprintf(classroom, "%d-%d", in, in1);
@@ -3245,6 +3271,7 @@ void teacher_course_add()
 	{
 		change_color(4, 14);
 		printf("无效，请重新输入：");
+		change_color(1, 14);
 		ret = scanf("%d", &in);
 		rewind(stdin);
 	}
@@ -3253,7 +3280,7 @@ void teacher_course_add()
 	else 
 		sprintf(limit, "100");
 	change_color(1, 14);
-	printf("请输入课程介绍（500字内）：");
+	printf("请输入课程介绍（250字内）：");
 	s_gets(intro,499);
 
 	change_color(1, 14);
@@ -3315,7 +3342,9 @@ void teacher_reg()
 	do {
 		while (check_stuId(teachID) == 0)//检查输入是否符合规范 
 		{
+			change_color(4, 14);
 			printf("无效输入！请输入10位数字:(若返回上一级，请按ctrl+q)");
+			change_color(1, 14);
 			s_gets(teachID, 20);
 
 			if (teachID[0] == 17)//若返回上一级，请按ctrl+q
@@ -3332,6 +3361,7 @@ void teacher_reg()
 		{
 			change_color(4, 14);
 			printf("此教师工号已注册!请更换教师工号:(若返回上一级，请按ctrl+q)");
+			change_color(1, 14);
 			s_gets(teachID, 20);
 			if (teachID[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -3354,6 +3384,7 @@ void teacher_reg()
 	{
 		change_color(4, 14);
 		printf("无效输入！请输入11位电话号:(若返回上一级，请按ctrl+q)");
+		change_color(1, 14);
 		s_gets(phone, 20);
 		if (phone[0] == 17)//若返回上一级，请按ctrl+q
 		{
@@ -3375,6 +3406,7 @@ void teacher_reg()
 		{
 			change_color(4, 14);
 			printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按ctrl+q）");
+			change_color(1, 14);
 			s_gets(passwd1, 20);
 			if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
 			{
@@ -3392,6 +3424,7 @@ void teacher_reg()
 	{
 		change_color(4, 14);
 		printf("无效输入！请按照***@***.***格式输入:");
+		change_color(1, 14);
 		s_gets(email, 20);
 		if (email[0] == 17)//若返回上一级，请按ctrl+q
 		{
@@ -3590,6 +3623,7 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 		{
 			change_color(4, 14);
 			printf("输入无效，请您重新输入：");
+			change_color(1, 14);
 			flag = 1;
 			continue;
 		}
