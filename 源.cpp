@@ -13,6 +13,7 @@
 void config_init();				// 若配置文件存在则读取，否则进行首次运行配置程序
 void readCFG();
 void sql_connect();
+void table_init();
 int main_entrance();
 //==========================================
 //学生功能
@@ -26,7 +27,6 @@ void student_query_result();
 void student_delete_course();
 void student_manage_info();
 void student_search_specific_imformation();
-void student_select_class(char* );
 void student_check_class_exist(char* );
 
 
@@ -53,11 +53,11 @@ void teacher_manage_info();			//  改信息
 //公共功能
 //用法、输入输出格式见函数定义前的详细注释
 
+void print_class(char*);
 int check_stuId(char* );
 int check_phone(char* );
 int check_email(char* );
 int check_classId(char* );
-void student_select_class(char* );
 int getState_selecting();										// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
 int getState_starting(char*, char*);							// 获取开课状态 0为未开课，1为已开课
 int check_password(int, char*, char*);							// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
@@ -130,11 +130,9 @@ int main_entrance()
 	switch (option)
 	{
 	case 1:
-		system("cls");
 		student_login();
 		break;
 	case 2:
-		system("cls");
 		teacher_login();
 		break;
 	case 3:
@@ -249,15 +247,36 @@ int check_stuId(char* str)
 
 void sql_connect()
 {
+	change_color(4, 14);
 	if (!(mysql_real_connect(&mysql, dbIP, dbUser, dbPassWd
 		, dbName, dbPort, NULL, 0))) {
-		printf("无法连接到数据库，错误代码: %s\n", mysql_error(&mysql));
-		change_color(1, 14);
-		getchar();
+		printf("无法连接到数据库，错误代码: %s\n\n请检查配置正确性，或考虑删除配置文件进行重新初始化...\n按任意键退出……", mysql_error(&mysql));
+		system("pause>nul");
 		exit(1);
 	}
 	if (!mysql_set_character_set(&mysql, "gbk"))
 		mysql_character_set_name(&mysql);
+	if (mysql_query(&mysql, "select name from `teachers`"))
+	{
+		printf("\n教师数据表查询失败！请确认数据表是否存在，或考虑删除配置文件进行重新初始化...\n\n按任意键退出……");
+		system("pause>nul");
+		exit(1);
+	}
+	mysql_store_result(&mysql);		//取走测试连接存储下来的数据
+	if (mysql_query(&mysql, "select name from `students`"))
+	{
+		printf("\n学生数据表查询失败！请确认数据表是否存在，或考虑删除配置文件进行重新初始化...\n\n按任意键退出……");
+		system("pause>nul");
+		exit(1);
+	}
+	mysql_store_result(&mysql);		//取走测试连接存储下来的数据
+	if (mysql_query(&mysql, "select 学分 from `classes`"))
+	{
+		printf("\n课程数据表查询失败！请确认数据表是否存在，或考虑删除配置文件进行重新初始化...\n\n按任意键退出……");
+		system("pause>nul");
+		exit(1);
+	}
+	mysql_store_result(&mysql);		//取走测试连接存储下来的数据
 }
 
 // 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
@@ -528,7 +547,7 @@ void student_select_course()
 	char query[200];
 	sprintf(query, "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,"
 		"(限制人数-已选人数) 余课量,学分,学分,学分,学分,学分,学分,学分,学分 from classes");
-	student_select_class(query);
+	print_class(query);
 	printf("\n请输入您想选的课程编号：");
 	s_gets(classID, 30);
 	//判断是否有这门课-------------------------------------------------------------------------------
@@ -677,7 +696,7 @@ void student_query_course()
 		s_gets(class_name, 20);
 		printf("\n选课结果为：\n\n");
 		sprintf(query, "select * from classes where 课程名称='%s'", class_name);
-		student_select_class(query);
+		print_class(query);
 		printf("\n请按任意键返回上一菜单");
 		system("pause > nul");
 		student_query_course();
@@ -695,7 +714,7 @@ void student_query_course()
 		s_gets(school_name, 20);
 		printf("\n选课结果为：\n\n");
 		sprintf(query, "select * from classes where 开课学院='%s'", school_name);
-		student_select_class(query);
+		print_class(query);
 		printf("\n请按任意键返回上一菜单");
 		system("pause > nul");
 		student_query_course();
@@ -711,7 +730,7 @@ void student_query_course()
 		printf("\n按课余量排序的所有课程如下：\n\n");
 		sprintf(query, "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,(限制人数-已选人数) 余课量,教材信息,");
 		strcat(query, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes order by 余课量 desc");
-		student_select_class(query);
+		print_class(query);
 		printf("\n请按任意键返回上一菜单");
 		system("pause > nul");
 		student_query_course();
@@ -727,7 +746,7 @@ void student_query_course()
 		printf("\n根据选课人数排序的所有课程如下：\n\n");
 		sprintf(query, "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,已选人数,教材信息,课程简介,已选人数,限制人数,");
 		strcat(query, "上课地点,上课时间段,开课时间,结课时间 from classes order by 已选人数 desc");
-		student_select_class(query);
+		print_class(query);
 		printf("\n请按任意键返回上一菜单");
 		system("pause > nul");
 		student_query_course();
@@ -767,7 +786,7 @@ void student_query_result()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
 	printf("\n您的选课结果如下：\n\n");
-	student_select_class(query);
+	print_class(query);
 }
 
 void student_delete_course()
@@ -1004,7 +1023,7 @@ void student_search_specific_imformation()
 	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
 	strcat(query3, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes");
 	change_color(1, 14);
-	student_select_class(query3);
+	print_class(query3);
 	printf("输入课程编号以查看该课程的详细信息\n");
 	s_gets(classID, 11);
 	student_check_class_exist(classID);
@@ -1091,7 +1110,7 @@ void student_search_specific_imformation()
 }
 
 //传入查询语句打印查询结果
-void student_select_class(char* query)
+void print_class(char* query)
 {
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
@@ -1351,7 +1370,7 @@ void teacher_mycourse()
 	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
 	strcat(query, nowName);
 	strcat(query, "'");
-	student_select_class(query);//打印相应查询内容
+	print_class(query);//打印相应查询内容
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
 	teacher_select_managemenu();
@@ -1405,7 +1424,7 @@ void teacher_findcourse()
 			else
 				flag = 0;
 		} while (flag == 1);
-		student_select_class(query);
+		print_class(query);
 
 		do {
 			change_color(1, 14);
@@ -1559,7 +1578,7 @@ void teacher_30delete()
 	char query2[200];
 	strcat(query, nowName);
 	strcat(query, "'");
-	student_select_class(query);//打印相应内容
+	print_class(query);//打印相应内容
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
@@ -1598,7 +1617,7 @@ void teacher_30delete()
 			else 
 				flag = 0;
 		} while (flag == 1);
-		student_select_class(query);
+		print_class(query);
 		sprintf(query, "SELECT `已选人数` FROM `classes`WHERE 课程编号 = '%s'"
 			, courseName);
 		mysql_query(&mysql, query);
@@ -1738,7 +1757,7 @@ void teacher_sortcourse() {
 	printf("\n以下是您开设课程的排序结果\n");
 	sprintf(query4, "select * from `classes` where `开课教师` = '%s' order by `已选人数` "
 		, nowName);
-	student_select_class(query4);
+	print_class(query4);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
 	teacher_select_managemenu();
@@ -1881,19 +1900,79 @@ int getState_starting(char* sweek, char* stime) {
 		return 1;
 }
 
+//删掉并重新创建表
+void table_init() {
+	char query[1000];
+	sprintf(query, "SET FOREIGN_KEY_CHECKS=0;");
+	mysql_query(&mysql, query);
+	sprintf(query, "DROP TABLE IF EXISTS `classes`;");
+	mysql_query(&mysql, query);
+	sprintf(query, "CREATE TABLE `classes` ("
+		"`课程编号` varchar(20)  NOT NULL,"
+		"`开课学院` varchar(255) DEFAULT NULL,"
+		"`课程名称` varchar(255) DEFAULT NULL,"
+		"`学分` float(255,1) DEFAULT NULL,"
+		"`学时` float(255,1) DEFAULT NULL,"
+		"`课程性质` varchar(255) DEFAULT NULL,"
+		"`开课教师` varchar(255) DEFAULT NULL,"
+		"`开课时间` varchar(255) DEFAULT NULL,"
+		"`结课时间` varchar(255) DEFAULT NULL,"
+		"`上课时间段` varchar(255) DEFAULT NULL,"
+		"`上课地点` varchar(255) DEFAULT NULL,"
+		"`限制人数` int DEFAULT NULL,"
+		"`已选人数` int DEFAULT NULL,"
+		"`教材信息` text CHARACTER SET utf8 COLLATE utf8_general_ci,"
+		"`课程简介` text CHARACTER SET utf8 COLLATE utf8_general_ci,"
+		"PRIMARY KEY (`课程编号`)"
+		") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	mysql_query(&mysql, query);
+	sprintf(query, "DROP TABLE IF EXISTS `students`;");
+	mysql_query(&mysql, query);
+	sprintf(query, "CREATE TABLE `students` ("
+		"`stuID` varchar(20) NOT NULL,"
+		"`school` varchar(100) DEFAULT NULL,"
+		"`major` varchar(255) DEFAULT NULL,"
+		"`name` varchar(100) DEFAULT NULL,"
+		"`sexual` varchar(10) DEFAULT NULL,"
+		"`phone` varchar(20) DEFAULT NULL,"
+		"`passwd` varchar(100) DEFAULT NULL,"
+		"`email` varchar(100) DEFAULT NULL,"
+		"`class1` varchar(255) DEFAULT NULL,"
+		"`class2` varchar(255) DEFAULT NULL,"
+		"`class3` varchar(255) DEFAULT NULL,"
+		"PRIMARY KEY (`stuID`)"
+		") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	mysql_query(&mysql, query);
+	sprintf(query, "DROP TABLE IF EXISTS `teachers`;");
+	mysql_query(&mysql, query);
+	sprintf(query, "CREATE TABLE `teachers` ("
+		"`teachID` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,"
+		"`school` varchar(100) DEFAULT NULL,"
+		"`name` varchar(100) DEFAULT NULL,"
+		"`passwd` varchar(100) DEFAULT NULL,"
+		"`email` varchar(100) DEFAULT NULL,"
+		"PRIMARY KEY (`teachID`)"
+		") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	mysql_query(&mysql, query);
+	change_color(2, 14);
+	printf("\n初始化数据库表完成...\n");
+}
+
 // 若配置文件存在则读取，否则进行首次运行配置程序
 void config_init() {
 	FILE* inFile;
+	FILE* insql;
+	char query[3000], * pr = query;
 	char in[30] = "";
-	int ini;
-	inFile = fopen("cssystem.cfg", "r");
+	int ini,ch;
+	inFile = fopen("cssystem.ini", "r");
 	if (inFile != NULL)
 	{
 		readCFG();
 		return;				// 如果配置文件存在则跳过首次使用设置部分，进入读配置部分
 	}
 
-	int ret=0,flag = 0;
+	int ret = 0, flag = 0, flag2 = 0;
 	do
 	{
 		flag = 0;
@@ -1946,6 +2025,42 @@ void config_init() {
 			printf("\n\n数据库连接失败！请确认配置是否正确，按回车重新配置……\n");
 			flag = 1;
 		}
+		if (!mysql_set_character_set(&mysql, "gbk"))
+			mysql_character_set_name(&mysql);
+
+		sprintf(query, "select name from `teachers`");	
+		if (!mysql_query(&mysql, query)) { //通过select是否错误来判断是否已经存在表
+			do
+			{
+				mysql_store_result(&mysql);
+				flag2 = 0;
+				change_color(4, 14);
+				printf("数据库中已有表，请选择是否删除以初始化表头（1：初始化/2：保留内容）（输入1或2）：");
+				ini = _getch();
+				if (ini == '1')
+				{
+					printf("初始化\n");
+					table_init();
+					continue;
+				}
+				else if (ini == '2')
+				{
+					printf("保留内容\n");
+					continue;
+				}
+				else
+				{
+					flag2 = 1;
+					change_color(4, 14);
+					printf("\n无效，请重新输入！");
+				}
+
+			} while (flag2);
+		}
+		else {
+			table_init();
+		}
+		mysql_store_result(&mysql);
 		mysql_close(&mysql);
 	} while (flag);
 
@@ -1954,7 +2069,7 @@ void config_init() {
 		flag = 0;
 		change_color(1, 14);
 		printf("\n\n学期部分——\n");
-		printf("\n当前学年（输入0-8）：202");
+		printf("当前学年（输入0-8）：202");
 		ini = _getch();
 		if (ini <= '8' && ini >= '0')
 		{
@@ -1976,7 +2091,7 @@ void config_init() {
 	{
 		flag = 0;
 		change_color(1, 14);
-		printf("\n当前学期（输入1或2）：202%d-202%d学年第  学期\b\b\b\b\b\b",currYear,currYear+1);
+		printf("当前学期（输入1或2）：202%d-202%d学年第  学期\b\b\b\b\b\b",currYear,currYear+1);
 		ini = _getch();
 		if (ini == '1')
 		{
@@ -1994,7 +2109,7 @@ void config_init() {
 		{
 			flag = 1;
 			change_color(4, 14);
-			printf("\n无效，请重新输入！");
+			printf("无效，请重新输入！");
 		}
 
 	} while (flag);
@@ -2004,7 +2119,7 @@ void config_init() {
 	do {
 		flag = 0;
 		change_color(1, 14);
-		printf("\n输入当前学期开学时间（格式yyyy-mm-dd，如输入2020-8-31，必须为周一）：");
+		printf("输入当前学期开学时间（格式yyyy-mm-dd，如输入2020-8-31，必须为周一）：");
 		ret = scanf("%d-%d-%d", &date[0], &date[1], &date[2]);
 		rewind(stdin);
 		while (ret != 3)
@@ -2041,7 +2156,7 @@ void config_init() {
 	do {
 		flag = 0;
 		change_color(1, 14);
-		printf("\n输入当前选课开始时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
+		printf("输入当前选课开始时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
 		ret = scanf("%d-%d-%d-%d:%d"
 			, &date[0], &date[1], &date[2], &date[3], &date[4]);
 		rewind(stdin);
@@ -2073,7 +2188,7 @@ void config_init() {
 	do {
 		flag = 0;
 		change_color(1, 14);
-		printf("\n输入当前选课结束时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
+		printf("输入当前选课结束时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
 		ret = scanf("%d-%d-%d-%d:%d"
 			, &date[0], &date[1], &date[2], &date[3], &date[4]);
 		rewind(stdin);
@@ -2130,7 +2245,7 @@ void readCFG() {
 	FILE* inFile;
 	char record[50] = { 0 };
 	int lineNum = 0;		//当前行数
-	if ((inFile = fopen("cssystem.cfg", "r")) == NULL)
+	if ((inFile = fopen("cssystem.ini", "r")) == NULL)
 	{
 		change_color(4, 14);
 		printf("\n打开配置文件失败！请尝试手动删除cfg配置文件并执行首次使用设置！");
@@ -2189,90 +2304,84 @@ void readCFG() {
 void teacher_login() {
 	char query[100];
 	char password[100];
-	if (mysql_query(&mysql, "select * from `teachers`"))
+
+	system("cls");
+	mysql_store_result(&mysql);
+	int option1;
+	system("title 学生选课管理系统 - 教师登录");
+	change_color(5, 14);
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--教师 ●○●○●○\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	change_color(1, 14);
+	printf("\n请选择您要进行的操作:\n");
+	printf("  ① - 登录\n");
+	printf("  ② - 注册\n");
+	printf("  ③ - 返回上层\n\n");
+	printf("请输入1，2或3：");
+	scanf_opt(&option1, 1, 3);
+	if (option1 == 1)
 	{
-		change_color(4, 14);
-		printf("\n教师数据表查询失败！请确认数据表是否存在\n");
-	}
-	else
-	{
-		system("cls");
-		mysql_store_result(&mysql);
-		int option1;
+		int flag = 0;
+		system("cls");			// 清屏，保证重复输入时美观
 		system("title 学生选课管理系统 - 教师登录");
 		change_color(5, 14);
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--教师 ●○●○●○\n");
+		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
-		printf("\n请选择您要进行的操作:\n");
-		printf("  ① - 登录\n");
-		printf("  ② - 注册\n");
-		printf("  ③ - 返回上层\n\n");
-		printf("请输入1，2或3：");
-		scanf_opt(&option1, 1, 3);
-		if (option1 == 1)
-		{
-			int flag = 0;
-			system("cls");			// 清屏，保证重复输入时美观
-			system("title 学生选课管理系统 - 教师登录");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			do {
-				flag = 0;
-				change_color(1, 14);
-				printf("请输入用户名：");
-				change_color(1, 14);
-				s_gets(teachID,11);
-				if (teachID[0] == 17)//若返回上一级，请按ctrl+q
-				{
-					system("cls");
-					teacher_login();
-				}
-				if (!check_teachId(teachID))
-				{
-					change_color(4, 14);
-					printf("学号格式错误！请重试！(若返回上一级，请按ctrl+q)\n");
-					flag = 1;
-					continue;
-				}
-				change_color(1, 14);
-				printf("请输入密码：");
-				scanf_pw(password);
-				if (password[0] == 17)//若返回上一级，请按ctrl+q
-				{
-					system("cls");
-					teacher_login();
-				}
-				if (!check_password(1, teachID, password))
-				{
-					change_color(4, 14);
-					printf("用户名或密码错误！请重试！(若返回上一级，请按ctrl+q)\n");
-					flag = 1;
-				}
-			} while (flag);
-			mysql_store_result(&mysql);
-			sprintf(query, "select school,name from teachers where teachID='%s'", teachID);
-			mysql_query(&mysql, query);
-			result = mysql_store_result(&mysql);
-			if (result)
-			{										// 防止数据为空造成崩溃
-				if (mysql_num_rows(result) == 1)	// 若非有且仅有一行数据则登录失败
-				{
-					Row = mysql_fetch_row(result);
-					sprintf(nowName, Row[1]);
-					sprintf(nowSchool, Row[0]);
-				}
-				teacher_mainmenu();
+		do {
+			flag = 0;
+			change_color(1, 14);
+			printf("请输入用户名：");
+			change_color(1, 14);
+			s_gets(teachID, 11);
+			if (teachID[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				teacher_login();
 			}
+			if (!check_teachId(teachID))
+			{
+				change_color(4, 14);
+				printf("学号格式错误！请重试！(若返回上一级，请按ctrl+q)\n");
+				flag = 1;
+				continue;
+			}
+			change_color(1, 14);
+			printf("请输入密码：");
+			scanf_pw(password);
+			if (password[0] == 17)//若返回上一级，请按ctrl+q
+			{
+				system("cls");
+				teacher_login();
+			}
+			if (!check_password(1, teachID, password))
+			{
+				change_color(4, 14);
+				printf("用户名或密码错误！请重试！(若返回上一级，请按ctrl+q)\n");
+				flag = 1;
+			}
+		} while (flag);
+		mysql_store_result(&mysql);
+		sprintf(query, "select school,name from teachers where teachID='%s'", teachID);
+		mysql_query(&mysql, query);
+		result = mysql_store_result(&mysql);
+		if (result)
+		{										// 防止数据为空造成崩溃
+			if (mysql_num_rows(result) == 1)	// 若非有且仅有一行数据则登录失败
+			{
+				Row = mysql_fetch_row(result);
+				sprintf(nowName, Row[1]);
+				sprintf(nowSchool, Row[0]);
+			}
+			teacher_mainmenu();
 		}
-		else if (option1 == 2)
-			teacher_reg();
-		else if (option1 == 3)
-			main_entrance();
 	}
+	else if (option1 == 2)
+		teacher_reg();
+	else if (option1 == 3)
+		main_entrance();
+
 }
 
 void teacher_course_list()
@@ -2285,7 +2394,7 @@ void teacher_course_list()
 	printf("\n全部课程如下：\n");
 	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
 	strcat(query3, "学分,学分,学分,学分,学分,学分,学分 from classes");
-	student_select_class(query3);
+	print_class(query3);
 	printf("输入课程编号以查看该课程的详细信息\n");
 	s_gets(classID, 11);
 	do {
@@ -2369,7 +2478,7 @@ void teacher_course_edit() {
 	char studentName[200];
 	strcat(query, nowName);
 	strcat(query, "'");
-	student_select_class(query);//打印相应查询内容
+	print_class(query);//打印相应查询内容
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14); 
@@ -2407,7 +2516,7 @@ void teacher_course_edit() {
 			else 
 				flag = 0;
 		} while (flag == 1);
-		student_select_class(query);
+		print_class(query);
 		sprintf(query, "SELECT `已选人数` FROM `classes`WHERE 课程编号 = '%s'", courseName);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
@@ -2675,7 +2784,7 @@ void teacher_course_delete() {
 	char studentName[200];
 	char query[200];
 	sprintf(query, "SELECT * FROM `classes`WHERE 开课教师 = '%s",nowName);	
-	student_select_class(query);//打印相应内容
+	print_class(query);//打印相应内容
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
@@ -2724,7 +2833,7 @@ void teacher_course_delete() {
 				flag = 0;
 			}
 		} while (flag == 1);
-		student_select_class(query);
+		print_class(query);
 
 		change_color(5, 14);
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
