@@ -1610,7 +1610,7 @@ void teacher_findcourse()
 		//----------------------------------------------------------------------------------------------------------------
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 		{
-			printf("%17s", field->name);
+			printf("%20s", field->name);
 			printf(" |");
 		}
 		printf("\n");
@@ -1618,20 +1618,14 @@ void teacher_findcourse()
 		{
 			for (int j = 0; j < column; j++)
 			{
-				printf("%17s", Row[j]);
+				printf("%20s", Row[j]);
 				printf(" |");
 			}
 			printf("\n");
 		}
 		printf("\n");
 		//--------------------------------------------------------------------------------------------------------------
-		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,"
-			"(select 课程名称 from classes where 课程编号="
-			"(select class1 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课1,"
-			"(select 课程名称 from classes where 课程编号="
-			"(select class2 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课2,"
-			"(select 课程名称 from classes where 课程编号="
-			"(select class3 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课3 "
+		sprintf(query1, "select stuID 学生编号,phone 学生电话,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3 "
 			"FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
 			, courseName, courseName, courseName, courseName, courseName, courseName
 			, courseName, courseName, courseName, courseName, courseName, courseName);
@@ -2087,7 +2081,7 @@ int getState_starting(char* sweek, char* stime) {
 	{
 		day = 6;
 	}
-	else if (!strcmp(tmp, "日"))
+	else
 	{
 		day = 7;
 	}
@@ -2105,8 +2099,9 @@ int getState_starting(char* sweek, char* stime) {
 		min = atoi(tmp);
 	}
 	// 在开课时间的基础上加上间隔时间得到真实开课时间
-	ttsTime = currStart + 604800l * (week - 1) +
-		86400l * (day - 1) + 3600l * hr + 60 * min;
+	ttsTime = currStart + 604800LL * (week - 1LL) +
+		86400LL * (day - 1LL)
+		+ 3600LL * hr + 60LL * min;
 	nowTime = time(NULL);
 	if (ttsTime - nowTime > 0)
 	{
@@ -2952,9 +2947,8 @@ void teacher_course_delete() {
 	int option2 = 0;
 	char courseName[200];
 	char studentName[200];
-	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
-	strcat(query, nowName);
-	strcat(query, "'");
+	char query[200];
+	sprintf(query, "SELECT * FROM `classes`WHERE 开课教师 = '%s",nowName);	
 	student_select_class(query);//打印相应内容
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -3054,6 +3048,7 @@ void teacher_manage_info()
 	char passwd[20];
 	char passwd1[20];
 	char email[50];
+	char query[200];
 	system("title 学生选课管理系统 - 教师信息修改");
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -3097,12 +3092,8 @@ void teacher_manage_info()
 			}
 		}
 		pw_encode(passwd);
-		char query1[200] = "update teachers set passwd='";
-		strcat(query1, passwd);
-		strcat(query1, "' where teachID='");
-		strcat(query1, teachID);
-		strcat(query1, "'");
-		mysql_query(&mysql, query1);
+		sprintf(query, "update teachers set passwd='%s' where teachID='%s'", passwd, teachID);
+		mysql_query(&mysql, query);
 		change_color(4, 14);
 		printf("\n修改成功!\n");
 		change_color(1, 14);
@@ -3135,12 +3126,8 @@ void teacher_manage_info()
 				s_gets(email, 20);
 			}
 		}
-		char query2[200] = "update teachers set email='";
-		strcat(query2, email);
-		strcat(query2, "' where teachID='");
-		strcat(query2, teachID);
-		strcat(query2, "'");
-		mysql_query(&mysql, query2);	//将更改后的邮箱存至mysql数据库
+		sprintf(query, "update teachers set email='%s' where teachID='%s'", email, teachID);
+		mysql_query(&mysql, query);	//将更改后的邮箱存至mysql数据库
 		change_color(4, 14);
 		printf("\n修改成功!\n");
 		change_color(1, 14);
@@ -3589,7 +3576,7 @@ void teacher_course_add()
 	}
 	else
 	{
-		change_color(4, 14);
+		change_color(2, 14);
 		printf("\n加课成功！\n");
 	}
 	change_color(1, 14);
@@ -3617,6 +3604,7 @@ void teacher_reg()
 {
 	system("cls");
 	char teachID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
+	char query[300];
 	system("title 学生选课管理系统 - 教师注册");
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -3638,10 +3626,7 @@ void teacher_reg()
 				return;
 			}
 		}
-
-		char query[100] = "select * from teachers where teachID='";
-		strcat(query, teachID);
-		strcat(query, "'");
+		sprintf(query, "select * from teachers where teachID='%s'", teachID);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
 		if (mysql_num_rows(result) != 0)
@@ -3657,31 +3642,12 @@ void teacher_reg()
 			}
 		}
 	} while (mysql_num_rows(result) != 0);
-
-	char query1[200] = "insert into teachers(teachID) values(";
-	strcat(query1, "'");
-	strcat(query1, teachID);
-	strcat(query1, "'");
-	strcat(query1, ")");
-
 	change_color(1, 14);
 	printf("请输入学院:");
 	s_gets(school, 20);
-	char query2[200] = "update teachers set school='";
-	strcat(query2, school);
-	strcat(query2, "' where teachID='");
-	strcat(query2, teachID);
-	strcat(query2, "'");
-
 	change_color(1, 14);
 	printf("请输入姓名:");
 	s_gets(name, 20);
-	char query4[200] = "update teachers set name='";
-	strcat(query4, name);
-	strcat(query4, "' where teachID='");
-	strcat(query4, teachID);
-	strcat(query4, "'");
-
 	change_color(1, 14);
 	printf("请输入电话:");
 	s_gets(phone, 20);
@@ -3697,12 +3663,6 @@ void teacher_reg()
 			return;
 		}
 	}
-	char query6[200] = "update teachers set phone='";
-	strcat(query6, phone);
-	strcat(query6, "' where teachID='");
-	strcat(query6, teachID);
-	strcat(query6, "'");
-
 	char passwd1[30];
 	change_color(1, 14);
 	printf("请输入密码:");
@@ -3725,11 +3685,6 @@ void teacher_reg()
 		}
 	} while (strcmp(passwd, passwd1) != 0);
 	pw_encode(passwd);
-	char query7[200] = "update teachers set passwd='";
-	strcat(query7, passwd);
-	strcat(query7, "' where teachID='");
-	strcat(query7, teachID);
-	strcat(query7, "'");
 
 	change_color(1, 14);
 	printf("请输入邮箱:");
@@ -3746,21 +3701,20 @@ void teacher_reg()
 			return;
 		}
 	}
-	char query8[200] = "update teachers set email='";
-	strcat(query8, email);
-	strcat(query8, "' where teachID='");
-	strcat(query8, teachID);
-	strcat(query8, "'");
+	sprintf(query, "INSERT INTO `teachers` (`teachID`, `school`, `name`, `passwd`, `email`) "
+		"VALUES ('%s', '%s', '%s', '%s', '%s')", teachID, school, name, passwd, email);
+	mysql_query(&mysql, query);
 
-	mysql_query(&mysql, query1);
-	mysql_query(&mysql, query2);
-	mysql_query(&mysql, query4);
-	mysql_query(&mysql, query6);
-	mysql_query(&mysql, query7);
-	mysql_query(&mysql, query8);
-
-	change_color(4, 14);
-	printf("\n注册成功！\n");
+	if (mysql_query(&mysql, query))
+	{
+		change_color(4, 14);
+		printf("\n数据库读写失败，请重试\n");
+	}
+	else
+	{
+		change_color(2, 14);
+		printf("\n注册成功！\n");
+	}
 	change_color(1, 14);
 	printf("\n请按任意键返回上一菜单\n");
 	system("pause > nul");
