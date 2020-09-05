@@ -532,7 +532,6 @@ void student_select_course()
 	s_gets(classID, 30);
 	//判断是否有这门课-------------------------------------------------------------------------------
 	student_check_class_exist(classID);
-
 	//把学生之前选的课从表中取出，存到字符串中
 	sprintf(query, "select class1,class2,class3 from students where stuID='%s'", stuID);
 	mysql_store_result(&mysql);
@@ -548,8 +547,8 @@ void student_select_course()
 	}
 	else {
 		//判断从表中取出的那些课的是不是和学生现在想选的课有重复
-		if (((Row[0] != NULL) && (strcmp(classID, Row[0]) == 0)) 
-			|| ((Row[1] != NULL) && (strcmp(classID, Row[1]) == 0)) 
+		if (((Row[0] != NULL) && (strcmp(classID, Row[0]) == 0))
+			|| ((Row[1] != NULL) && (strcmp(classID, Row[1]) == 0))
 			|| ((Row[2] != NULL) && (strcmp(classID, Row[2]) == 0)))//strcmp,如果有重复,class1ID==classID||....||....
 		{
 			change_color(4, 14);
