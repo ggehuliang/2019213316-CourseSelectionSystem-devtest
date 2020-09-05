@@ -3439,7 +3439,7 @@ void teacher_course_add()
 	else 
 		sprintf(limit, "100");
 	change_color(1, 14);
-	printf("请输入课程介绍（500字内）：");
+	printf("请输入课程介绍（250字内）：");
 	s_gets(intro,499);
 
 	change_color(1, 14);
