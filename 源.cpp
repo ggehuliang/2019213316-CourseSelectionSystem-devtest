@@ -138,6 +138,7 @@ int main_entrance()
 		teacher_login();
 		break;
 	case 3:
+		mysql_close(&mysql);		//正常退出，断开数据库连接
 		exit(0);
 	}
 	return 0;
