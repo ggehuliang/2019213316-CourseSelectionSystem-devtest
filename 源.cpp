@@ -3148,7 +3148,7 @@ void teacher_course_delete() {
 		}
 		break;
 	case 2:
-		teacher_select_managemenu();
+		teacher_course_managemenu();
 		break;
 	default:
 		printf("无效，请重新输入!\n");
