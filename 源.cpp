@@ -2014,6 +2014,7 @@ void config_init() {
 			change_color(4, 14);
 			printf("\n\n数据库连接失败！请确认配置是否正确，按回车重新配置……\n");
 			flag = 1;
+			continue;
 		}
 		if (!mysql_set_character_set(&mysql, "gbk"))
 			mysql_character_set_name(&mysql);
@@ -2099,36 +2100,36 @@ void config_init() {
 		{
 			flag = 1;
 			change_color(4, 14);
-			printf("无效，请重新输入！");
+			printf("无效，请重新输入！\n");
 		}
 
 	} while (flag);
 
 	int date[5];
-	char tmp[10];
+	char tmp[20];
+	char* p;		//用于const化输入字符串使用sscanf代替scanf
 	do {
 		flag = 0;
 		change_color(1, 14);
 		printf("输入当前学期开学时间（格式yyyy-mm-dd，如输入2020-8-31，必须为周一）：");
-		ret = scanf("%d-%d-%d", &date[0], &date[1], &date[2]);
-		rewind(stdin);
-		while (ret != 3)
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p,"%d-%d-%d", &date[0], &date[1], &date[2]);
+		if(ret != 3)
 		{
-			while (getchar() != '\n');
-			{
-				change_color(4, 14);
-				printf("无效，请重新输入：");
-				change_color(1, 14);
-				ret = scanf("%d-%d-%d", &date[0], &date[1], &date[2]);
-				rewind(stdin);
-			}
+
+			change_color(4, 14);
+			printf("无效格式，请重新输入。\n");
+			flag = 1;
+			continue;
+
 		}
 		if (date[0] < 2020 || date[0]>2029 || date[1] > 12
 			|| date[1] < 1 || date[2] < 1 || date[2]>31)
 		{
 			flag = 1;
 			change_color(4, 14);
-			printf("不符合日期规范，请重新输入。");
+			printf("不符合日期规范，请重新输入。\n");
 			continue;
 		}
 
@@ -2138,7 +2139,7 @@ void config_init() {
 		{
 			flag = 1;
 			change_color(4, 14);
-			printf("该日不是周一，请重新输入。");
+			printf("该日不是周一，请重新输入。\n");
 		}
 
 	} while (flag);
@@ -2146,21 +2147,18 @@ void config_init() {
 	do {
 		flag = 0;
 		change_color(1, 14);
-		printf("输入当前选课开始时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
-		ret = scanf("%d-%d-%d-%d:%d"
+		printf("输入当前选课开始时间（格式yyyy-mm-dd hh:mm，如输入2020-8-31 9:00）：");
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p,"%d-%d-%d %d:%d"
 			, &date[0], &date[1], &date[2], &date[3], &date[4]);
-		rewind(stdin);
-		while (ret != 5)
+		if (ret != 5)
 		{
-			while (getchar() != '\n');
-			{
-				change_color(4, 14);
-				printf("输入无效，请重新输入：");
-				change_color(1, 14);
-				ret = scanf("%d-%d-%d-%d:%d"
-					, &date[0], &date[1], &date[2], &date[3], &date[4]);
-				rewind(stdin);
-			}
+			change_color(4, 14);
+			printf("无效格式，请重新输入。\n");
+			flag = 1;
+			continue;
+
 		}
 		if (date[0] < 2020 || date[0]>2029 || date[1] > 12 || date[1] < 1
 			|| date[2] < 1 || date[2]>31 || date[3] < 0 || date[3]>23
@@ -2168,7 +2166,7 @@ void config_init() {
 		{
 			flag = 1;
 			change_color(4, 14);
-			printf("不符合日期规范，请重新输入。");
+			printf("不符合日期规范，请重新输入。\n");
 			continue;
 		}
 		selecStart = convert_dateToTT(
@@ -2178,21 +2176,17 @@ void config_init() {
 	do {
 		flag = 0;
 		change_color(1, 14);
-		printf("输入当前选课结束时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31-9:00）：");
-		ret = scanf("%d-%d-%d-%d:%d"
+		printf("输入当前选课结束时间（格式yyyy-mm-dd-hh:mm，如输入2020-8-31 9:00）：");
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p, "%d-%d-%d %d:%d"
 			, &date[0], &date[1], &date[2], &date[3], &date[4]);
-		rewind(stdin);
-		while (ret != 5)
+		if (ret != 5)
 		{
-			while (getchar() != '\n');
-			{
-				change_color(4, 14);
-				printf("输入无效，请重新输入：");
-				change_color(1, 14);
-				ret = scanf("%d-%d-%d-%d:%d"
-					, &date[0], &date[1], &date[2], &date[3], &date[4]);
-				rewind(stdin);
-			}
+			change_color(4, 14);
+			printf("无效格式，请重新输入。\n");
+			flag = 1;
+			continue;
 		}
 		if (date[0] < 2020 || date[0]>2029 || date[1] > 12 || date[1] < 1
 			|| date[2] < 1 || date[2]>31 || date[3] < 0 || date[3]>23
@@ -3154,31 +3148,35 @@ void teacher_course_add()
 			"课程名称='%s'", name);
 	} while (check_classClash(query));
 
+	char* p;
+	char tmp[20];
 	change_color(1, 14);
 	printf("请输入课程学分（1-4，允许一位小数）：");
-	ret = scanf("%f", &in_f);
-	rewind(stdin);
+	s_gets(tmp, 19);
+	p = tmp;
+	ret = sscanf(p, "%f", &in_f);
 	while (ret != 1 || in_f > 4.0 || in_f < 1.0)
 	{
 		change_color(4, 14);
 		printf("无效，请重新输入：");
-		change_color(1, 14);
-		ret = scanf("%f", &in_f);
-		rewind(stdin);
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p, "%f", &in_f);
 	}
 	sprintf(credit, "%.1f", in_f);			// 学分浮点转字符串
 
 	change_color(1, 14);
 	printf("请输入课程学时（允许一位小数）：");
-	ret = scanf("%f", &in_f);
-	rewind(stdin);
+	s_gets(tmp, 19);
+	p = tmp;
+	ret = sscanf(p, "%f", &in_f);
 	while (ret != 1)
 	{
 		change_color(4, 14);
 		printf("输入无效，请重新输入：");
-		change_color(1, 14);
-		ret = scanf("%f", &in_f);
-		rewind(stdin);
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p, "%f", &in_f);
 	}
 	sprintf(learnTime, "%.1f", in_f);		// 学时浮点转字符串
 
@@ -3188,15 +3186,16 @@ void teacher_course_add()
 		strcpy(startTime, term);			//将之前存好的学期重新写入避免循环后重复拼入
 		change_color(1, 14);
 		printf("请输入开课周次（输入1-20间整数）：");
-		ret = scanf("%d", &in);
-		rewind(stdin);
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p, "%d", &in);
 		while (ret != 1 || in > 20 || in < 1)
 		{
 			change_color(4, 14);
 			printf("输入无效，请重新输入：");
-			change_color(1, 14);
-			ret = scanf("%d", &in);
-			rewind(stdin);
+			s_gets(tmp, 19);
+			p = tmp;
+			ret = sscanf(p, "%d", &in);
 		}
 
 		int sw;
@@ -3208,15 +3207,16 @@ void teacher_course_add()
 
 		change_color(1, 14);
 		printf("请输入结课周次（输入1-20间整数）：");
-		ret = scanf("%d", &in);
-		rewind(stdin);
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p, "%d", &in);
 		while (ret != 1 || in > 20 || in < 1 || in < sw)
 		{
 			change_color(4, 14);
 			printf("输入无效，请重新输入：");
-			change_color(1, 14);
-			ret = scanf("%d", &in);
-			rewind(stdin);
+			s_gets(tmp, 19);
+			p = tmp;
+			ret = sscanf(p, "%d", &in);
 		}
 		sprintf(in_s, "第%d周", in);		//周次整型转字符串
 		strcat(endTime, in_s);
@@ -3228,18 +3228,19 @@ void teacher_course_add()
 		printf("\n时间节次表：\n1、8:00-8:50\n2、9:00-9:50\n3、10:00-10:50\n"
 			"4、11:00-11:50\n5、13:30-14:20\n6、14:30-15:20\n7、15:30-16:20\n"
 			"8、16:30-17:20\n9、18:30-19:20\n10、19:30-20:20");
-		printf("\n输入格式：[周几(1-7)]-[第几(1-10)节]\n"
-			"若具体上课时间为每周三第五节（13:30-14:20），则输入应为：3-5");
+		printf("\n输入格式：[周几(1-7)] [第几(1-10)节]\n"
+			"若具体上课时间为每周三第五节（13:30-14:20），则输入应为：3 5");
 		printf("\n请输入具体上课时间段：");
-		ret = scanf("%d-%d", &in, &in1);
-		rewind(stdin);
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p, "%d %d", &in,&in1);
 		while (ret != 2 || in > 7 || in < 1 || in1 < 1 || in1 > 10)
 		{
 			change_color(4, 14);
 			printf("输入无效，请重新输入：");
-			change_color(1, 14);
-			ret = scanf("%d-%d", &in, &in1);
-			rewind(stdin);
+			s_gets(tmp, 19);
+			p = tmp;
+			ret = sscanf(p, "%d %d", &in, &in1);
 		}
 		switch (in) {		//周整型转字符串
 		case 1:
@@ -3327,13 +3328,16 @@ void teacher_course_add()
 		change_color(1, 14);
 		printf("\n\n上课地点格式：楼号-房间号。1表示教一楼2表示教二楼；房间号为3位数字"
 			"\n请输入上课地点：");
-		ret = scanf("%d-%d", &in, &in1);
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p, "%d-%d", &in, &in1);
 		while (ret != 2 || in > 2 || in < 1 || in1 < 100 || in1 > 999)
 		{
 			change_color(4, 14);
 			printf("无效，请重新输入：");
-			change_color(1, 14);
-			ret = scanf("%d-%d", &in, &in1);
+			s_gets(tmp, 19);
+			p = tmp;
+			ret = sscanf(p, "%d-%d", &in, &in1);
 		}
 		sprintf(classroom, "%d-%d", in, in1);
 		sprintf(query, "select 开课时间,结课时间,上课时间段 from classes where "
@@ -3360,15 +3364,17 @@ void teacher_course_add()
 
 	change_color(1, 14);
 	printf("\n\n请选择人数上限(80/100）：");
-	ret = scanf("%d", &in);
+	s_gets(tmp, 19);
+	p = tmp;
+	ret = sscanf(p, "%d", &in);
 	rewind(stdin);
 	while (ret != 1 || !(in == 80 || in == 100))
 	{
 		change_color(4, 14);
 		printf("无效，请重新输入：");
-		change_color(1, 14);
-		ret = scanf("%d", &in);
-		rewind(stdin);
+		s_gets(tmp, 19);
+		p = tmp;
+		ret = sscanf(p, "%d", &in);
 	}
 	if (in == 80)
 		sprintf(limit, "80");
