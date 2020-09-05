@@ -1407,8 +1407,7 @@ void teacher_mainmenu()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n登录成功，欢迎您，\n%s 的 %s 老师。\n", nowSchool, nowName);
 	change_color(1, 14);
-	printf("\n请选择您需要的服务:\n");
-	printf("  \n");
+	printf("\n请选择您需要的服务:\n\n");
 	printf("              ┌ 查看开设的课程\n");
 	printf("              ├ 查询学生信息\n");
 	printf(" ① 选课管理──┼ 删除课程(选课结束后)\n");
@@ -1438,7 +1437,6 @@ void teacher_mainmenu()
 		main_entrance();
 		break;
 	}
-
 }
 
 void teacher_select_managemenu() {
@@ -1553,6 +1551,7 @@ void teacher_findcourse()
 
 		if (result)
 		{
+			//====================================================================================================================================
 			int fieldCount = mysql_field_count(&mysql);
 			if (fieldCount > 0)
 			{
@@ -1600,6 +1599,7 @@ void teacher_findcourse()
 					printf("\n");
 				}
 			}
+			//===============================================================================================================
 		}
 		do {
 			change_color(1, 14);
@@ -1626,7 +1626,7 @@ void teacher_findcourse()
 				flag = 0;
 			}
 		} while (flag == 1);
-
+		//----------------------------------------------------------------------------------------------------------------
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 		{
 			printf("%17s", field->name);
@@ -1643,6 +1643,7 @@ void teacher_findcourse()
 			printf("\n");
 		}
 		printf("\n");
+		//--------------------------------------------------------------------------------------------------------------
 		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,"
 			"(select 课程名称 from classes where 课程编号="
 			"(select class1 from students where class1 = '%s' OR class2 = '%s' OR class3 = '%s')) 选课1,"
@@ -1653,6 +1654,7 @@ void teacher_findcourse()
 			"FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
 			, courseName, courseName, courseName, courseName, courseName, courseName
 			, courseName, courseName, courseName, courseName, courseName, courseName);
+		//------------------------------------------------------------------------------------------------------------------------------------
 		mysql_query(&mysql, query1);
 		result = mysql_store_result(&mysql);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
@@ -1671,6 +1673,7 @@ void teacher_findcourse()
 			printf("\n");
 		}
 
+		//----------------------------------------------------------------------------------------------------------------------
 		change_color(1, 14);
 		printf("\n按任意键返回上一菜单...\n");
 		system("pause>nul");
@@ -1703,6 +1706,7 @@ void teacher_findcourse()
 			}
 		} while (flag == 1);
 
+		//----------------------------------------------------------------------------------------------------
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 		{
 			printf("%17s", field->name);
@@ -1719,6 +1723,7 @@ void teacher_findcourse()
 			printf("\n");
 		}
 		printf("\n");
+		//-------------------------------------------------------------------------------------------------------------
 		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,"
 			"(select 课程名称 from classes where 课程编号=(select class1 from students where  name = '%s')) 选课1,"
 			"(select 课程名称 from classes where 课程编号=(select class2 from students where  name = '%s')) 选课2,"
@@ -1816,7 +1821,7 @@ void teacher_30delete()
 				flag = 0;
 			}
 		} while (flag == 1);
-
+		//==================================================================================================================
 		if (result)
 		{
 			int fieldCount = mysql_field_count(&mysql);
@@ -1867,14 +1872,13 @@ void teacher_30delete()
 				}
 			}
 		}
-
+		//========================================================================================================================
 		sprintf(query, "SELECT `已选人数` FROM `classes`WHERE 课程编号 = '%s'"
 			, courseName);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
 		Row = mysql_fetch_row(result);
 		stu_num = atoi(Row[0]);
-
 
 		if (getState_selecting() == 2)
 		{
@@ -1934,8 +1938,6 @@ void teacher_30delete()
 							, Row[0]);
 						mysql_query(&mysql, query2);//class3
 					}
-
-
 					printf("\n删除成功！\n");
 					change_color(1, 14);
 					printf("\n按任意键返回上一菜单...\n");
