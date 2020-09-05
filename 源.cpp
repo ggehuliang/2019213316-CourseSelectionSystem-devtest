@@ -172,6 +172,7 @@ void student_login()
 			flag = 0;
 			change_color(1, 14);
 			printf("\n请输入学号：");
+
 			s_gets(stuID, 11);
 			if (stuID[0] == 17)//输入ctrl+q返回上一级
 			{
