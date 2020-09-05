@@ -179,7 +179,7 @@ void student_login()
 			if (check_stuId(stuID) == 0)
 			{
 				change_color(4, 14);
-				printf("无效输入！请输入10位数字(若返回上一级，请按ctrl+q)\n");
+				printf("无效输入！请输入10位数字(若返回上一级，请按Ctrl+Q后回车)\n");
 				flag = 1;
 				continue;
 			}
@@ -199,7 +199,7 @@ void student_login()
 			if ((int)mysql_num_rows(result) == 0)
 			{
 				change_color(4, 14);
-				printf("此学号未注册，请重新输入！(若返回上一级，请按ctrl+q)\n");
+				printf("此学号未注册，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
 				flag = 1;
 			}
 		} while (flag);
@@ -401,10 +401,10 @@ void student_register()
 		while (check_stuId(stuID) == 0)//检查输入是否符合规范 
 		{
 			change_color(4, 14);
-			printf("无效输入！请输入10位数字:(若返回上一级，请按ctrl+q)");
+			printf("无效输入！请输入10位数字:(若返回上一级，请按Ctrl+Q后回车)");
 			change_color(1, 14);
 			s_gets(stuID, 11);
-			if (stuID[0] == 17)//若返回上一级，请按ctrl+q
+			if (stuID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				student_login();
@@ -417,10 +417,10 @@ void student_register()
 		if ((int)mysql_num_rows(result) != 0)
 		{
 			change_color(4, 14);
-			printf("此学号已注册!请更换学号:(若返回上一级，请按ctrl+q)");
+			printf("此学号已注册!请更换学号:(若返回上一级，请按Ctrl+Q后回车)");
 			change_color(1, 14);
 			s_gets(stuID, 11);
-			if (stuID[0] == 17)//若返回上一级，请按ctrl+q
+			if (stuID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				student_login();
@@ -428,6 +428,26 @@ void student_register()
 			}
 		}
 	} while ((int)mysql_num_rows(result) != 0);
+
+	printf("请输入密码:");
+	scanf_pw(passwd);
+	char passwd1[30];
+	printf("请再次确认密码:");
+	scanf_pw(passwd1);
+	do {
+		if (strcmp(passwd, passwd1) != 0)
+		{
+			change_color(4, 14);
+			printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按Ctrl+Q后回车）");
+			s_gets(passwd1, 20);
+			if (passwd1[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+			{
+				system("cls");
+				student_register();
+			}
+		}
+	} while (strcmp(passwd, passwd1) != 0);
+	pw_encode(passwd);
 	printf("请输入学院:");
 	s_gets(school, 20);
 	printf("请输入专业:");
@@ -449,7 +469,7 @@ void student_register()
 	while (check_phone(phone) == 0)
 	{
 		change_color(4, 14);
-		printf("无效输入！请输入11位电话号:（若返回上一级，请按ctrl+q）");
+		printf("无效输入！请输入11位电话号:（若返回上一级，请按Ctrl+Q后回车）");
 		change_color(1, 14);
 		s_gets(phone, 12);
 		if (phone[0] == 17)//返回上一级
@@ -458,35 +478,13 @@ void student_register()
 			student_register();
 		}
 	}
-	change_color(1, 14);
-	printf("请输入密码:");
-	scanf_pw(passwd);
-	char passwd1[30];
-	printf("请再次确认密码:");
-	scanf_pw(passwd1);
-	do {
-		if (strcmp(passwd, passwd1) != 0)
-		{
-			change_color(4, 14);
-			printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按ctrl+q）");
-			s_gets(passwd1, 20);
-			if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
-			{
-				system("cls");
-				student_register();
-			}
-		}
-	} while (strcmp(passwd, passwd1) != 0);
-	pw_encode(passwd);
 	
-	change_color(1, 14);
 	printf("请输入邮箱:");
 	s_gets(email, 30);
 	while (check_email(email) == 0)
 	{
 		change_color(4, 14);
-		printf("无效输入！请按照***@***.***格式输入:（若返回上一级，请按ctrl+q）");
-		change_color(1, 14);
+		printf("无效输入！请按照***@***.***格式输入:（若返回上一级，请按Ctrl+Q后回车）");
 		s_gets(email, 30);
 		if (email[0] == 17)//返回上一级
 		{
@@ -815,7 +813,7 @@ void student_delete_course()
 		change_color(4, 14);
 		printf("此课程已开课，无法删除！\n");
 		change_color(1, 14);
-		printf("请重新输入课程编号：（若返回上一级，请按ctrl+q）\n");
+		printf("请重新输入课程编号：（若返回上一级，请按Ctrl+Q后回车）\n");
 		s_gets(classID, 11);
 		if (classID[0] == 17)//返回上一级
 		{
@@ -900,10 +898,10 @@ void student_manage_info()
 		while (check_phone(phone) == 0)
 		{
 			change_color(4, 14);
-			printf("输入无效！请输入11位电话号：(若返回上一级，请按ctrl+q)");
+			printf("输入无效！请输入11位电话号：(若返回上一级，请按Ctrl+Q后回车)");
 			change_color(1, 14);
 			s_gets(phone, 11);
-			if (phone[0] == 17)//若返回上一级，请按ctrl+q
+			if (phone[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				student_manage_info();
@@ -939,9 +937,9 @@ void student_manage_info()
 			if (strcmp(passwd, passwd1) != 0)
 			{
 				change_color(4, 14);
-				printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按ctrl+q）");
+				printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按Ctrl+Q后回车）");
 				s_gets(passwd1, 20);
-				if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
+				if (passwd1[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 				{
 					system("cls");
 					student_manage_info();
@@ -976,10 +974,10 @@ void student_manage_info()
 		while (check_email(email) == 0)
 		{
 			change_color(4, 14);
-			printf("无效输入！请按照***@***.***格式输入：（若返回上一级，请按ctrl+q）");
+			printf("无效输入！请按照***@***.***格式输入：（若返回上一级，请按Ctrl+Q后回车）");
 			change_color(1, 14);
 			s_gets(email, 30);
-			if (email[0] == 17)//若返回上一级，请按ctrl+q
+			if (email[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				student_manage_info();
@@ -1160,7 +1158,7 @@ int check_email(char* str)
 		return 0;
 	}
 
-	if (str[0] == '@' || str[sum] == '.')
+	if (str[0] == '@' || str[sum-1] == '.')
 		return 0;
 
 	for (int i = 0; i < sum; i++)
@@ -1258,7 +1256,7 @@ void student_check_class_exist(char* classID)
 		if ((int)mysql_num_rows(result) == 0)
 		{
 			change_color(4, 14);
-			printf("无此课程，请重新输入！(若返回上一级，请按ctrl+q)\n");
+			printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
 			change_color(1, 14);
 			s_gets(classID, 11);
 			if(classID[0]==17)
@@ -1402,7 +1400,7 @@ void teacher_findcourse()
 			change_color(1, 14);
 			printf("请输入您想要查询的课程名称：");
 			s_gets(courseName, 20);
-			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_findcourse();
@@ -1414,7 +1412,7 @@ void teacher_findcourse()
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("无结果，请重新输入（若返回上一级，请按ctrl+q）\n");
+				printf("无结果，请重新输入（若返回上一级，请按Ctrl+Q后回车）\n");
 				mysql_free_result(result);
 			}
 			else
@@ -1426,7 +1424,7 @@ void teacher_findcourse()
 			change_color(1, 14);
 			printf("请输入您想要查询相应学生信息的课程编号：");
 			s_gets(courseName, 20);
-			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_findcourse();
@@ -1441,7 +1439,7 @@ void teacher_findcourse()
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("课程编号输入错误 或 该课程暂无学生选课（若返回上一级，请按ctrl+q）\n");
+				printf("课程编号输入错误 或 该课程暂无学生选课（若返回上一级，请按Ctrl+Q后回车）\n");
 				mysql_free_result(result);
 			}
 			else 
@@ -1485,7 +1483,7 @@ void teacher_findcourse()
 			change_color(1, 14);
 			printf("请输入您想要查询的学生名称：");
 			s_gets(studentName, 20);
-			if (studentName[0] == 17)//若返回上一级，请按ctrl+q
+			if (studentName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_findcourse();
@@ -1500,7 +1498,7 @@ void teacher_findcourse()
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("无结果，请重新输入（若返回上一级，请按ctrl+q）\n");
+				printf("无结果，请重新输入（若返回上一级，请按Ctrl+Q后回车）\n");
 				mysql_free_result(result);
 			}
 			else
@@ -1591,7 +1589,7 @@ void teacher_30delete()
 			change_color(1, 14);
 			printf("请输入您想要删除的课程的编号：");
 			s_gets(courseName, 20);
-			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_30delete();
@@ -1604,7 +1602,7 @@ void teacher_30delete()
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("无结果，请重新输入（若返回上一级，请按ctrl+q）\n");
+				printf("无结果，请重新输入（若返回上一级，请按Ctrl+Q后回车）\n");
 				mysql_free_result(result);
 			}
 			else 
@@ -2326,7 +2324,7 @@ void teacher_login() {
 			printf("请输入用户名：");
 			change_color(1, 14);
 			s_gets(teachID, 11);
-			if (teachID[0] == 17)//若返回上一级，请按ctrl+q
+			if (teachID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_login();
@@ -2334,14 +2332,14 @@ void teacher_login() {
 			if (!check_teachId(teachID))
 			{
 				change_color(4, 14);
-				printf("学号格式错误！请重试！(若返回上一级，请按ctrl+q)\n");
+				printf("学号格式错误！请重试！(若返回上一级，请按Ctrl+Q后回车)\n");
 				flag = 1;
 				continue;
 			}
 			change_color(1, 14);
 			printf("请输入密码：");
 			scanf_pw(password);
-			if (password[0] == 17)//若返回上一级，请按ctrl+q
+			if (password[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_login();
@@ -2349,7 +2347,7 @@ void teacher_login() {
 			if (!check_password(1, teachID, password))
 			{
 				change_color(4, 14);
-				printf("用户名或密码错误！请重试！(若返回上一级，请按ctrl+q)\n");
+				printf("用户名或密码错误！请重试！(若返回上一级，请按Ctrl+Q后回车)\n");
 				flag = 1;
 			}
 		} while (flag);
@@ -2397,7 +2395,7 @@ void teacher_course_list()
 		result = mysql_store_result(&mysql);
 		if ((int)mysql_num_rows(result) == 0)
 		{
-			printf("无此课程，请重新输入！(若返回上一级，请按ctrl+q)\n");
+			printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
 			s_gets(classID, 11);
 			if (classID[0] == 17)
 			{
@@ -2486,7 +2484,7 @@ void teacher_course_edit() {
 			change_color(1, 14);
 			printf("请输入您想要修改的课程的编号：");
 			s_gets(courseName,20);
-			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_course_edit();
@@ -2499,7 +2497,7 @@ void teacher_course_edit() {
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("无结果，请重新输入(若返回上一级，请按ctrl+q)\n");
+				printf("无结果，请重新输入(若返回上一级，请按Ctrl+Q后回车)\n");
 				mysql_free_result(result);
 			}
 			else 
@@ -2798,7 +2796,7 @@ void teacher_course_delete() {
 			change_color(1, 14);
 			printf("请输入您想要删除的课程的编号：");
 			s_gets(courseName, 20);
-			if (courseName[0] == 17)//若返回上一级，请按ctrl+q
+			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_course_delete();
@@ -2811,7 +2809,7 @@ void teacher_course_delete() {
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("无结果，请重新输入(若返回上一级，请按ctrl+q)\n");
+				printf("无结果，请重新输入(若返回上一级，请按Ctrl+Q后回车)\n");
 				mysql_free_result(result);
 			}
 			else
@@ -2899,7 +2897,7 @@ void teacher_manage_info()
 
 		while (strcmp(passwd, passwd1) != 0)
 		{
-			if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
+			if (passwd1[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_manage_info();
@@ -2908,7 +2906,7 @@ void teacher_manage_info()
 			else
 			{
 				change_color(4, 14);
-				printf("两次输入不一致!请重新确认:(若返回上一级，请按ctrl+q)");
+				printf("两次输入不一致!请重新确认:(若返回上一级，请按Ctrl+Q后回车)");
 				s_gets(passwd1, 20);
 			}
 		}
@@ -2935,7 +2933,7 @@ void teacher_manage_info()
 		s_gets(email, 20);
 		while (check_email(email) == 0)
 		{
-			if (email[0] == 17)//若返回上一级，请按ctrl+q
+			if (email[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_manage_info();
@@ -3440,11 +3438,11 @@ void teacher_reg()
 		while (check_stuId(teachID) == 0)//检查输入是否符合规范 
 		{
 			change_color(4, 14);
-			printf("无效输入！请输入10位数字:(若返回上一级，请按ctrl+q)");
+			printf("无效输入！请输入10位数字:(若返回上一级，请按Ctrl+Q后回车)");
 			change_color(1, 14);
 			s_gets(teachID, 20);
 
-			if (teachID[0] == 17)//若返回上一级，请按ctrl+q
+			if (teachID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_login();
@@ -3457,10 +3455,10 @@ void teacher_reg()
 		if ((int)mysql_num_rows(result) != 0)
 		{
 			change_color(4, 14);
-			printf("此教师工号已注册!请更换教师工号:(若返回上一级，请按ctrl+q)");
+			printf("此教师工号已注册!请更换教师工号:(若返回上一级，请按Ctrl+Q后回车)");
 			change_color(1, 14);
 			s_gets(teachID, 20);
-			if (teachID[0] == 17)//若返回上一级，请按ctrl+q
+			if (teachID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_login();
@@ -3468,30 +3466,8 @@ void teacher_reg()
 			}
 		}
 	} while ((int)mysql_num_rows(result) != 0);
-	change_color(1, 14);
-	printf("请输入学院:");
-	s_gets(school, 20);
-	change_color(1, 14);
-	printf("请输入姓名:");
-	s_gets(name, 20);
-	change_color(1, 14);
-	printf("请输入电话:");
-	s_gets(phone, 20);
-	while (check_phone(phone) == 0)
-	{
-		change_color(4, 14);
-		printf("无效输入！请输入11位电话号:(若返回上一级，请按ctrl+q)");
-		change_color(1, 14);
-		s_gets(phone, 20);
-		if (phone[0] == 17)//若返回上一级，请按ctrl+q
-		{
-			system("cls");
-			teacher_login();
-			return;
-		}
-	}
+
 	char passwd1[30];
-	change_color(1, 14);
 	printf("请输入密码:");
 	scanf_pw(passwd);
 
@@ -3502,10 +3478,10 @@ void teacher_reg()
 		if (strcmp(passwd, passwd1) != 0)
 		{
 			change_color(4, 14);
-			printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按ctrl+q）");
+			printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按Ctrl+Q后回车）");
 			change_color(1, 14);
 			s_gets(passwd1, 20);
-			if (passwd1[0] == 17)//若返回上一级，请按ctrl+q
+			if (passwd1[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_reg();
@@ -3514,7 +3490,26 @@ void teacher_reg()
 	} while (strcmp(passwd, passwd1) != 0);
 	pw_encode(passwd);
 
-	change_color(1, 14);
+	printf("请输入学院:");
+	s_gets(school, 20);
+	printf("请输入姓名:");
+	s_gets(name, 20);
+	printf("请输入电话:");
+	s_gets(phone, 20);
+	while (check_phone(phone) == 0)
+	{
+		change_color(4, 14);
+		printf("无效输入！请输入11位电话号:(若返回上一级，请按Ctrl+Q后回车)");
+		change_color(1, 14);
+		s_gets(phone, 20);
+		if (phone[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+		{
+			system("cls");
+			teacher_login();
+			return;
+		}
+	}
+
 	printf("请输入邮箱:");
 	s_gets(email, 20);
 	while (check_email(email) == 0)
@@ -3523,7 +3518,7 @@ void teacher_reg()
 		printf("无效输入！请按照***@***.***格式输入:");
 		change_color(1, 14);
 		s_gets(email, 20);
-		if (email[0] == 17)//若返回上一级，请按ctrl+q
+		if (email[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 		{
 			system("cls");
 			teacher_login();
@@ -3573,7 +3568,6 @@ int scanf_pw(char* str)
 		//保证输入字符串长度不大于20且不为莫名其妙的字符
 		else if (i < 20 && str[i] < 127 && str[i] >39)
 		{
-			change_color(1, 14);
 			printf("*");
 			i++;
 		}
@@ -3738,6 +3732,7 @@ char* s_gets(char* str, int n)
 	{
 		i = 0;
 		flag = 0;
+		change_color(1, 14);
 		in = fgets(str, n + 2, stdin);
 		if (in)
 		{
