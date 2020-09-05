@@ -78,7 +78,7 @@ void change_color(int, int);									// 快捷更改接下来输出信息的颜�
 MYSQL mysql;										// 全局mysql连接
 MYSQL_RES* result;									// 查询返回结果集
 MYSQL_FIELD* field;									// 结果集取出列存放
-MYSQL_ROW Row,Row1, Row2, Row3, Row4, Row5;;	// 结果集取出行存放
+MYSQL_ROW Row;	// 结果集取出行存放
 
 char stuID[11];	
 char teachID[20];
@@ -516,6 +516,7 @@ int check_phone(char* str)
 void student_select_course()
 {
 	MYSQL_RES* result1, * result2, * result3, * result4, * result5;
+	MYSQL_ROW Row1 = NULL, Row2 = NULL, Row3 = NULL, Row4 = NULL, Row5 = NULL;
 	system("cls");
 	system("title 学生选课管理系统 - 学生选课");
 	change_color(5, 14);
@@ -3238,7 +3239,7 @@ void teacher_course_add()
 	sprintf(credit, "%.1f", in_f);			// 学分浮点转字符串
 
 	change_color(1, 14);
-	printf("\n请输入课程学时（允许一位小数）：");
+	printf("请输入课程学时（允许一位小数）：");
 	ret = scanf("%f", &in_f);
 	rewind(stdin);
 	while (ret != 1)
@@ -3253,8 +3254,9 @@ void teacher_course_add()
 	do
 	{
 		reflag = 0;		//防止无限循环
+		strcpy(startTime, term);			//将之前存好的学期重新写入避免循环后重复拼入
 		change_color(1, 14);
-		printf("\n请输入开课周次（输入1-20间整数）：");
+		printf("请输入开课周次（输入1-20间整数）：");
 		ret = scanf("%d", &in);
 		rewind(stdin);
 		while (ret != 1 || in > 20 || in < 1)
@@ -3273,7 +3275,7 @@ void teacher_course_add()
 		strcat(startTime, in_s);
 
 		change_color(1, 14);
-		printf("\n请输入结课周次（输入1-20间整数）：");
+		printf("请输入结课周次（输入1-20间整数）：");
 		ret = scanf("%d", &in);
 		rewind(stdin);
 		while (ret != 1 || in > 20 || in < 1 || in < sw)
