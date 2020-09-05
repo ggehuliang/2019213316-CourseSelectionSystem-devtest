@@ -1536,7 +1536,6 @@ void teacher_findcourse()
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程名称 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
-			column = mysql_num_fields(result);
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
@@ -1548,59 +1547,8 @@ void teacher_findcourse()
 				flag = 0;
 			}
 		} while (flag == 1);
+		student_select_class(query);
 
-		if (result)
-		{
-			//====================================================================================================================================
-			int fieldCount = mysql_field_count(&mysql);
-			if (fieldCount > 0)
-			{
-				int row = mysql_num_rows(result);
-				int column = mysql_num_fields(result);
-				for (int i = 0; field = mysql_fetch_field(result), i < 7; i++) {
-					//获得属性名 
-					if (i == 0)
-					{
-						printf(" %-8s", field->name);
-						printf("|");
-					}
-					else if (i == 1 || i == 2)
-					{
-						printf(" %-20s", field->name);
-						printf("|");
-					}
-					else
-					{
-						printf(" %-8s", field->name);
-						printf("|");
-					}
-				}
-
-				printf("\n");
-				while (Row = mysql_fetch_row(result))
-				{
-					for (int j = 0; j < column - 8; j++) {
-						if (j == 0)
-						{
-							printf(" %-8s", Row[j]);
-							printf("|");
-						}
-						else if (j == 1 || j == 2)
-						{
-							printf(" %-20s", Row[j]);
-							printf("|");
-						}
-						else
-						{
-							printf(" %-8s", Row[j]);
-							printf("|");
-						}
-					}
-					printf("\n");
-				}
-			}
-			//===============================================================================================================
-		}
 		do {
 			change_color(1, 14);
 			printf("请输入您想要查询相应学生信息的课程编号：");
@@ -1821,58 +1769,7 @@ void teacher_30delete()
 				flag = 0;
 			}
 		} while (flag == 1);
-		//==================================================================================================================
-		if (result)
-		{
-			int fieldCount = mysql_field_count(&mysql);
-			if (fieldCount > 0)
-			{
-				int row = mysql_num_rows(result);
-				int column = mysql_num_fields(result);
-				for (int i = 0; field = mysql_fetch_field(result), i < 7; i++) {
-					//获得属性名 
-					if (i == 0)
-					{
-						printf(" %-8s", field->name);
-						printf("|");
-					}
-					else if (i == 1 || i == 2)
-					{
-						printf(" %-20s", field->name);
-						printf("|");
-					}
-					else
-					{
-						printf(" %-8s", field->name);
-						printf("|");
-					}
-				}
-
-				printf("\n");
-				while (Row = mysql_fetch_row(result))
-				{
-					for (int j = 0; j < column - 8; j++) {
-						if (j == 0)
-						{
-							printf(" %-8s", Row[j]);
-							printf("|");
-						}
-						else if (j == 1 || j == 2)
-						{
-							printf(" %-20s", Row[j]);
-							printf("|");
-						}
-						else
-						{
-							printf(" %-8s", Row[j]);
-							printf("|");
-						}
-					}
-					printf("\n");
-				}
-			}
-		}
-		//========================================================================================================================
+		student_select_class(query);
 		sprintf(query, "SELECT `已选人数` FROM `classes`WHERE 课程编号 = '%s'"
 			, courseName);
 		mysql_query(&mysql, query);
@@ -2578,7 +2475,7 @@ void teacher_course_list()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\n全部课程如下：\n");
 	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
-	strcat(query3, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes");
+	strcat(query3, "学分,学分,学分,学分,学分,学分,学分 from classes");
 	student_select_class(query3);
 	printf("输入课程编号以查看该课程的详细信息\n");
 	s_gets(classID, 11);
@@ -2684,8 +2581,8 @@ void teacher_course_edit() {
 	int stu_num;
 	int flag = 0;
 	int option2 = 0;
-	char courseName[200] = "niconiconi";
-	char studentName[200] = "niconiconi";
+	char courseName[200];
+	char studentName[200];
 	strcat(query, nowName);
 	strcat(query, "'");
 	student_select_class(query);//打印相应查询内容
@@ -2716,7 +2613,6 @@ void teacher_course_edit() {
 			sprintf(query, "SELECT 课程编号,课程名称,开课教师,限制人数,教材信息,课程简介 FROM `classes`WHERE 课程编号 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
-			column = mysql_num_fields(result);
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
@@ -2727,47 +2623,7 @@ void teacher_course_edit() {
 				flag = 0;
 			}
 		} while (flag == 1);
-		for (int i = 0; field = mysql_fetch_field(result); i++)
-		{
-			if (i == 0)
-			{
-				printf(" %-8s", field->name);
-				printf("|");
-			}
-			else if (i == 1 || i == 4 ||i == 5)
-			{
-				printf(" %-20s", field->name);
-				printf("|");
-			}
-			else
-			{
-				printf(" %-8s", field->name);
-				printf("|");
-			}
-		}
-		printf("\n");
-		while (Row = mysql_fetch_row(result))
-		{
-			for (int j = 0; j < column; j++)
-			{
-				if (j == 0)
-				{
-					printf(" %-8s", Row[j]);
-					printf("|");
-				}
-				else if (j == 1 || j == 4 || j == 5)
-				{
-					printf(" %-20s", Row[j]);
-					printf("|");
-				}
-				else
-				{
-					printf(" %-8s", Row[j]);
-					printf("|");
-				}
-			}
-			printf("\n");
-		}
+		student_select_class(query);
 		sprintf(query, "SELECT `已选人数` FROM `classes`WHERE 课程编号 = '%s'", courseName);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
@@ -3015,8 +2871,8 @@ void teacher_course_delete() {
 	int row;
 	int flag = 0;
 	int option2 = 0;
-	char courseName[200] = "niconiconi";
-	char studentName[200] = "niconiconi";
+	char courseName[200];
+	char studentName[200];
 	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
 	strcat(query, nowName);
 	strcat(query, "'");
@@ -3056,7 +2912,6 @@ void teacher_course_delete() {
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
-			column = mysql_num_fields(result);
 			if (mysql_num_rows(result) == 0)
 			{
 				flag = 1;
@@ -3068,56 +2923,7 @@ void teacher_course_delete() {
 				flag = 0;
 			}
 		} while (flag == 1);
-		if (result)
-		{
-			int fieldCount = mysql_field_count(&mysql);
-			if (fieldCount > 0)
-			{
-				int row = mysql_num_rows(result);
-				int column = mysql_num_fields(result);
-				for (int i = 0; field = mysql_fetch_field(result), i < 7; i++) {
-					//获得属性名 
-					if (i == 0)
-					{
-						printf(" %-8s", field->name);
-						printf("|");
-					}
-					else if (i == 1 || i == 2)
-					{
-						printf(" %-20s", field->name);
-						printf("|");
-					}
-					else
-					{
-						printf(" %-8s", field->name);
-						printf("|");
-					}
-				}
-
-				printf("\n");
-				while (Row = mysql_fetch_row(result))
-				{
-					for (int j = 0; j < column - 8; j++) {
-						if (j == 0)
-						{
-							printf(" %-8s", Row[j]);
-							printf("|");
-						}
-						else if (j == 1 || j == 2)
-						{
-							printf(" %-20s", Row[j]);
-							printf("|");
-						}
-						else
-						{
-							printf(" %-8s", Row[j]);
-							printf("|");
-						}
-					}
-					printf("\n");
-				}
-			}
-		}
+		student_select_class(query);
 
 		change_color(5, 14);
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -3868,9 +3674,7 @@ int scanf_pw(char* str)
 			if (i > 0)	//若减后不为0都能往前 
 			{
 				i--; 
-				printf("\b");
-				printf(" ");
-				printf("\b");
+				printf("\b \b");
 				str[i] = '\0';
 			}
 		}
