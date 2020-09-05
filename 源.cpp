@@ -2719,7 +2719,6 @@ void teacher_course_edit() {
 				result = mysql_store_result(&mysql);
 				Row = mysql_fetch_row(result);
 				stu_num = atoi(Row[0]);
-				printf("%d", stu_num);
 				switch (stu_num)
 			case 80:
 				change_color(5, 14);
