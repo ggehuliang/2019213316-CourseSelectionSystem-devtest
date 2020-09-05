@@ -111,8 +111,6 @@ int main()
 
 int main_entrance()
 {
-	char in_s[10];
-	int ret,flag;
 	int option;
 	system("cls");
 	system("title 学生选课管理系统 - 入口");
@@ -191,14 +189,14 @@ void student_login()
 			mysql_store_result(&mysql);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
-			if (mysql_num_rows(result) != 0)
+			if ((int)mysql_num_rows(result) != 0)
 			{
 				Row = mysql_fetch_row(result);
 				sprintf(nowName, Row[0]);
 				sprintf(nowSchool, Row[1]);
 			}
 
-			if (mysql_num_rows(result) == 0)
+			if ((int)mysql_num_rows(result) == 0)
 			{
 				change_color(4, 14);
 				printf("此学号未注册，请重新输入！(若返回上一级，请按ctrl+q)\n");
@@ -301,7 +299,7 @@ int check_password(int who, char* ID, char* password)
 	mysql_query(&mysql, query);  // 同时匹配用户名和密码查询
 	result = mysql_store_result(&mysql);
 	if (result) {     // 防止数据为空造成崩溃
-		if (mysql_num_rows(result) != 1) // 若非有且仅有一行数据则登录失败
+		if ((int)mysql_num_rows(result) != 1) // 若非有且仅有一行数据则登录失败
 		{
 			mysql_free_result(result);
 			return 0;
@@ -416,7 +414,7 @@ void student_register()
 		sprintf(query, "select * from students where stuID='%s'", stuID);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
-		if (mysql_num_rows(result) != 0)
+		if ((int)mysql_num_rows(result) != 0)
 		{
 			change_color(4, 14);
 			printf("此学号已注册!请更换学号:(若返回上一级，请按ctrl+q)");
@@ -429,7 +427,7 @@ void student_register()
 				return;
 			}
 		}
-	} while (mysql_num_rows(result) != 0);
+	} while ((int)mysql_num_rows(result) != 0);
 	printf("请输入学院:");
 	s_gets(school, 20);
 	printf("请输入专业:");
@@ -534,7 +532,7 @@ int check_phone(char* str)
 void student_select_course()
 {
 	MYSQL_RES* result1, * result2, * result3, * result4, * result5;
-	MYSQL_ROW Row1 = NULL, Row2 = NULL, Row3 = NULL, Row4 = NULL, Row5 = NULL;
+	MYSQL_ROW Row1 = Row, Row2 = Row, Row3 = Row, Row4 = Row, Row5 = Row;	//-为了去除warnings必须先初始化
 	system("cls");
 	system("title 学生选课管理系统 - 学生选课");
 	change_color(5, 14);
@@ -607,11 +605,11 @@ void student_select_course()
 			check2 = 0;
 			check3 = 0;
 
-			if (mysql_num_rows(result2) != 0 && mysql_num_rows(result5) != 0)
+			if ((int)mysql_num_rows(result2) != 0 && (int)mysql_num_rows(result5) != 0)
 				check1 = check_timeClash(Row2[0], Row2[1], Row2[2], Row5[0], Row5[1], Row5[2]);//比较class1和class2是否时间冲突
-			if (mysql_num_rows(result3) != 0 && mysql_num_rows(result5) != 0)
+			if ((int)mysql_num_rows(result3) != 0 && (int)mysql_num_rows(result5) != 0)
 				check2 = check_timeClash(Row3[0], Row3[1], Row3[2], Row5[0], Row5[1], Row5[2]);
-			if (mysql_num_rows(result4) != 0 && mysql_num_rows(result5) != 0)
+			if ((int)mysql_num_rows(result4) != 0 && (int)mysql_num_rows(result5) != 0)
 				check3 = check_timeClash(Row4[0], Row4[1], Row4[2], Row5[0], Row5[1], Row5[2]);
 
 			sprintf(query, "select 限制人数,已选人数 from classes where 课程编号='%s'", classID);
@@ -1037,7 +1035,7 @@ void student_search_specific_imformation()
 		int fieldCount = mysql_field_count(&mysql);
 		if (fieldCount > 0)
 		{
-			int row = mysql_num_rows(result);
+			int row = (int)mysql_num_rows(result);
 			int column = mysql_num_fields(result);
 			for (int i = 0; field = mysql_fetch_field(result); i++) {
 				//获得属性名 
@@ -1118,7 +1116,7 @@ void print_class(char* query)
 		int fieldCount = mysql_field_count(&mysql);
 		if (fieldCount > 0)
 		{
-			int row = mysql_num_rows(result);
+			int row = (int)mysql_num_rows(result);
 			int column = mysql_num_fields(result);
 			for (int i = 0; field = mysql_fetch_field(result),i<7; i++) {
 				//获得属性名 
@@ -1188,7 +1186,7 @@ int check_email(char* str)
 //一课的开课时间、结课时间、具体上课时间段、二课的开课时间、结课时间、具体上课时间段；有冲突返回1
 int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char* time2_sweek, char* time2_eweek, char* time2_day)
 {
-	char term1[10], term2[10], sweek1[5], sweek2[5], eweek1[5], eweek2[5], day1[10], day2[10];
+	char term1[10], term2[10], sweek1[5], sweek2[5], eweek1[5], eweek2[5];
 	int s1i, e1i, s2i, e2i;  // 一课的开课周数，结课周数，二课的开课，结课周数
 
 	if (strcmp(time1_day, time2_day)) //上课时间段不一样直接pass
@@ -1257,7 +1255,7 @@ void student_check_class_exist(char* classID)
 		mysql_store_result(&mysql);
 		mysql_query(&mysql, query10);
 		result = mysql_store_result(&mysql);
-		if (mysql_num_rows(result) == 0)
+		if ((int)mysql_num_rows(result) == 0)
 		{
 			change_color(4, 14);
 			printf("无此课程，请重新输入！(若返回上一级，请按ctrl+q)\n");
@@ -1269,7 +1267,7 @@ void student_check_class_exist(char* classID)
 				student_mainmenu();
 			}
 		}
-	} while (mysql_num_rows(result) == 0);
+	} while ((int)mysql_num_rows(result) == 0);
 }
 
 void teacher_mainmenu()
@@ -1379,7 +1377,6 @@ void teacher_findcourse()
 {
 	system("cls");
 	int column;
-	int row;
 	int flag = 0;
 	int option2 = 0;
 	char courseName[200] = "";
@@ -1413,7 +1410,7 @@ void teacher_findcourse()
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程名称 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
-			if (mysql_num_rows(result) == 0)
+			if ((int)mysql_num_rows(result) == 0)
 			{
 				flag = 1;
 				change_color(4, 14);
@@ -1440,7 +1437,7 @@ void teacher_findcourse()
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			column = mysql_num_fields(result);
-			if (mysql_num_rows(result) == 0)
+			if ((int)mysql_num_rows(result) == 0)
 			{
 				flag = 1;
 				change_color(4, 14);
@@ -1499,7 +1496,7 @@ void teacher_findcourse()
 			result = mysql_store_result(&mysql);
 
 			column = mysql_num_fields(result);
-			if (mysql_num_rows(result) == 0)
+			if ((int)mysql_num_rows(result) == 0)
 			{
 				flag = 1;
 				change_color(4, 14);
@@ -1565,8 +1562,6 @@ void teacher_30delete()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
 	printf("\n以下是您开设的课程\n");
-	int column;
-	int row;
 	int stu_num;
 	int flag = 0;
 	int option2 = 0;
@@ -1605,8 +1600,7 @@ void teacher_30delete()
 				, courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
-			column = mysql_num_fields(result);
-			if (mysql_num_rows(result) == 0)
+			if ((int)mysql_num_rows(result) == 0)
 			{
 				flag = 1;
 				change_color(4, 14);
@@ -1739,7 +1733,7 @@ void teacher_totalcourse() {
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	change_color(1, 14);
-	printf("\n您总共开设了%d门课程\n", mysql_num_rows(result));
+	printf("\n您总共开设了%d门课程\n", (int)mysql_num_rows(result));
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
 	teacher_select_managemenu();
@@ -1960,10 +1954,9 @@ void table_init() {
 // 若配置文件存在则读取，否则进行首次运行配置程序
 void config_init() {
 	FILE* inFile;
-	FILE* insql;
 	char query[3000], * pr = query;
 	char in[30] = "";
-	int ini,ch;
+	int ini;
 	inFile = fopen("cssystem.ini", "r");
 	if (inFile != NULL)
 	{
@@ -2232,7 +2225,7 @@ void config_init() {
 	char enpw[50];
 	strcpy(enpw, dbPassWd);
 	pw_encode(enpw);
-	fprintf(outFile, "# 学生选课管理系统配置文件\n# 手动修改请遵从文件格式（包括行数）\n\n# 数据库地址\n%s\n\n# 端口号\n%d\n\n# 用户名\n%s\n\n# 密码\n%s\n\n# 库名\n%s\n\n# 当前学期信息（学年、学期、开学时间、选课开始时间、结束时间）\n202%d\n%d\n%ld\n%ld\n%ld", dbIP, dbPort, dbUser, enpw, dbName, currYear, currTerm, currStart, selecStart, selecEnd);
+	fprintf(outFile, "# 学生选课管理系统配置文件\n# 手动修改请遵从文件格式（包括行数）\n\n# 数据库地址\n%s\n\n# 端口号\n%d\n\n# 用户名\n%s\n\n# 密码\n%s\n\n# 库名\n%s\n\n# 当前学期信息（学年、学期、开学时间、选课开始时间、结束时间）\n202%d\n%d\n%ld\n%ld\n%ld", dbIP, dbPort, dbUser, enpw, dbName, currYear, currTerm, (long)currStart, (long)selecStart, (long)selecEnd);
 	fclose(outFile);
 	change_color(1, 14);
 	printf("\n\n首次使用设置完毕，按任意键开始使用系统……");
@@ -2251,7 +2244,6 @@ void readCFG() {
 		getchar();
 		exit(1);
 	}
-	int tmp[3];				//临时存待转换时间
 	while (!feof(inFile)) {
 		lineNum++;
 		memset(record, 0, sizeof(record));
@@ -2367,7 +2359,7 @@ void teacher_login() {
 		result = mysql_store_result(&mysql);
 		if (result)
 		{										// 防止数据为空造成崩溃
-			if (mysql_num_rows(result) == 1)	// 若非有且仅有一行数据则登录失败
+			if ((int)mysql_num_rows(result) == 1)	// 若非有且仅有一行数据则登录失败
 			{
 				Row = mysql_fetch_row(result);
 				sprintf(nowName, Row[1]);
@@ -2403,7 +2395,7 @@ void teacher_course_list()
 		mysql_store_result(&mysql);
 		mysql_query(&mysql, query10);
 		result = mysql_store_result(&mysql);
-		if (mysql_num_rows(result) == 0)
+		if ((int)mysql_num_rows(result) == 0)
 		{
 			printf("无此课程，请重新输入！(若返回上一级，请按ctrl+q)\n");
 			s_gets(classID, 11);
@@ -2413,7 +2405,7 @@ void teacher_course_list()
 				teacher_course_managemenu();
 			}
 		}
-	} while (mysql_num_rows(result) == 0);
+	} while ((int)mysql_num_rows(result) == 0);
 	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数,教材信息,课程简介 from classes where 课程编号='";
 	strcat(query, classID);
 	strcat(query, "'");
@@ -2424,7 +2416,7 @@ void teacher_course_list()
 		int fieldCount = mysql_field_count(&mysql);
 		if (fieldCount > 0)
 		{
-			int row = mysql_num_rows(result);
+			int row = (int)mysql_num_rows(result);
 			int column = mysql_num_fields(result);
 			for (int i = 0; field = mysql_fetch_field(result); i++) {
 				//获得属性名 
@@ -2469,12 +2461,10 @@ void teacher_course_edit() {
 	change_color(1, 14); 
 	printf("以下是您开设的课程\n\n");
 	char query[600] = "SELECT * FROM `classes`WHERE 开课教师 = '";
-	int column;
 	int stu_num;
 	int flag = 0;
 	int option2 = 0;
 	char courseName[200];
-	char studentName[200];
 	strcat(query, nowName);
 	strcat(query, "'");
 	print_class(query);//打印相应查询内容
@@ -2505,7 +2495,7 @@ void teacher_course_edit() {
 			sprintf(query, "SELECT 课程编号,课程名称,开课教师,限制人数,教材信息,课程简介 FROM `classes`WHERE 课程编号 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
-			if (mysql_num_rows(result) == 0)
+			if ((int)mysql_num_rows(result) == 0)
 			{
 				flag = 1;
 				change_color(4, 14);
@@ -2775,12 +2765,9 @@ void teacher_course_delete() {
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
 	printf("以下是您开设的课程\n");
-	int column;
-	int row;
 	int flag = 0;
 	int option2 = 0;
 	char courseName[200];
-	char studentName[200];
 	char query[200];
 	sprintf(query, "SELECT * FROM `classes`WHERE 开课教师 = '%s",nowName);	
 	print_class(query);//打印相应内容
@@ -2820,7 +2807,7 @@ void teacher_course_delete() {
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
-			if (mysql_num_rows(result) == 0)
+			if ((int)mysql_num_rows(result) == 0)
 			{
 				flag = 1;
 				change_color(4, 14);
@@ -3003,7 +2990,7 @@ int check_classClash(char* query) {
 	mysql_store_result(&mysql);		//清除数据防止出错
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
-	if (mysql_num_rows(result) != 0)
+	if ((int)mysql_num_rows(result) != 0)
 	{
 		change_color(4, 14);
 		printf("\n与现有课程冲突！\n");
@@ -3090,14 +3077,14 @@ void teacher_course_add()
 	strcat(query, "%'");
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
-	numClass1 = mysql_num_rows(result);		// 取所选学期必修课已开数
+	numClass1 = (int)mysql_num_rows(result);		// 取所选学期必修课已开数
 	sprintf(query, "select 课程编号,课程性质 from classes where "
 		"开课教师='%s' and 课程性质='选修' and 开课时间 like '%s"
 		, nowName, startTime);
 	strcat(query, "%'");
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
-	numClass2 = mysql_num_rows(result);		// 取所选学期选修课已开数
+	numClass2 = (int)mysql_num_rows(result);		// 取所选学期选修课已开数
 
 	strcpy(term, startTime);				//拷贝一份作为开课学期
 
@@ -3355,7 +3342,7 @@ void teacher_course_add()
 			"上课地点='%s'", classroom);					//准备验证是否有相同教室的课
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
-		if (mysql_num_rows(result)) {		//若有，则判断时间是否冲突
+		if ((int)mysql_num_rows(result)) {		//若有，则判断时间是否冲突
 			while (Row = mysql_fetch_row(result))
 			{
 				if (check_timeClash(Row[0], Row[1], Row[2], startTime, endTime, time))
@@ -3439,7 +3426,7 @@ int check_classId(char* str)
 void teacher_reg()
 {
 	system("cls");
-	char teachID[11], school[50], major[50], name[50], sexual[5], phone[100], passwd[100], email[100];
+	char teachID[11], school[50], name[50], phone[100], passwd[100], email[100];
 	char query[300];
 	system("title 学生选课管理系统 - 教师注册");
 	change_color(5, 14);
@@ -3467,7 +3454,7 @@ void teacher_reg()
 		sprintf(query, "select * from teachers where teachID='%s'", teachID);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
-		if (mysql_num_rows(result) != 0)
+		if ((int)mysql_num_rows(result) != 0)
 		{
 			change_color(4, 14);
 			printf("此教师工号已注册!请更换教师工号:(若返回上一级，请按ctrl+q)");
@@ -3480,7 +3467,7 @@ void teacher_reg()
 				return;
 			}
 		}
-	} while (mysql_num_rows(result) != 0);
+	} while ((int)mysql_num_rows(result) != 0);
 	change_color(1, 14);
 	printf("请输入学院:");
 	s_gets(school, 20);
@@ -3609,7 +3596,7 @@ void pw_encode(char* str)
 	char base64_table[100] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 	//计算经过base64编码后的字符串长度  
-	str_lenth = strlen(str);
+	str_lenth = (long)strlen(str);
 
 	if (str_lenth % 3 == 0)
 		lenth = str_lenth / 3 * 4;
@@ -3677,7 +3664,7 @@ void pw_decode(char* str)
 	};
 
 	//计算解码后的字符串长度  
-	lenth = strlen(str);
+	lenth = (long)strlen(str);
 
 	//判断编码后的字符串后是否有=  
 	if (strstr(str, "=="))
