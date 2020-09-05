@@ -375,6 +375,7 @@ void student_register()
 	system("cls");
 	char stuID[11], school[50], major[50], name[50], sexual[5]
 		, phone[100], passwd[100], email[100];
+	char query[400];
 	system("title 学生选课管理系统 - 学生注册");
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -397,10 +398,7 @@ void student_register()
 				return;
 			}
 		}
-
-		char query[100] = "select * from students where stuID='";
-		strcat(query, stuID);
-		strcat(query, "'");
+		sprintf(query, "select * from students where stuID='%s'", stuID);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
 		if (mysql_num_rows(result) != 0)
@@ -416,41 +414,12 @@ void student_register()
 			}
 		}
 	} while (mysql_num_rows(result) != 0);
-
-	char query1[200] = "insert into students(stuID) values(";
-	strcat(query1, "'");
-	strcat(query1, stuID);
-	strcat(query1, "'");
-	strcat(query1, ")");
-
-	change_color(1, 14);
 	printf("请输入学院:");
 	s_gets(school, 20);
-	char query2[200] = "update students set school='";
-	strcat(query2, school);
-	strcat(query2, "' where stuID='");
-	strcat(query2, stuID);
-	strcat(query2, "'");
-
-	change_color(1, 14);
 	printf("请输入专业:");
 	s_gets(major, 30);
-	char query3[200] = "update students set major='";
-	strcat(query3, major);
-	strcat(query3, "' where stuID='");
-	strcat(query3, stuID);
-	strcat(query3, "'");
-
-	change_color(1, 14);
 	printf("请输入姓名:");
 	s_gets(name, 20);
-	char query4[200] = "update students set name='";
-	strcat(query4, name);
-	strcat(query4, "' where stuID='");
-	strcat(query4, stuID);
-	strcat(query4, "'");
-
-	change_color(1, 14);
 	printf("请输入性别:");
 	s_gets(sexual, 3);
 	while (strcmp(sexual, "男") != 0 && strcmp(sexual, "女") != 0)
@@ -459,12 +428,6 @@ void student_register()
 		printf("无效输入！请输入男或女:");
 		s_gets(sexual, 3);
 	}
-	char query5[200] = "update students set sexual='";
-	strcat(query5, sexual);
-	strcat(query5, "' where stuID='");
-	strcat(query5, stuID);
-	strcat(query5, "'");
-
 	change_color(1, 14);
 	printf("请输入电话:");
 	s_gets(phone, 11);
@@ -479,12 +442,6 @@ void student_register()
 			student_register();
 		}
 	}
-	char query6[200] = "update students set phone='";
-	strcat(query6, phone);
-	strcat(query6, "' where stuID='");
-	strcat(query6, stuID);
-	strcat(query6, "'");
-
 	change_color(1, 14);
 	printf("请输入密码:");
 	scanf_pw(passwd);
@@ -505,11 +462,6 @@ void student_register()
 		}
 	} while (strcmp(passwd, passwd1) != 0);
 	pw_encode(passwd);
-	char query7[200] = "update students set passwd='";
-	strcat(query7, passwd);
-	strcat(query7, "' where stuID='");
-	strcat(query7, stuID);
-	strcat(query7, "'");
 	
 	change_color(1, 14);
 	printf("请输入邮箱:");
@@ -525,23 +477,20 @@ void student_register()
 			student_register();
 		}
 	}
-	char query8[200] = "update students set email='";
-	strcat(query8, email);
-	strcat(query8, "' where stuID='");
-	strcat(query8, stuID);
-	strcat(query8, "'");
+	sprintf(query, "INSERT INTO `students` (`stuID`, `school`, `major`, `name`, `sexual`, `phone`, `passwd`, `email`) "
+		"VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"
+		, stuID, school, major, name, sexual, phone, passwd, email);
 
-	mysql_query(&mysql, query1);
-	mysql_query(&mysql, query2);
-	mysql_query(&mysql, query3);
-	mysql_query(&mysql, query4);
-	mysql_query(&mysql, query5);
-	mysql_query(&mysql, query6);
-	mysql_query(&mysql, query7);
-	mysql_query(&mysql, query8);
-
-	change_color(4, 14);
-	printf("\n注册成功！\n");
+	if (mysql_query(&mysql, query))
+	{
+		change_color(4, 14);
+		printf("\n数据库读写失败，请重试\n");
+	}
+	else
+	{
+		change_color(2, 14);
+		printf("\n注册成功！\n");
+	}
 	change_color(1, 14);
 	printf("\n请按任意键返回上一菜单");
 	system("pause > nul");
@@ -3703,8 +3652,6 @@ void teacher_reg()
 	}
 	sprintf(query, "INSERT INTO `teachers` (`teachID`, `school`, `name`, `passwd`, `email`) "
 		"VALUES ('%s', '%s', '%s', '%s', '%s')", teachID, school, name, passwd, email);
-	mysql_query(&mysql, query);
-
 	if (mysql_query(&mysql, query))
 	{
 		change_color(4, 14);
@@ -3719,7 +3666,6 @@ void teacher_reg()
 	printf("\n请按任意键返回上一菜单\n");
 	system("pause > nul");
 	teacher_login();
-
 }
 
 //输入密码用*代替显示，输入为待赋值字符串数组
@@ -3945,4 +3891,3 @@ void change_color(int text, int bg)
 	bg <<= 4;
 	SetConsoleTextAttribute(consoleHWnd, bg + text);
 }
-
