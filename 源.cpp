@@ -2398,7 +2398,7 @@ void teacher_course_list()
 			}
 		}
 	} while ((int)mysql_num_rows(result) == 0);
-	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数,教材信息,课程简介 from classes where 课程编号='";
+	char query[200] = "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数 from classes where 课程编号='";
 	strcat(query, classID);
 	strcat(query, "'");
 	mysql_query(&mysql, query);
@@ -2438,6 +2438,47 @@ void teacher_course_list()
 			}
 		}
 	}
+
+	char query1[200] = "select 教材信息 from classes where 课程编号='";
+	strcat(query1, classID);
+	strcat(query1, "'");
+	mysql_query(&mysql, query1);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			field = mysql_fetch_field(result);
+			//获得属性名 
+			printf("%s:", field->name);
+			printf("\n");
+			Row = mysql_fetch_row(result);
+			printf("%s", Row[0]);
+			printf("\n\n");
+		}
+	}
+
+	char query2[200] = "select 课程简介 from classes where 课程编号='";
+	strcat(query2, classID);
+	strcat(query2, "'");
+	mysql_query(&mysql, query2);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			field = mysql_fetch_field(result);
+			//获得属性名 
+			printf("%s:", field->name);
+			printf("\n");
+			Row = mysql_fetch_row(result);
+			printf("%s", Row[0]);
+			printf("\n\n");
+		}
+	}
+
 	change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
