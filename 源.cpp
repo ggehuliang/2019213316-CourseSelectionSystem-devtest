@@ -58,6 +58,7 @@ int check_stuId(char* );
 int check_phone(char* );
 int check_email(char* );
 int check_classId(char* );
+int check_classClash(char*);
 int getState_selecting();										// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
 int getState_starting(char*, char*);							// 获取开课状态 0为未开课，1为已开课
 int check_password(int, char*, char*);							// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
@@ -1171,9 +1172,7 @@ int check_email(char* str)
 	int b[50];
 
 	if (sum > 50)
-	{
 		return 0;
-	}
 
 	if (str[0] == '@' || str[sum-1] == '.')
 		return 0;
