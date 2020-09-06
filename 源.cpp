@@ -1352,6 +1352,7 @@ void teacher_select_managemenu()
 			break;
 		case 2:
 			teacher_findcourse();
+			continue;
 			break;
 		case 3:
 			teacher_30delete();
@@ -1462,8 +1463,7 @@ void teacher_findcourse()
 	char* classID;
 	char courseName[200] = "";
 	char studentName[200] = "";
-	char query[200];
-	char query1[200];
+	char query[500];
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 学生信息查询界面 ●○●○●○\n");
@@ -1475,39 +1475,39 @@ void teacher_findcourse()
 	printf("  ③ - 返回上一菜单\n\n");
 	printf("\n请输入1，2或3:");
 	scanf_opt(&option2, 1, 3);
-		switch (option2)
+	switch (option2)
 	{
 	case 1:
-			do 
+		do
 		{
-				do
+			do
 			{
-			change_color(1, 14);
-			printf("请输入您想要查询的课程名称：");
-			s_gets(courseName, 20);
-			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
-			{
-				system("cls");
-				teacher_findcourse();
-				return;
-			}
-			sprintf(query, "SELECT 课程编号 FROM `classes`WHERE 课程名称 = '%s'", courseName);
-			mysql_query(&mysql, query);
-			result = mysql_store_result(&mysql);
-			if ((int)mysql_num_rows(result) == 0)
-			{
-				flag = 1;
-				change_color(4, 14);
-				printf("课程编号输入错误（若返回上一级，请按Ctrl+Q后回车）\n");
-				mysql_free_result(result);
-			}
-			else
-				flag = 0;
-		} while (flag == 1);
-		Row = mysql_fetch_row(result);
-		classID = Row[0];
+				change_color(1, 14);
+				printf("请输入您想要查询的课程名称：");
+				s_gets(courseName, 20);
+				if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+				{
+					system("cls");
+					teacher_findcourse();
+					return;
+				}
+				sprintf(query, "SELECT 课程编号 FROM `classes`WHERE 课程名称 = '%s'", courseName);
+				mysql_query(&mysql, query);
+				result = mysql_store_result(&mysql);
+				if ((int)mysql_num_rows(result) == 0)
+				{
+					flag = 1;
+					change_color(4, 14);
+					printf("课程编号输入错误（若返回上一级，请按Ctrl+Q后回车）\n");
+					mysql_free_result(result);
+				}
+				else
+					flag = 0;
+			} while (flag == 1);
+			Row = mysql_fetch_row(result);
+			classID = Row[0];
 
-	
+
 			change_color(1, 14);
 			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别"
 				" FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
@@ -1522,7 +1522,7 @@ void teacher_findcourse()
 				printf("该课程暂无学生选课（若返回上一级，请按Ctrl+Q后回车）\n");
 				mysql_free_result(result);
 			}
-			else 
+			else
 				flag = 0;
 		} while (flag == 1);
 
@@ -1540,10 +1540,10 @@ void teacher_findcourse()
 		}
 		change_color(1, 14);
 		printf("\n");
-		sprintf(query1, "select stuID 学生编号,phone 学生电话,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3 "
+		sprintf(query, "select stuID 学生编号,phone 学生电话,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3 "
 			"FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
 			, classID, classID, classID);
-		mysql_query(&mysql, query1);
+		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
@@ -1553,7 +1553,7 @@ void teacher_findcourse()
 
 		while (Row = mysql_fetch_row(result))
 		{
-			for (int j = 0; j < column+1; j++)
+			for (int j = 0; j < column + 1; j++)
 				printf("%18s |", Row[j]);
 			printf("\n");
 		}
@@ -1575,7 +1575,7 @@ void teacher_findcourse()
 				return;
 			}
 			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别 "
-				"FROM `students`WHERE name = '%s'",studentName);
+				"FROM `students`WHERE name = '%s'", studentName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 
@@ -1604,13 +1604,13 @@ void teacher_findcourse()
 		}
 		change_color(1, 14);
 		printf("\n");
-		sprintf(query1, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,"
+		sprintf(query, "SELECT stuID 学生编号,phone 学生电话,email 电子邮箱,"
 			"(select 课程名称 from classes where 课程编号=(select class1 from students where  name = '%s')) 选课1,"
 			"(select 课程名称 from classes where 课程编号=(select class2 from students where  name = '%s')) 选课2,"
 			"(select 课程名称 from classes where 课程编号=(select class3 from students where name = '%s')) 选课3"
 			" FROM `students`WHERE name = '%s'"
 			, studentName, studentName, studentName, studentName);
-		mysql_query(&mysql, query1);
+		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
 		column = mysql_num_fields(result);
 		change_color(0, 14);
@@ -1621,7 +1621,7 @@ void teacher_findcourse()
 
 		while (Row = mysql_fetch_row(result))
 		{
-			for (int j = 0; j < column ; j++)
+			for (int j = 0; j < column; j++)
 				printf("%17s |", Row[j]);
 			printf("\n");
 		}
