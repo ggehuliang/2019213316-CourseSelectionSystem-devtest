@@ -3798,11 +3798,13 @@ int scanf_pw(char* str)
 	for (i = 0;; )
 	{
 		str[i] = _getch();
-		if (str[i] == 13)	//如果是回车符就加结束字符
+		if (str[i] == 13 )	//如果是回车符就加结束字符
 		{
 			str[i] = '\0';
 			break;
 		}
+		if (i > 19)		//如果是到20位就加结束字符
+			str[i] = '\0';
 		else if (str[i] == 8 || str[i] == 127)
 		{
 
