@@ -1171,9 +1171,7 @@ int check_email(char* str)
 	int b[50];
 
 	if (sum > 50)
-	{
 		return 0;
-	}
 
 	if (str[0] == '@' || str[sum-1] == '.')
 		return 0;
