@@ -226,7 +226,10 @@ void student_login()
 			continue;
 		}
 		else if (option1 == 2)
+		{
 			student_register();
+			continue;
+		}
 		else if (option1 == 3)
 			return;
 	} while (1);
@@ -2475,7 +2478,10 @@ void teacher_login() {
 			}
 		}
 		else if (option1 == 2)
+		{
 			teacher_reg();
+			continue;
+		}
 		else if (option1 == 3)
 			return;
 
