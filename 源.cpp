@@ -1652,7 +1652,7 @@ void teacher_30delete()
 	int option2 = 0;
 	char courseName[200] = "niconiconi";
 	char studentName[200] = "niconiconi";
-	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
+	char query[200] = "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes`WHERE 开课教师 = '";
 	char query1[200];
 	char query2[200];
 	strcat(query, nowName);
@@ -1683,7 +1683,7 @@ void teacher_30delete()
 				teacher_30delete();
 				return;
 			}
-			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'"
+			sprintf(query, "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes`WHERE 课程编号 = '%s'"
 				, courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
