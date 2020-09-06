@@ -176,6 +176,7 @@ void student_login()
 				{
 					system("cls");
 					student_login();
+					return;
 				}
 				if (check_stuId(stuID) == 0)
 				{
@@ -211,7 +212,7 @@ void student_login()
 			while (check_password(0, stuID, stu_passwd) == 0)
 			{
 				change_color(4, 14);
-				printf("密码错误!请重新输入密码：(若返回上一级，输入ctrl+q)");
+				printf("密码错误!请重新输入密码：(若返回上一级，请按Ctrl+Q后回车)");
 				change_color(1, 14);
 				s_gets(stu_passwd, 20);	//若首次密码输入错误则明文显示
 				if (stu_passwd[0] == 17)//返回上一级
@@ -807,12 +808,21 @@ void student_delete_course()
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 删除选课结果 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
 	change_color(1, 14);
-	printf("\n您的已选课程如下:\n\n");
-	student_query_result();
+	char query1[500] = "select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=";
+	strcat(query1, stuID);
+	strcat(query1, ")or c.`课程编号`=(select s.class2 from students s where stuID=");
+	strcat(query1, stuID);
+	strcat(query1, ")or c.`课程编号`=(select s.class3 from students s where stuID=");
+	strcat(query1, stuID);
+	strcat(query1, ")");
+	printf("您的已选课程如下：\n\n");
+	print_class(query1);
 	do {
+		change_color(1, 14);
 		printf("\n请输入您想删除的课程编号（若返回上一级，请按Ctrl+Q后回车）：");
+		change_color(0, 14);
 		s_gets(classID, 11);
 		if (classID[0] == 17)//返回上一级
 			return;
