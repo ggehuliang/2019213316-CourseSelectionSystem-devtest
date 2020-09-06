@@ -177,7 +177,6 @@ void student_login()
 				{
 					system("cls");
 					student_login();
-					return;
 				}
 				if (check_stuId(stuID) == 0)
 				{
@@ -213,7 +212,7 @@ void student_login()
 			while (check_password(0, stuID, stu_passwd) == 0)
 			{
 				change_color(4, 14);
-				printf("密码错误!请重新输入密码：(若返回上一级，请按Ctrl+Q后回车)");
+				printf("密码错误!请重新输入密码：(若返回上一级，输入ctrl+q)");
 				change_color(1, 14);
 				s_gets(stu_passwd, 20);	//若首次密码输入错误则明文显示
 				if (stu_passwd[0] == 17)//返回上一级
@@ -809,21 +808,12 @@ void student_delete_course()
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("\t\t\t○●○●○● 删除选课结果 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
-	char query1[500] = "select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=";
-	strcat(query1, stuID);
-	strcat(query1, ")or c.`课程编号`=(select s.class2 from students s where stuID=");
-	strcat(query1, stuID);
-	strcat(query1, ")or c.`课程编号`=(select s.class3 from students s where stuID=");
-	strcat(query1, stuID);
-	strcat(query1, ")");
-	printf("您的已选课程如下：\n\n");
-	print_class(query1);
+	printf("\n您的已选课程如下:\n\n");
+	student_query_result();
 	do {
-		change_color(1, 14);
 		printf("\n请输入您想删除的课程编号（若返回上一级，请按Ctrl+Q后回车）：");
-		change_color(0, 14);
 		s_gets(classID, 11);
 		if (classID[0] == 17)//返回上一级
 			return;
@@ -1488,8 +1478,10 @@ void teacher_findcourse()
 		switch (option2)
 	{
 	case 1:
-		do
+			do 
 		{
+				do
+			{
 			change_color(1, 14);
 			printf("请输入您想要查询的课程名称：");
 			s_gets(courseName, 20);
@@ -1506,7 +1498,7 @@ void teacher_findcourse()
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("无结果，请重新输入（若返回上一级，请按Ctrl+Q后回车）\n");
+				printf("课程编号输入错误（若返回上一级，请按Ctrl+Q后回车）\n");
 				mysql_free_result(result);
 			}
 			else
@@ -1515,7 +1507,7 @@ void teacher_findcourse()
 		Row = mysql_fetch_row(result);
 		classID = Row[0];
 
-		do {
+	
 			change_color(1, 14);
 			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别"
 				" FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
@@ -1527,12 +1519,13 @@ void teacher_findcourse()
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("课程编号输入错误或该课程暂无学生选课（若返回上一级，请按Ctrl+Q后回车）\n");
+				printf("该课程暂无学生选课（若返回上一级，请按Ctrl+Q后回车）\n");
 				mysql_free_result(result);
 			}
 			else 
 				flag = 0;
 		} while (flag == 1);
+
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%18s |", field->name);
@@ -1549,7 +1542,7 @@ void teacher_findcourse()
 		printf("\n");
 		sprintf(query1, "select stuID 学生编号,phone 学生电话,email 电子邮箱,class1 选课1,class2 选课2,class3 选课3 "
 			"FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
-			, courseName, courseName, courseName);
+			, classID, classID, classID);
 		mysql_query(&mysql, query1);
 		result = mysql_store_result(&mysql);
 		change_color(0, 14);
