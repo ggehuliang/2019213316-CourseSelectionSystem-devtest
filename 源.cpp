@@ -379,7 +379,7 @@ void student_register()
 {
 	int contflag = 0;
 	system("cls");
-	char stuID[11], school[50], major[50], name[50], sexual[5]
+	char school[50], major[50], name[50], sexual[5]
 		, phone[100], passwd[100], email[100];
 	char query[400];
 	system("title 学生选课管理系统 - 学生注册");
@@ -482,6 +482,7 @@ void student_register()
 		{
 			system("cls");
 			student_register();
+			return;
 		}
 	}
 	sprintf(query, "INSERT INTO `students` (`stuID`, `school`, `major`, `name`, `sexual`, `phone`, `passwd`, `email`) "
@@ -3610,7 +3611,7 @@ int check_classId(char* str)
 void teacher_reg()
 {
 	system("cls");
-	char teachID[11], school[50], name[50], phone[100], passwd[100], email[100];
+	char school[50], name[50], phone[100], passwd[100], email[100];
 	char query[300];
 	system("title 学生选课管理系统 - 教师注册");
 	change_color(5, 14);
@@ -3619,7 +3620,7 @@ void teacher_reg()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
 	printf("请输入教师工号:");
-	s_gets(teachID, 20);
+	s_gets(teachID, 12);
 	do {
 		while (check_stuId(teachID) == 0)//检查输入是否符合规范 
 		{
