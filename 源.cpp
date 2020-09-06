@@ -795,7 +795,6 @@ void student_query_result()
 	printf("\n您的选课结果如下：\n\n");
 	change_color(0, 14);
 	print_class(query);
-	
 }
 
 void student_delete_course()
