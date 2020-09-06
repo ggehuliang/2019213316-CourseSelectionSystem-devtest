@@ -1370,6 +1370,7 @@ void teacher_select_managemenu()
 
 void teacher_mycourse()
 {
+	char classID[100];
 	system("cls");
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1383,6 +1384,69 @@ void teacher_mycourse()
 	change_color(0, 14);
 	print_class(query);//打印相应查询内容
 	change_color(1, 14);
+	change_color(1, 14);
+	printf("输入课程编号以查看该课程的详细信息\n");
+	s_gets(classID, 11);
+	do {
+		char query10[100] = "select * from classes where 课程编号='";
+		strcat(query10, classID);
+		strcat(query10, "'");
+		mysql_store_result(&mysql);
+		mysql_query(&mysql, query10);
+		result = mysql_store_result(&mysql);
+		if ((int)mysql_num_rows(result) == 0)
+		{
+			printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
+			s_gets(classID, 11);
+			if (classID[0] == 17)
+			{
+				system("cls");
+				return;
+			}
+		}
+	} while ((int)mysql_num_rows(result) == 0);
+	sprintf(query,"select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数 from classes where 课程编号='");
+	strcat(query, classID);
+	strcat(query, "'");
+	mysql_query(&mysql, query);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			change_color(0, 14);
+			int row = (int)mysql_num_rows(result);
+			int column = mysql_num_fields(result);
+			for (int i = 0; field = mysql_fetch_field(result); i++) {
+				//获得属性名 
+				if (i == 0 || i == 1)
+					printf("%-27s |", field->name);
+				else if (i == 2)
+					printf("%-17s |", field->name);
+				else if (i == 3 || i == 4 || i == 5)
+					printf("%-8s |", field->name);
+				else
+					printf(" %-20s|", field->name);
+			}
+			printf("\n");
+			while (Row = mysql_fetch_row(result)) {
+				for (int j = 0; j < column; j++)
+				{
+					if (j == 0 || j == 1)
+						printf("%-27s |", Row[j]);
+					else if (j == 2)
+						printf("%-17s |", Row[j]);
+					else if (j == 3 || j == 4 || j == 5)
+						printf("%-8s |", Row[j]);
+					else
+						printf("%-20s |", Row[j]);
+				}
+				printf("\n");
+
+			}
+		}
+		}change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
 	return;
@@ -2539,8 +2603,6 @@ void teacher_course_edit() {
 	change_color(1, 14); 
 	printf("以下是您开设的课程\n\n");
 	char query[600];
-	char query1[200];
-	char query2[200];
 	int stu_num;
 	int flag = 0;
 	int option2 = 0;
