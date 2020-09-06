@@ -58,6 +58,7 @@ int check_stuId(char* );
 int check_phone(char* );
 int check_email(char* );
 int check_classId(char* );
+int check_classClash(char*);
 int getState_selecting();										// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
 int getState_starting(char*, char*);							// 获取开课状态 0为未开课，1为已开课
 int check_password(int, char*, char*);							// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
@@ -1660,7 +1661,7 @@ void teacher_30delete()
 	int option2 = 0;
 	char courseName[200] = "niconiconi";
 	char studentName[200] = "niconiconi";
-	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
+	char query[200] = "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes`WHERE 开课教师 = '";
 	char query1[200];
 	char query2[200];
 	strcat(query, nowName);
@@ -1691,7 +1692,7 @@ void teacher_30delete()
 				teacher_30delete();
 				return;
 			}
-			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'"
+			sprintf(query, "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes`WHERE 课程编号 = '%s'"
 				, courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
