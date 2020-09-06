@@ -61,8 +61,6 @@ int check_classId(char* );
 int getState_selecting();										// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
 int getState_starting(char*, char*);							// 获取开课状态 0为未开课，1为已开课
 int check_password(int, char*, char*);							// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
-int check_phone(char*);
-int check_classId(char*);
 int check_teachId(char*);
 int check_timeClash(char*, char*, char*, char*, char*, char*);
 time_t convert_dateToTT(int, int, int, int, int, int);
@@ -1081,7 +1079,6 @@ void student_search_specific_imformation()
 		}
 	}
 	char query1[200] = "select 教材信息 from classes where 课程编号='";
-	printf("教材信息\n");
 	strcat(query1, classID);
 	strcat(query1, "'");
 	mysql_query(&mysql, query1);
@@ -1089,22 +1086,13 @@ void student_search_specific_imformation()
 	if (result)
 	{
 		change_color(0, 14);
-		int fieldCount = mysql_field_count(&mysql);
-		if (fieldCount > 0)
-		{
-			field = mysql_fetch_field(result);
-			//获得属性名 
-			printf("%s:", field->name);
-			printf("\n");
-			Row = mysql_fetch_row(result);
-			printf("%s", Row[0]);
-			printf("\n\n");
-			change_color(1, 14);
-		}
+		printf("教材信息\n");
+		Row = mysql_fetch_row(result);
+		printf("%s\n\n", Row[0]);
+		change_color(1, 14);
 	}
 
 	char query2[200] = "select 课程简介 from classes where 课程编号='";
-	printf("课程简介\n");
 	strcat(query2, classID);
 	strcat(query2, "'");
 	mysql_query(&mysql, query2);
@@ -1112,18 +1100,10 @@ void student_search_specific_imformation()
 	if (result)
 	{
 		change_color(0, 14);
-		int fieldCount = mysql_field_count(&mysql);
-		if (fieldCount > 0)
-		{
-			field = mysql_fetch_field(result);
-				//获得属性名 
-			printf("%s:", field->name);
-			printf("\n");
-			Row = mysql_fetch_row(result);
-			printf("%s", Row[0]);
-			printf("\n\n");
-			change_color(1, 14);
-		}
+		printf("课程简介\n");
+		Row = mysql_fetch_row(result);
+		printf("%s\n\n", Row[0]);
+		change_color(1, 14);
 	}
 }
 
@@ -1450,7 +1430,7 @@ void teacher_findcourse()
 
 		do {
 			change_color(1, 14);
-			printf("请输入您想要查询相应学生信息的课程编号：");
+			printf("请输入课程编号以查询选择该课学生的具体信息：");
 			s_gets(courseName, 20);
 			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
@@ -1467,7 +1447,7 @@ void teacher_findcourse()
 			{
 				flag = 1;
 				change_color(4, 14);
-				printf("课程编号输入错误 或 该课程暂无学生选课（若返回上一级，请按Ctrl+Q后回车）\n");
+				printf("课程编号输入错误或该课程暂无学生选课（若返回上一级，请按Ctrl+Q后回车）\n");
 				mysql_free_result(result);
 			}
 			else 
@@ -1494,14 +1474,14 @@ void teacher_findcourse()
 		result = mysql_store_result(&mysql);
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
-			printf("%17s |", field->name);
+			printf("%18s |", field->name);
 
 		printf("\n");
 
 		while (Row = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column+1; j++)
-				printf("%17s |", Row[j]);
+				printf("%18s |", Row[j]);
 			printf("\n");
 		}
 		change_color(1, 14);
