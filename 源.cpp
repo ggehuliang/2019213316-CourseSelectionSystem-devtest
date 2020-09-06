@@ -1383,6 +1383,7 @@ void teacher_findcourse()
 	int column;
 	int flag = 0;
 	int option2 = 0;
+	char* classID;
 	char courseName[200] = "";
 	char studentName[200] = "";
 	char query[200];
@@ -1411,7 +1412,7 @@ void teacher_findcourse()
 				system("cls");
 				teacher_findcourse();
 			}
-			sprintf(query, "SELECT * FROM `classes`WHERE 课程名称 = '%s'", courseName);
+			sprintf(query, "SELECT 课程编号 FROM `classes`WHERE 课程名称 = '%s'", courseName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			if ((int)mysql_num_rows(result) == 0)
@@ -1424,22 +1425,14 @@ void teacher_findcourse()
 			else
 				flag = 0;
 		} while (flag == 1);
-		change_color(0, 14);
-		print_class(query);
-		change_color(1, 14);
+		Row = mysql_fetch_row(result);
+		classID = Row[0];
 
 		do {
 			change_color(1, 14);
-			printf("请输入课程编号以查询选择该课学生的具体信息：");
-			s_gets(courseName, 20);
-			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
-			{
-				system("cls");
-				teacher_findcourse();
-			}
 			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别"
 				" FROM `students`WHERE class1 = '%s' OR class2 = '%s' OR class3 = '%s'"
-				, courseName, courseName, courseName);
+				, classID, classID, classID);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			column = mysql_num_fields(result);
