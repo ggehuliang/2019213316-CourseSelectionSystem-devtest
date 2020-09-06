@@ -78,7 +78,7 @@ void change_color(int, int);									// 快捷更改接下来输出信息的颜�
 MYSQL mysql;										// 全局mysql连接
 MYSQL_RES* result;									// 查询返回结果集
 MYSQL_FIELD* field;									// 结果集取出列存放
-MYSQL_ROW Row,Row1;	// 结果集取出行存放
+MYSQL_ROW Row;	// 结果集取出行存放
 
 char stuID[11];	
 char teachID[20];
@@ -1065,43 +1065,27 @@ void student_search_specific_imformation()
 		}
 	}
 	char query1[200] = "select 教材信息 from classes where 课程编号='";
+	printf("教材信息\n");
 	strcat(query1, classID);
 	strcat(query1, "'");
 	mysql_query(&mysql, query1);
 	result = mysql_store_result(&mysql);
 	if (result)
 	{
-		int fieldCount = mysql_field_count(&mysql);
-		if (fieldCount > 0)
-		{
-			field = mysql_fetch_field(result);
-			//获得属性名 
-			printf("%s:", field->name);
-			printf("\n");
-			Row = mysql_fetch_row(result);
-			printf("%s", Row[0]);
-			printf("\n\n");
-		}
+		Row = mysql_fetch_row(result);
+		printf("%s\n\n", Row[0]);
 	}
 
 	char query2[200] = "select 课程简介 from classes where 课程编号='";
+	printf("课程简介\n");
 	strcat(query2, classID);
 	strcat(query2, "'");
 	mysql_query(&mysql, query2);
 	result = mysql_store_result(&mysql);
 	if (result)
 	{
-		int fieldCount = mysql_field_count(&mysql);
-		if (fieldCount > 0)
-		{
-			field = mysql_fetch_field(result);
-				//获得属性名 
-			printf("%s:", field->name);
-			printf("\n");
-			Row = mysql_fetch_row(result);
-			printf("%s", Row[0]);
-			printf("\n\n");
-		}
+		Row = mysql_fetch_row(result);
+		printf("%s\n\n", Row[0]);
 	}
 }
 
