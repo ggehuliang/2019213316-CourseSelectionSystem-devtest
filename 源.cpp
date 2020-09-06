@@ -810,8 +810,17 @@ void student_delete_course()
 	printf("\t\t\t○●○●○● 删除选课结果 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
-	printf("\n您的已选课程如下:\n\n");
-	student_query_result();
+	char query1[500] = "select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=";
+	strcat(query1, stuID);
+	strcat(query1, ")or c.`课程编号`=(select s.class2 from students s where stuID=");
+	strcat(query1, stuID);
+	strcat(query1, ")or c.`课程编号`=(select s.class3 from students s where stuID=");
+	strcat(query1, stuID);
+	strcat(query1, ")");
+	printf("\n您的选课结果如下：\n\n");
+	change_color(0, 14);
+	print_class(query1);
+	change_color(1, 14);
 	do {
 		printf("\n请输入您想删除的课程编号（若返回上一级，请按Ctrl+Q后回车）：");
 		s_gets(classID, 11);
@@ -2447,6 +2456,7 @@ void teacher_login() {
 					change_color(4, 14);
 					printf("用户名或密码错误！请重试！(若返回上一级，请按Ctrl+Q后回车)\n");
 					flag = 1;
+					continue;
 				}
 			} while (flag);
 			mysql_store_result(&mysql);
