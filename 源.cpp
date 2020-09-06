@@ -379,7 +379,7 @@ void student_register()
 {
 	int contflag = 0;
 	system("cls");
-	char stuID[11], school[50], major[50], name[50], sexual[5]
+	char school[50], major[50], name[50], sexual[5]
 		, phone[100], passwd[100], email[100];
 	char query[400];
 	system("title 学生选课管理系统 - 学生注册");
@@ -482,6 +482,7 @@ void student_register()
 		{
 			system("cls");
 			student_register();
+			return;
 		}
 	}
 	sprintf(query, "INSERT INTO `students` (`stuID`, `school`, `major`, `name`, `sexual`, `phone`, `passwd`, `email`) "
@@ -1281,88 +1282,92 @@ int student_check_class_exist(char* classID)
 
 void teacher_mainmenu()
 {
-	system("cls");
-	int option2 = 0;
-	system("title 学生选课管理系统 - 教师主菜单");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t○●○●○● 教师主菜单 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(4, 14);
-	printf("\n登录成功，欢迎您，\n%s 的 %s 老师。\n", nowSchool, nowName);
-	change_color(1, 14);
-	printf("\n请选择您需要的服务:\n\n");
-	printf("              ┌ 查看开设的课程\n");
-	printf("              ├ 查询学生信息\n");
-	printf(" ① 选课管理──┼ 删除课程(选课结束后)\n");
-	printf("              ├ 统计课程数目\n");
-	printf("              └ 排序课程\n\n");
-	printf("              ┌ 查询课程\n");
-	printf(" ② 课程管理──┼ 添加课程\n");
-	printf("              ├ 修改课程\n");
-	printf("              └ 删除课程(选课开始前)\n\n");
-	printf(" ③ 信息管理──┬ 修改密码\n");
-	printf("              └ 修改邮箱\n\n");
-	printf(" ④ 退出登录\n\n");
-	printf("\n  请输入1，2，3或4:");
-	scanf_opt(&option2, 1, 4);
-	switch (option2)
-	{
-	case 1:
-		teacher_select_managemenu();
-		break;
-	case 2:
-		teacher_course_managemenu();
-		break;
-	case 3:
-		teacher_manage_info();
-		break;
-	case 4:
-		main_entrance();
-		break;
-	}
+	do {
+		system("cls");
+		int option2 = 0;
+		system("title 学生选课管理系统 - 教师主菜单");
+		change_color(5, 14);
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		printf("\t\t\t○●○●○● 教师主菜单 ●○●○●○\n");
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		change_color(4, 14);
+		printf("\n登录成功，欢迎您，\n%s 的 %s 老师。\n", nowSchool, nowName);
+		change_color(1, 14);
+		printf("\n请选择您需要的服务:\n\n");
+		printf("              ┌ 查看开设的课程\n");
+		printf("              ├ 查询学生信息\n");
+		printf(" ① 选课管理──┼ 删除课程(选课结束后)\n");
+		printf("              ├ 统计课程数目\n");
+		printf("              └ 排序课程\n\n");
+		printf("              ┌ 查询课程\n");
+		printf(" ② 课程管理──┼ 添加课程\n");
+		printf("              ├ 修改课程\n");
+		printf("              └ 删除课程(选课开始前)\n\n");
+		printf(" ③ 信息管理──┬ 修改密码\n");
+		printf("              └ 修改邮箱\n\n");
+		printf(" ④ 退出登录\n\n");
+		printf("\n  请输入1，2，3或4:");
+		scanf_opt(&option2, 1, 4);
+		switch (option2)
+		{
+		case 1:
+			teacher_select_managemenu();
+			break;
+		case 2:
+			teacher_course_managemenu();
+			break;
+		case 3:
+			teacher_manage_info();
+			break;
+		case 4:
+			return;
+			break;
+		}
+	} while (1);
 }
 
 void teacher_select_managemenu() 
 {
-	system("cls");
-	int option2 = 0;
-	system("title 学生选课管理系统 - 教师选课管理");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t○●○●○● 选课菜单 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14); 
-	printf("\n请选择您需要的服务:\n");
-	printf("  ① - 查看您开设的选课情况\n");
-	printf("  ② - 查询选择某门课程的学生信息\n");
-	printf("  ③ - 删除您的课程(选课结束后)\n");
-	printf("  ④ - 统计您自己开设过的课程数目\n");
-	printf("  ⑤ - 按选课人数排序所有开设过的课程\n\n");
-	printf("  ⑥ - 返回上一个菜单\n\n");
-	printf("\n请输入1,2,3,4,5或6:");
-	scanf_opt(&option2, 1, 6);
-	switch (option2)
-	{
-	case 1:
-		teacher_mycourse();
-		break;
-	case 2:
-		teacher_findcourse();
-		break;
-	case 3:
-		teacher_30delete();
-		break;
-	case 4:
-		teacher_totalcourse();
-		break;
-	case 5:
-		teacher_sortcourse();
-		break;
-	case 6:
-		teacher_mainmenu();
-		break;
-	}
+	do {
+		system("cls");
+		int option2 = 0;
+		system("title 学生选课管理系统 - 教师选课管理");
+		change_color(5, 14);
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		printf("\t\t\t○●○●○● 选课菜单 ●○●○●○\n");
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		change_color(1, 14);
+		printf("\n请选择您需要的服务:\n");
+		printf("  ① - 查看您开设的选课情况\n");
+		printf("  ② - 查询选择某门课程的学生信息\n");
+		printf("  ③ - 删除您的课程(选课结束后)\n");
+		printf("  ④ - 统计您自己开设过的课程数目\n");
+		printf("  ⑤ - 按选课人数排序所有开设过的课程\n\n");
+		printf("  ⑥ - 返回上一个菜单\n\n");
+		printf("\n请输入1,2,3,4,5或6:");
+		scanf_opt(&option2, 1, 6);
+		switch (option2)
+		{
+		case 1:
+			teacher_mycourse();
+			break;
+		case 2:
+			teacher_findcourse();
+			break;
+		case 3:
+			teacher_30delete();
+			break;
+		case 4:
+			teacher_totalcourse();
+			break;
+		case 5:
+			teacher_sortcourse();
+			break;
+		case 6:
+			return;
+			break;
+		}
+	} while (1);
 }
 
 void teacher_mycourse()
@@ -1382,7 +1387,7 @@ void teacher_mycourse()
 	change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
-	teacher_select_managemenu();
+	return;
 }
 
 void teacher_findcourse()
@@ -1407,7 +1412,7 @@ void teacher_findcourse()
 	printf("  ③ - 返回上一菜单\n\n");
 	printf("\n请输入1，2或3:");
 	scanf_opt(&option2, 1, 3);
-	switch (option2)
+		switch (option2)
 	{
 	case 1:
 		do
@@ -1419,6 +1424,7 @@ void teacher_findcourse()
 			{
 				system("cls");
 				teacher_findcourse();
+				return;
 			}
 			sprintf(query, "SELECT 课程编号 FROM `classes`WHERE 课程名称 = '%s'", courseName);
 			mysql_query(&mysql, query);
@@ -1489,6 +1495,7 @@ void teacher_findcourse()
 		printf("\n按任意键返回上一菜单...\n");
 		system("pause>nul");
 		teacher_findcourse();
+		return;
 		break;
 	case 2:
 		do {
@@ -1499,6 +1506,7 @@ void teacher_findcourse()
 			{
 				system("cls");
 				teacher_findcourse();
+				return;
 			}
 			sprintf(query, "SELECT stuID 学生编号,school 所属院系,major 所属专业,name 学生姓名,sexual 性别 "
 				"FROM `students`WHERE name = '%s'",studentName);
@@ -1555,9 +1563,10 @@ void teacher_findcourse()
 		printf("\n按任意键返回上一菜单...\n");
 		system("pause>nul");
 		teacher_findcourse();
+		return;
 		break;
 	case 3:
-		teacher_select_managemenu();
+		return;
 		break;
 	default:
 		change_color(4, 14);
@@ -1608,6 +1617,7 @@ void teacher_30delete()
 			{
 				system("cls");
 				teacher_30delete();
+				return;
 			}
 			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'"
 				, courseName);
@@ -1698,9 +1708,11 @@ void teacher_30delete()
 					printf("\n按任意键返回上一菜单...\n");
 					system("pause>nul");
 					teacher_30delete();
+					return;
 					break;
 				case 2:
 					teacher_30delete();
+					return;
 					break;
 				default:
 					change_color(4, 14);
@@ -1715,6 +1727,7 @@ void teacher_30delete()
 				printf("\n按任意键返回上一菜单...\n");
 				system("pause>nul");
 				teacher_30delete();
+				return;
 				break;
 			}
 		}
@@ -1726,10 +1739,11 @@ void teacher_30delete()
 			printf("\n按任意键返回上一菜单...\n");
 			system("pause>nul");
 			teacher_30delete();
+			return;
 		}
 		break;
 	case 2:
-		teacher_select_managemenu();
+		return;
 		break;
 	default:
 		change_color(4, 14);
@@ -1751,7 +1765,7 @@ void teacher_totalcourse() {
 	printf("\n您总共开设了%d门课程\n", (int)mysql_num_rows(result));
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
-	teacher_select_managemenu();
+	return;
 }
 
 void teacher_sortcourse() {
@@ -1770,7 +1784,7 @@ void teacher_sortcourse() {
 	change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
-	teacher_select_managemenu();
+	return;
 }
 
 void teacher_course_managemenu()
@@ -1808,7 +1822,7 @@ void teacher_course_managemenu()
 			teacher_course_delete();
 			break;
 		case 5:
-			teacher_mainmenu();
+			return;
 			break;
 		}
 	} while (1);
@@ -2309,83 +2323,87 @@ void teacher_login() {
 	char query[100];
 	char password[100];
 
-	system("cls");
-	mysql_store_result(&mysql);
-	int option1;
-	system("title 学生选课管理系统 - 教师登录");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--教师 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
-	printf("\n请选择您要进行的操作:\n");
-	printf("  ① - 登录\n");
-	printf("  ② - 注册\n");
-	printf("  ③ - 返回上层\n\n");
-	printf("请输入1，2或3：");
-	scanf_opt(&option1, 1, 3);
-	if (option1 == 1)
-	{
-		int flag = 0;
-		system("cls");			// 清屏，保证重复输入时美观
+	do {
+		system("cls");
+		mysql_store_result(&mysql);
+		int option1;
 		system("title 学生选课管理系统 - 教师登录");
 		change_color(5, 14);
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
+		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--教师 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		do {
-			flag = 0;
-			change_color(1, 14);
-			printf("请输入用户名：");
-			change_color(1, 14);
-			s_gets(teachID, 11);
-			if (teachID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
-			{
-				system("cls");
-				teacher_login();
+		change_color(1, 14);
+		printf("\n请选择您要进行的操作:\n");
+		printf("  ① - 登录\n");
+		printf("  ② - 注册\n");
+		printf("  ③ - 返回上层\n\n");
+		printf("请输入1，2或3：");
+		scanf_opt(&option1, 1, 3);
+		if (option1 == 1)
+		{
+			int flag = 0;
+			system("cls");			// 清屏，保证重复输入时美观
+			system("title 学生选课管理系统 - 教师登录");
+			change_color(5, 14);
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			do {
+				flag = 0;
+				change_color(1, 14);
+				printf("请输入用户名：");
+				change_color(1, 14);
+				s_gets(teachID, 11);
+				if (teachID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+				{
+					system("cls");
+					teacher_login();
+					return;
+				}
+				if (!check_teachId(teachID))
+				{
+					change_color(4, 14);
+					printf("学号格式错误！请重试！(若返回上一级，请按Ctrl+Q后回车)\n");
+					flag = 1;
+					continue;
+				}
+				change_color(1, 14);
+				printf("请输入密码：");
+				scanf_pw(password);
+				if (password[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+				{
+					system("cls");
+					teacher_login();
+					return;
+				}
+				if (!check_password(1, teachID, password))
+				{
+					change_color(4, 14);
+					printf("用户名或密码错误！请重试！(若返回上一级，请按Ctrl+Q后回车)\n");
+					flag = 1;
+				}
+			} while (flag);
+			mysql_store_result(&mysql);
+			sprintf(query, "select school,name from teachers where teachID='%s'", teachID);
+			mysql_query(&mysql, query);
+			result = mysql_store_result(&mysql);
+			if (result)
+			{										// 防止数据为空造成崩溃
+				if ((int)mysql_num_rows(result) == 1)	// 若非有且仅有一行数据则登录失败
+				{
+					Row = mysql_fetch_row(result);
+					sprintf(nowName, Row[1]);
+					sprintf(nowSchool, Row[0]);
+				}
+				teacher_mainmenu();
 			}
-			if (!check_teachId(teachID))
-			{
-				change_color(4, 14);
-				printf("学号格式错误！请重试！(若返回上一级，请按Ctrl+Q后回车)\n");
-				flag = 1;
-				continue;
-			}
-			change_color(1, 14);
-			printf("请输入密码：");
-			scanf_pw(password);
-			if (password[0] == 17)//判断若输入首字符为ctrl+q则返回上层
-			{
-				system("cls");
-				teacher_login();
-			}
-			if (!check_password(1, teachID, password))
-			{
-				change_color(4, 14);
-				printf("用户名或密码错误！请重试！(若返回上一级，请按Ctrl+Q后回车)\n");
-				flag = 1;
-			}
-		} while (flag);
-		mysql_store_result(&mysql);
-		sprintf(query, "select school,name from teachers where teachID='%s'", teachID);
-		mysql_query(&mysql, query);
-		result = mysql_store_result(&mysql);
-		if (result)
-		{										// 防止数据为空造成崩溃
-			if ((int)mysql_num_rows(result) == 1)	// 若非有且仅有一行数据则登录失败
-			{
-				Row = mysql_fetch_row(result);
-				sprintf(nowName, Row[1]);
-				sprintf(nowSchool, Row[0]);
-			}
-			teacher_mainmenu();
 		}
-	}
-	else if (option1 == 2)
-		teacher_reg();
-	else if (option1 == 3)
-		main_entrance();
+		else if (option1 == 2)
+			teacher_reg();
+		else if (option1 == 3)
+			return;
 
+	} while (1);
 }
 
 void teacher_course_list()
@@ -2417,7 +2435,7 @@ void teacher_course_list()
 			if (classID[0] == 17)
 			{
 				system("cls");
-				teacher_course_managemenu();
+				return;
 			}
 		}
 	} while ((int)mysql_num_rows(result) == 0);
@@ -2511,7 +2529,7 @@ void teacher_course_list()
 	change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
-	teacher_course_managemenu();
+	return;
 }
 
 void teacher_course_edit() {
@@ -2676,6 +2694,7 @@ void teacher_course_edit() {
 				printf("按任意键返回上一菜单...\n");
 				system("pause>nul");
 				teacher_course_edit();
+				return;
 				break;
 
 			case 2:
@@ -2692,6 +2711,7 @@ void teacher_course_edit() {
 				printf("按任意键返回上一菜单...\n");
 				system("pause>nul");
 				teacher_course_edit();
+				return;
 				break;
 
 			case 3:
@@ -2728,9 +2748,11 @@ void teacher_course_edit() {
 					printf("按任意键返回上一菜单...\n");
 					system("pause>nul");
 					teacher_course_edit();
+					return;
 					break;
 				case 2:
 					teacher_course_edit();
+					return;
 					break;
 				default:
 					change_color(4, 14);
@@ -2761,9 +2783,11 @@ void teacher_course_edit() {
 					printf("按任意键返回上一菜单...\n");
 					system("pause>nul");
 					teacher_course_edit();
+					return;
 					break;
 				case 2:
 					teacher_course_edit();
+					return;
 					break;
 				default:
 					change_color(4, 14);
@@ -2816,9 +2840,11 @@ void teacher_course_edit() {
 					printf("按任意键返回上一菜单...\n");
 					system("pause>nul");
 					teacher_course_edit();
+					return;
 					break;
 				case 2:
 					teacher_course_edit();
+					return;
 					break;
 				default:
 					change_color(4, 14);
@@ -2839,6 +2865,7 @@ void teacher_course_edit() {
 					printf("按任意键返回上一菜单...\n");
 					system("pause>nul");
 					teacher_course_edit();
+					return;
 				}
 				else {
 					change_color(5, 14);
@@ -2864,9 +2891,11 @@ void teacher_course_edit() {
 						printf("按任意键返回上一菜单...\n");
 						system("pause>nul");
 						teacher_course_edit();
+						return;
 						break;
 					case 2:
 						teacher_course_edit();
+						return;
 						break;
 					default:
 						change_color(4, 14);
@@ -2927,6 +2956,7 @@ void teacher_course_delete() {
 			printf("按任意键返回上一菜单...\n");
 			system("pause>nul");
 			teacher_course_delete();
+			return;
 		}
 		do {
 			change_color(1, 14);
@@ -2979,9 +3009,11 @@ void teacher_course_delete() {
 			printf("按任意键返回上一菜单...\n");
 			system("pause>nul");
 			teacher_course_delete();
+			return;
 			break;
 		case 2:
 			teacher_course_delete();
+			return;
 			break;
 		default:
 			change_color(4, 14);
@@ -2989,7 +3021,7 @@ void teacher_course_delete() {
 		}
 		break;
 	case 2:
-		teacher_course_managemenu();
+		return;
 		break;
 	default:
 		change_color(4, 14);
@@ -2999,109 +3031,114 @@ void teacher_course_delete() {
 
 void teacher_manage_info()
 {
-	system("cls");
-	int option2;
-	char passwd[20];
-	char passwd1[20];
-	char email[50];
-	char query[200];
-	system("title 学生选课管理系统 - 教师信息修改");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t○●○●○● 信息修改界面--教师 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14); 
-	printf("\n请选择需要修改的信息：\n");
-	printf("  ① - 密码\n");
-	printf("  ② - 邮箱\n");
-	printf("  ③ - 返回上一个菜单\n\n");
-	printf("\n请输入1，2或3：");
-	scanf_opt(&option2, 1, 3);
-	switch (option2)
-	{
-	case 1:
-	{
+	do {
 		system("cls");
+		int option2;
+		char passwd[20];
+		char passwd1[20];
+		char email[50];
+		char query[200];
+		system("title 学生选课管理系统 - 教师信息修改");
 		change_color(5, 14);
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t○●○●○● 信息修改界面--教师--密码 ●○●○●○\n");
+		printf("\t\t\t○●○●○● 信息修改界面--教师 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
-		printf("\n请输入新的密码：");
-		scanf_pw(passwd);
-		printf("请再次确认新的密码：");
-		scanf_pw(passwd1);
+		printf("\n请选择需要修改的信息：\n");
+		printf("  ① - 密码\n");
+		printf("  ② - 邮箱\n");
+		printf("  ③ - 返回上一个菜单\n\n");
+		printf("\n请输入1，2或3：");
+		scanf_opt(&option2, 1, 3);
+		switch (option2)
+		{
+		case 1:
+		{
+			system("cls");
+			change_color(5, 14);
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\t\t\t○●○●○● 信息修改界面--教师--密码 ●○●○●○\n");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			change_color(1, 14);
+			printf("\n请输入新的密码：");
+			scanf_pw(passwd);
+			printf("请再次确认新的密码：");
+			scanf_pw(passwd1);
 
-		while (strcmp(passwd, passwd1) != 0)
-		{
-			if (passwd1[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+			while (strcmp(passwd, passwd1) != 0)
 			{
-				system("cls");
-				teacher_manage_info();
-				return;
+				if (passwd1[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+				{
+					system("cls");
+					teacher_manage_info();
+					return;
+				}
+				else
+				{
+					change_color(4, 14);
+					printf("两次输入不一致!请重新确认:(若返回上一级，请按Ctrl+Q后回车)");
+					s_gets(passwd1, 20);
+				}
 			}
-			else
-			{
-				change_color(4, 14);
-				printf("两次输入不一致!请重新确认:(若返回上一级，请按Ctrl+Q后回车)");
-				s_gets(passwd1, 20);
-			}
+			pw_encode(passwd);
+			sprintf(query, "update teachers set passwd='%s' where teachID='%s'", passwd, teachID);
+			mysql_query(&mysql, query);
+			change_color(2, 14);
+			printf("\n修改成功!\n");
+			change_color(1, 14);
+			printf("按任意键返回上一菜单...\n");
+			system("pause>nul");
+			teacher_manage_info();
+			return;
+			break;
 		}
-		pw_encode(passwd);
-		sprintf(query, "update teachers set passwd='%s' where teachID='%s'", passwd, teachID);
-		mysql_query(&mysql, query);
-		change_color(2, 14);
-		printf("\n修改成功!\n");
-		change_color(1, 14);
-		printf("按任意键返回上一菜单...\n");
-		system("pause>nul");
-		teacher_manage_info();
-		break;
-	}
-	case 2:
-	{
-		system("cls");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t○●○●○● 信息修改界面--学生--邮箱 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
-		printf("\n请输入新的邮箱：");
-		s_gets(email, 20);
-		while (check_email(email) == 0)
+		case 2:
 		{
-			if (email[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+			system("cls");
+			change_color(5, 14);
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			printf("\t\t\t○●○●○● 信息修改界面--学生--邮箱 ●○●○●○\n");
+			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			change_color(1, 14);
+			printf("\n请输入新的邮箱：");
+			s_gets(email, 20);
+			while (check_email(email) == 0)
 			{
-				system("cls");
-				teacher_manage_info();
+				if (email[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+				{
+					system("cls");
+					teacher_manage_info();
+					return;
+				}
+				else
+				{
+					change_color(4, 14);
+					printf("无效输入！请按照***@***.***格式输入:");
+					change_color(1, 14);
+					s_gets(email, 20);
+				}
 			}
-			else
-			{
-				change_color(4, 14);
-				printf("无效输入！请按照***@***.***格式输入:");
-				change_color(1, 14);
-				s_gets(email, 20);
-			}
+			sprintf(query, "update teachers set email='%s' where teachID='%s'", email, teachID);
+			mysql_query(&mysql, query);	//将更改后的邮箱存至mysql数据库
+			change_color(2, 14);
+			printf("\n修改成功!\n");
+			change_color(1, 14);
+			printf("按任意键返回上一菜单...\n");
+			system("pause>nul");
+			teacher_manage_info();
+			return;
+			break;
 		}
-		sprintf(query, "update teachers set email='%s' where teachID='%s'", email, teachID);
-		mysql_query(&mysql, query);	//将更改后的邮箱存至mysql数据库
-		change_color(2, 14);
-		printf("\n修改成功!\n");
-		change_color(1, 14);
-		printf("按任意键返回上一菜单...\n");
-		system("pause>nul");
-		teacher_manage_info();
-		break;
-	}
-	case 3:
-	{
-		teacher_mainmenu();
-		break;
-	}
-	default:
-		change_color(4, 14);
-		printf("无效，请重新输入!\n");
-	}
+		case 3:
+		{
+			return;
+			break;
+		}
+		default:
+			change_color(4, 14);
+			printf("无效，请重新输入!\n");
+		}
+	}while(1);
 }
 
 // 判断教师id是否符合10位数字，符合返回1
@@ -3552,7 +3589,7 @@ void teacher_course_add()
 	change_color(1, 14);
 	printf("\n按任意键返回上层菜单……");
 	system("pause>nul");
-	teacher_course_managemenu();
+	return;
 }
 //验证课id是否满足6位数字，符合则返回1
 int check_classId(char* str)
@@ -3573,7 +3610,7 @@ int check_classId(char* str)
 void teacher_reg()
 {
 	system("cls");
-	char teachID[11], school[50], name[50], phone[100], passwd[100], email[100];
+	char school[50], name[50], phone[100], passwd[100], email[100];
 	char query[300];
 	system("title 学生选课管理系统 - 教师注册");
 	change_color(5, 14);
@@ -3582,7 +3619,7 @@ void teacher_reg()
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
 	printf("请输入教师工号:");
-	s_gets(teachID, 20);
+	s_gets(teachID, 12);
 	do {
 		while (check_stuId(teachID) == 0)//检查输入是否符合规范 
 		{
@@ -3594,7 +3631,7 @@ void teacher_reg()
 			if (teachID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
-				teacher_login();
+				/*teacher_login();*/
 				return;
 			}
 		}
@@ -3610,7 +3647,7 @@ void teacher_reg()
 			if (teachID[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
-				teacher_login();
+				/*teacher_login();*/
 				return;
 			}
 		}
@@ -3634,6 +3671,7 @@ void teacher_reg()
 			{
 				system("cls");
 				teacher_reg();
+				return;
 			}
 		}
 	} while (strcmp(passwd, passwd1) != 0);
@@ -3654,7 +3692,7 @@ void teacher_reg()
 		if (phone[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 		{
 			system("cls");
-			teacher_login();
+		/*	teacher_login();*/
 			return;
 		}
 	}
@@ -3670,7 +3708,7 @@ void teacher_reg()
 		if (email[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 		{
 			system("cls");
-			teacher_login();
+			/*teacher_login();*/
 			return;
 		}
 	}
@@ -3689,7 +3727,7 @@ void teacher_reg()
 	change_color(1, 14);
 	printf("\n请按任意键返回上一菜单\n");
 	system("pause > nul");
-	teacher_login();
+	return;
 }
 
 //输入密码用*代替显示，输入为待赋值字符串数组
