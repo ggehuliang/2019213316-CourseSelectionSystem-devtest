@@ -126,7 +126,7 @@ int main_entrance()
 		printf("  ① - 学生\n");
 		printf("  ② - 老师\n");
 		printf("  ③ - 退出程序\n\n");
-		printf("请输入或您要进行的操作或直接点击相应标题:");
+		printf("请输入1,2,3或直接点击相应标题:");
 
 		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
@@ -1460,7 +1460,9 @@ void teacher_mycourse()
 		result = mysql_store_result(&mysql);
 		if ((int)mysql_num_rows(result) == 0)
 		{
+			change_color(4, 14);
 			printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
+			change_color(1, 14);
 			s_gets(classID, 11);
 			if (classID[0] == 17)
 			{
@@ -4024,11 +4026,11 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 	do
 	{
 		flag = 0;
-		i = 0;
-		fgets(in_s, 4, stdin);
+		i = _getch();
+		i -= 48;
 		rewind(stdin);
-		*optPtr = atoi(in_s);
-		if (strlen(in_s) != 2 || *optPtr > optMax || *optPtr < optMin)
+		*optPtr = i;
+		if ( *optPtr > optMax || *optPtr < optMin)
 		{
 			change_color(4, 14);
 			printf("输入无效，请您重新输入：");
@@ -4036,6 +4038,8 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 			flag = 1;
 			continue;
 		}
+		
+		
 	} while (flag);
 	return 1;
 }
@@ -4108,11 +4112,9 @@ DWORD WINAPI ThreadFun(LPVOID pM)
 		x = selectionInf.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				/*printf(" \b");*/
+				//printf(" \b");
 				keybd_event(49 + i, 0, 0, 0);
 				keybd_event(49 + i, 0, 2, 0);
-				keybd_event(13, 0, 0, 0);
-				keybd_event(13, 0, 2, 0);
 			}
 		}
 		Sleep(200);
