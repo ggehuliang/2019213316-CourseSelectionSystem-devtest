@@ -118,20 +118,27 @@ int main_entrance()
 		system("cls");
 		system("title 学生选课管理系统 - 入口");
 		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		printf("\t\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
+		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
-		printf("\n请选择您的身份:\n");
-		printf("  ① - 学生\n");
-		printf("  ② - 老师\n");
-		printf("  ③ - 退出程序\n\n");
-		printf("请输入1,2,3或直接点击相应标题:");
+		printf("\n\t\t\t\t\t\t请选择您的身份:\n\n");
+		printf("\t\t\t\t\t   ┌━━━━━━━━━━━━━━━━━━━━━━━┐\n");
+		printf("\t\t\t\t\t   │       ① - 学生       │\n");
+		printf("\t\t\t\t\t   └━━━━━━━━━━━━━━━━━━━━━━━┘\n\n");
+		printf("\t\t\t\t\t   ┌━━━━━━━━━━━━━━━━━━━━━━━┐\n");
+		printf("\t\t\t\t\t   │       ② - 老师       │\n");
+		printf("\t\t\t\t\t   └━━━━━━━━━━━━━━━━━━━━━━━┘\n\n");
+		printf("\t\t\t\t\t   ┌━━━━━━━━━━━━━━━━━━━━━━━┐\n");
+		printf("\t\t\t\t\t   │     ③ - 退出程序     │\n");
+		printf("\t\t\t\t\t   └━━━━━━━━━━━━━━━━━━━━━━━┘\n\n\n");
+		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
 
-		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
+		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 
 		scanf_opt(&option, 1, 3);
+
 
 		TerminateThread(handle,1);
 
@@ -4111,13 +4118,10 @@ DWORD WINAPI ThreadFun(LPVOID pM)
 		x = selectionInf.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, XBUTTON1, 0);
-				mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, XBUTTON2, 0);
-				printf(" \b");
 				keybd_event(49 + i, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
 				keybd_event(49 + i, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 			}
 		}
-		Sleep(800);
+		Sleep(200);
 	}
 }
