@@ -712,7 +712,7 @@ void student_query_course()
 		printf("  ⑥ - 返回学生主菜单\n");
 		printf("请输入1，2，3，4，5或6:");
 
-		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
+		sprintf(pos, "6-6,2-20|7-7,2-22|8-8,2-28|9-9,2-30|10-10,2-22|12-12,2-20");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option, 1, 6);
 		TerminateThread(handle, 1);
