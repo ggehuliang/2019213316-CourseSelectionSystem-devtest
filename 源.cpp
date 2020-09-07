@@ -4028,7 +4028,6 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 		flag = 0;
 		i = _getch();
 		i -= 48;
-		rewind(stdin);
 		*optPtr = i;
 		if ( *optPtr > optMax || *optPtr < optMin)
 		{
@@ -4112,11 +4111,13 @@ DWORD WINAPI ThreadFun(LPVOID pM)
 		x = selectionInf.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				//printf(" \b");
-				keybd_event(49 + i, 0, 0, 0);
-				keybd_event(49 + i, 0, 2, 0);
+				mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, XBUTTON1, 0);
+				mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, XBUTTON2, 0);
+				printf(" \b");
+				keybd_event(49 + i, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+				keybd_event(49 + i, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 			}
 		}
-		Sleep(200);
+		Sleep(800);
 	}
 }
