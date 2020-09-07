@@ -53,6 +53,7 @@ void teacher_manage_info();			//  改信息
 //公共功能
 //用法、输入输出格式见函数定义前的详细注释
 
+DWORD WINAPI ThreadFun(LPVOID pM);
 void print_class(char*);
 int check_stuId(char* );
 int check_phone(char* );
@@ -91,6 +92,8 @@ time_t currStart, selecStart, selecEnd;		// 当前学期开课时间、选课始
 
 HANDLE consoleHWnd;							//更改颜色需要用到的窗口句柄
 
+char pos[100]; // 8,2-13|11,2-13|15,2-17|16,2-17|17,2-17|19,2-17
+
 int main()
 {
 	mysql_init(&mysql);		// 初始化mysql
@@ -111,6 +114,7 @@ int main()
 
 int main_entrance()
 {
+	HANDLE handle;
 	do {
 		int option;
 		system("cls");
@@ -125,7 +129,14 @@ int main_entrance()
 		printf("  ② - 老师\n");
 		printf("  ③ - 退出程序\n\n");
 		printf("请选择您要进行的操作:");
+
+		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|999-999,2-17|999-999,2-17|999-999,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+
 		scanf_opt(&option, 1, 3);
+
+		TerminateThread(handle,1);
+
 		switch (option)
 		{
 		case 1:
@@ -143,6 +154,7 @@ int main_entrance()
 
 void student_login()
 {
+	HANDLE handle;
 	do {
 		system("cls");
 		int option1, flag;
@@ -157,7 +169,14 @@ void student_login()
 		printf("  ② - 注册\n");
 		printf("  ③ - 返回上层\n\n");
 		printf("请输入1，2或3：");
+
+		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+
 		scanf_opt(&option1, 1, 3);
+
+		TerminateThread(handle, 1);
+
 		if (option1 == 1)
 		{
 			system("cls");
@@ -322,6 +341,7 @@ int check_password(int who, char* ID, char* password)
 
 void student_mainmenu()
 {
+	HANDLE handle;
 	do {
 		system("cls");
 		int option;
@@ -345,7 +365,12 @@ void student_mainmenu()
 		printf("  ⑤ - 个人信息管理\n\n");
 		printf("  ⑥ - 退出登录\n\n");
 		printf(" 请输入1，2，3，4，5或6：");
+
+		sprintf(pos, "9-9,2-13|10-14,2-30|16-16,2-17|17-17,2-17|18-18,2-17|20-20,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option, 1, 6);
+		TerminateThread(handle, 1);
+		
 		if (option == 1)
 		{
 			student_select_course();
@@ -667,6 +692,7 @@ void student_select_course()
 
 void student_query_course()
 {
+	HANDLE handle;
 	do {
 		char query[500];
 		system("cls");
@@ -685,7 +711,12 @@ void student_query_course()
 		printf("  ⑤ - 查看课程详细信息\n\n");
 		printf("  ⑥ - 返回学生主菜单\n");
 		printf("请输入1，2，3，4，5或6:");
+
+		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option, 1, 6);
+		TerminateThread(handle, 1);
+
 		if (option == 1)
 		{
 			system("cls");
@@ -897,6 +928,7 @@ void student_delete_course()
 
 void student_manage_info()
 {
+	HANDLE handle;
 	do {
 		system("cls");
 		int option;
@@ -916,7 +948,12 @@ void student_manage_info()
 		printf("  ③ - 邮箱\n");
 		printf("  ④ - 返回学生主菜单\n");
 		printf("\n请输入1，2，3或4：");
+
+		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-10|8-8,2-20|1--1,2-17|1--1,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option, 1, 4);
+		TerminateThread(handle, 1);
+
 		switch (option)
 		{
 		case 1:
@@ -1293,6 +1330,7 @@ int student_check_class_exist(char* classID)
 
 void teacher_mainmenu()
 {
+	HANDLE handle;
 	do {
 		system("cls");
 		int option2 = 0;
@@ -1318,7 +1356,13 @@ void teacher_mainmenu()
 		printf("              └ 修改邮箱\n\n");
 		printf(" ④ 退出登录\n\n");
 		printf("\n  请输入1，2，3或4:");
+
+		sprintf(pos, "9-13,1-30|15-18,1-30|20-21,1-23|23-23,1-11|1--1,2-17|1--1,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+
 		scanf_opt(&option2, 1, 4);
+
+		TerminateThread(handle, 1);
 		switch (option2)
 		{
 		case 1:
@@ -1339,6 +1383,7 @@ void teacher_mainmenu()
 
 void teacher_select_managemenu() 
 {
+	HANDLE handle;
 	do {
 		system("cls");
 		int option2 = 0;
@@ -1356,7 +1401,14 @@ void teacher_select_managemenu()
 		printf("  ⑤ - 按选课人数排序所有开设过的课程\n\n");
 		printf("  ⑥ - 返回上一个菜单\n\n");
 		printf("\n请输入1,2,3,4,5或6:");
+
+		sprintf(pos, "5-5,2-26|6-6,2-32|7-7,2-30|8-8,2-32|9-9,2-36|11-11,2-20");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+
 		scanf_opt(&option2, 1, 6);
+
+		TerminateThread(handle, 1);
+
 		switch (option2)
 		{
 		case 1:
@@ -1867,6 +1919,7 @@ void teacher_sortcourse() {
 
 void teacher_course_managemenu()
 {
+	HANDLE handle;
 	do {
 		system("cls");
 		int option2 = 0;
@@ -1883,7 +1936,12 @@ void teacher_course_managemenu()
 		printf("  ④ - 删除您的课程(选课开始前)\n\n");
 		printf("  ⑤ - 返回上一个菜单\n\n");
 		printf("\n请输入1,2,3,4或5:");
+		sprintf(pos, "5-5,2-18|6-6,2-18|7-7,2-18|8-8,2-31|10-10,2-20|1--1,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+
 		scanf_opt(&option2, 1, 5);
+
+		TerminateThread(handle, 1);
 		char query1[200] = "SELECT * FROM `classes` LIMIT 0, 1000";
 		switch (option2)
 		{
@@ -2400,7 +2458,7 @@ void readCFG() {
 void teacher_login() {
 	char query[100];
 	char password[100];
-
+	HANDLE handle;
 	do {
 		system("cls");
 		mysql_store_result(&mysql);
@@ -2416,7 +2474,12 @@ void teacher_login() {
 		printf("  ② - 注册\n");
 		printf("  ③ - 返回上层\n\n");
 		printf("请输入1，2或3：");
+		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+
 		scanf_opt(&option1, 1, 3);
+
+		TerminateThread(handle, 1);
 		if (option1 == 1)
 		{
 			int flag = 0;
@@ -3111,6 +3174,7 @@ void teacher_course_delete() {
 
 void teacher_manage_info()
 {
+	HANDLE handle;
 	do {
 		system("cls");
 		int option2;
@@ -3129,7 +3193,10 @@ void teacher_manage_info()
 		printf("  ② - 邮箱\n");
 		printf("  ③ - 返回上一个菜单\n\n");
 		printf("\n请输入1，2或3：");
+		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-20|1--1,2-17|1--1,2-17|1--1,2-17");
+		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option2, 1, 3);
+		TerminateThread(handle, 1);
 		switch (option2)
 		{
 		case 1:
@@ -4035,4 +4102,38 @@ void change_color(int text, int bg)
 {
 	bg <<= 4;
 	SetConsoleTextAttribute(consoleHWnd, bg + text);
+}
+
+DWORD WINAPI ThreadFun(LPVOID pM)
+{
+	CONSOLE_SELECTION_INFO selectionInf;
+	char* poss = pos;
+	int p[6][4];
+	//printf("子线程的线程ID号为：%d\n", GetCurrentThreadId());
+	sscanf(poss, "%d-%d,%d-%d|%d-%d,%d-%d|%d-%d,%d-%d|%d-%d,%d-%d|%d-%d,%d-%d|%d-%d,%d-%d"
+		, &p[0][0], &p[0][1], &p[0][2], &p[0][3]
+		, &p[1][0], &p[1][1], &p[1][2], &p[1][3]
+		, &p[2][0], &p[2][1], &p[2][2], &p[2][3]
+		, &p[3][0], &p[3][1], &p[3][2], &p[3][3]
+		, &p[4][0], &p[4][1], &p[4][2], &p[4][3]
+		, &p[5][0], &p[5][1], &p[5][2], &p[5][3]);
+	int x, y;
+
+	while (1) {
+		GetConsoleSelectionInfo(&selectionInf);
+		//printf(" \b");
+		//printf(" %d,%d ", selectionInf.dwSelectionAnchor.X, selectionInf.dwSelectionAnchor.Y);
+		y = selectionInf.dwSelectionAnchor.Y;
+		x = selectionInf.dwSelectionAnchor.X;
+		for (int i = 0; i < 6; i++) {
+			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
+				printf(" \b");
+				keybd_event(49 + i, 0, 0, 0);
+				keybd_event(49 + i, 0, 2, 0);
+				keybd_event(13, 0, 0, 0);
+				keybd_event(13, 0, 2, 0);
+			}
+		}
+		Sleep(200);
+	}
 }
