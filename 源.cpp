@@ -4125,7 +4125,7 @@ DWORD WINAPI ThreadFun(LPVOID pM)
 		x = selectionInf.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				/*printf(" \b");*/
+				printf(" \b");
 				keybd_event(49 + i, 0, 0, 0);
 				keybd_event(49 + i, 0, 2, 0);
 				keybd_event(13, 0, 0, 0);
