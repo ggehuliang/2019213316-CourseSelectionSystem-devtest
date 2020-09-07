@@ -3968,18 +3968,10 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 	{
 		flag = 0;
 		i = 0;
-		fgets(in_s, 3, stdin);
-		if (in_s)
-		{
-			while (in_s[i] != '\n' && in_s[i] != '\0')
-				i++;
-			if (in_s[i] == '\n')
-				in_s[i] = '\0';
-			else
-				rewind(stdin);
-		}
+		fgets(in_s, 4, stdin);
+		rewind(stdin);
 		*optPtr = atoi(in_s);
-		if (strlen(in_s) != 1 || *optPtr > optMax || *optPtr < optMin)
+		if (strlen(in_s) != 2 || *optPtr > optMax || *optPtr < optMin)
 		{
 			change_color(4, 14);
 			printf("输入无效，请您重新输入：");
