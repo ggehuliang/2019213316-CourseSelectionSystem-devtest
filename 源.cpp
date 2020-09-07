@@ -154,9 +154,9 @@ void student_login()
 {
 	HANDLE handle;
 	do {
-		system("cls");
+		//system("cls");
 		int option1, flag;
-		system("title 学生选课管理系统 - 学生登录");
+		//system("title 学生选课管理系统 - 学生登录");
 		change_color(5, 14);
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		printf("\t\t\t○●○●○● 欢迎登录学生选课管理系统--学生 ●○●○●○\n");
@@ -4037,8 +4037,6 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 			flag = 1;
 			continue;
 		}
-		
-		
 	} while (flag);
 	return 1;
 }
@@ -4111,13 +4109,13 @@ DWORD WINAPI ThreadFun(LPVOID pM)
 		x = selectionInf.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, XBUTTON1, 0);
+				/*mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, XBUTTON1, 0);
 				mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, XBUTTON2, 0);
-				printf(" \b");
-				keybd_event(49 + i, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
-				keybd_event(49 + i, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+				printf(" \b");*/
+				keybd_event(49 + i, 0, 0, 0);
+				keybd_event(49 + i, 0, 2, 0);
 			}
 		}
-		Sleep(800);
+		Sleep(200);
 	}
 }
