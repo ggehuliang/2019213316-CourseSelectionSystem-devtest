@@ -128,9 +128,9 @@ int main_entrance()
 		printf("  ① - 学生\n");
 		printf("  ② - 老师\n");
 		printf("  ③ - 退出程序\n\n");
-		printf("请选择您要进行的操作:");
+		printf("请输入或您要进行的操作或直接点击相应标题:");
 
-		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|999-999,2-17|999-999,2-17|999-999,2-17");
+		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 
 		scanf_opt(&option, 1, 3);
@@ -168,7 +168,7 @@ void student_login()
 		printf("  ① - 登录\n");
 		printf("  ② - 注册\n");
 		printf("  ③ - 返回上层\n\n");
-		printf("请输入1，2或3：");
+		printf("请输入1，2，3或直接点击相应标题：");
 
 		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
@@ -196,6 +196,7 @@ void student_login()
 				{
 					system("cls");
 					student_login();
+					return;
 				}
 				if (check_stuId(stuID) == 0)
 				{
@@ -364,7 +365,7 @@ void student_mainmenu()
 		printf("  ④ - 删除选课结果\n");
 		printf("  ⑤ - 个人信息管理\n\n");
 		printf("  ⑥ - 退出登录\n\n");
-		printf(" 请输入1，2，3，4，5或6：");
+		printf(" 请输入1，2，3，4，5，6或直接点击相应标题：");
 
 		sprintf(pos, "9-9,2-13|10-14,2-30|16-16,2-17|17-17,2-17|18-18,2-17|20-20,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
@@ -510,7 +511,6 @@ void student_register()
 		if (email[0] == 17)//返回上一级
 		{
 			system("cls");
-			student_register();
 			return;
 		}
 	}
@@ -710,7 +710,7 @@ void student_query_course()
 		printf("  ④ - 根据选课人数排序所有课程\n");
 		printf("  ⑤ - 查看课程详细信息\n\n");
 		printf("  ⑥ - 返回学生主菜单\n");
-		printf("请输入1，2，3，4，5或6:");
+		printf("请输入1，2，3，4，5，6或直接点击相应标题:");
 
 		sprintf(pos, "6-6,2-20|7-7,2-22|8-8,2-28|9-9,2-30|10-10,2-22|12-12,2-20");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
@@ -947,7 +947,7 @@ void student_manage_info()
 		printf("  ② - 密码\n");
 		printf("  ③ - 邮箱\n");
 		printf("  ④ - 返回学生主菜单\n");
-		printf("\n请输入1，2，3或4：");
+		printf("\n请输入1，2，3，4或直接点击相应标题：");
 
 		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-10|8-8,2-20|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
@@ -1355,7 +1355,7 @@ void teacher_mainmenu()
 		printf(" ③ 信息管理──┬ 修改密码\n");
 		printf("              └ 修改邮箱\n\n");
 		printf(" ④ 退出登录\n\n");
-		printf("\n  请输入1，2，3或4:");
+		printf("\n  请输入1，2，3，4或直接点击相应标题:");
 
 		sprintf(pos, "9-13,1-30|15-18,1-30|20-21,1-23|23-23,1-11|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
@@ -1400,7 +1400,7 @@ void teacher_select_managemenu()
 		printf("  ④ - 统计您自己开设过的课程数目\n");
 		printf("  ⑤ - 按选课人数排序所有开设过的课程\n\n");
 		printf("  ⑥ - 返回上一个菜单\n\n");
-		printf("\n请输入1,2,3,4,5或6:");
+		printf("\n请输入1,2,3,4,5，6或直接点击相应标题:");
 
 		sprintf(pos, "5-5,2-26|6-6,2-32|7-7,2-30|8-8,2-32|9-9,2-36|11-11,2-20");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
@@ -1520,6 +1520,7 @@ void teacher_mycourse()
 
 void teacher_findcourse()
 {
+	HANDLE handle;
 	system("cls");
 	int column;
 	int flag = 0;
@@ -1537,8 +1538,13 @@ void teacher_findcourse()
 	printf("  ① - 根据课程名称查询\n");
 	printf("  ② - 根据学生姓名查询\n");
 	printf("  ③ - 返回上一菜单\n\n");
-	printf("\n请输入1，2或3:");
+	printf("\n请输入1，2，3或直接点击相应标题:");
+
+	sprintf(pos, "5-5,2-22|6-6,2-22|7-7,2-18|1--1,2-31|1--1,2-20|1--1,2-17");
+	handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+
 	scanf_opt(&option2, 1, 3);
+	TerminateThread(handle, 1);
 	switch (option2)
 	{
 	case 1:
@@ -1935,7 +1941,7 @@ void teacher_course_managemenu()
 		printf("  ③ - 修改您的课程\n");
 		printf("  ④ - 删除您的课程(选课开始前)\n\n");
 		printf("  ⑤ - 返回上一个菜单\n\n");
-		printf("\n请输入1,2,3,4或5:");
+		printf("\n请输入1,2,3,4,5或直接点击相应标题:");
 		sprintf(pos, "5-5,2-18|6-6,2-18|7-7,2-18|8-8,2-31|10-10,2-20|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 
@@ -2473,7 +2479,7 @@ void teacher_login() {
 		printf("  ① - 登录\n");
 		printf("  ② - 注册\n");
 		printf("  ③ - 返回上层\n\n");
-		printf("请输入1，2或3：");
+		printf("请输入1，2，3或直接点击相应标题：");
 		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 
@@ -3192,7 +3198,7 @@ void teacher_manage_info()
 		printf("  ① - 密码\n");
 		printf("  ② - 邮箱\n");
 		printf("  ③ - 返回上一个菜单\n\n");
-		printf("\n请输入1，2或3：");
+		printf("\n请输入1，2，3或直接点击相应标题：");
 		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-20|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option2, 1, 3);
