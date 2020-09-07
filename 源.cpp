@@ -196,6 +196,7 @@ void student_login()
 				{
 					system("cls");
 					student_login();
+					return;
 				}
 				if (check_stuId(stuID) == 0)
 				{
@@ -510,7 +511,6 @@ void student_register()
 		if (email[0] == 17)//返回上一级
 		{
 			system("cls");
-			student_register();
 			return;
 		}
 	}
