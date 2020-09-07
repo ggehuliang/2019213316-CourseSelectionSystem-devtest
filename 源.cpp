@@ -4042,11 +4042,11 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 	do
 	{
 		flag = 0;
-		i = 0;
-		fgets(in_s, 4, stdin);
+		i = _getch();
+		i -= 48;
 		rewind(stdin);
-		*optPtr = atoi(in_s);
-		if (strlen(in_s) != 2 || *optPtr > optMax || *optPtr < optMin)
+		*optPtr = i;
+		if ( *optPtr > optMax || *optPtr < optMin)
 		{
 			change_color(4, 14);
 			printf("输入无效，请您重新输入：");
@@ -4054,6 +4054,8 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 			flag = 1;
 			continue;
 		}
+		
+		
 	} while (flag);
 	return 1;
 }
@@ -4127,11 +4129,9 @@ DWORD WINAPI ThreadFun(LPVOID pM)
 		x = selectionInf.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				/*printf(" \b");*/
+				//printf(" \b");
 				keybd_event(49 + i, 0, 0, 0);
 				keybd_event(49 + i, 0, 2, 0);
-				keybd_event(13, 0, 0, 0);
-				keybd_event(13, 0, 2, 0);
 			}
 		}
 		Sleep(200);
