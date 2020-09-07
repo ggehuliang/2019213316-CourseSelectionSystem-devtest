@@ -128,7 +128,7 @@ int main_entrance()
 		printf("  ① - 学生\n");
 		printf("  ② - 老师\n");
 		printf("  ③ - 退出程序\n\n");
-		printf("请输入或您要进行的操作或直接点击相应标题:");
+		printf("请输入1,2,3或直接点击相应标题:");
 
 		sprintf(pos, "5-5,2-10|6-6,2-10|7-7,2-14|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
@@ -1462,7 +1462,9 @@ void teacher_mycourse()
 		result = mysql_store_result(&mysql);
 		if ((int)mysql_num_rows(result) == 0)
 		{
+			change_color(4, 14);
 			printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
+			change_color(1, 14);
 			s_gets(classID, 11);
 			if (classID[0] == 17)
 			{
