@@ -2399,7 +2399,7 @@ void config_init() {
 	} while (flag);
 
 	FILE* outFile;
-	if ((outFile = fopen("cssystem.ini", "a+")) == NULL)
+	if ((outFile = fopen("cssystem.ini", "w")) == NULL)
 	{
 		change_color(4, 14);
 		printf("\n打开配置文件失败！请尝试手动删除cfg配置文件后重试！");
