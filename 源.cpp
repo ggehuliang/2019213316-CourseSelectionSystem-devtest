@@ -364,22 +364,22 @@ void student_mainmenu()
 		printf("\t\t\t\t ○●○●○● 功能界面--学生 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(4, 14);
-		printf("\n\t\t\t\t     登录成功，欢迎您，%s 的 %s 同学。\n", nowSchool, nowName);
+		printf("\n登录成功，欢迎您，%s的%s同学。\n", nowSchool, nowName);
 		change_color(1, 14);
 		printf("\n\t\t\t\t           请选择你需要的操作：\n\n");
 		printf("\t\t\t\t             【① 学生选课】\n");
-		printf("\t\t\t\t                                ┌ 根据课程名查询\n");
-		printf("\t\t\t\t                                ├ 根据开课学院查询\n");
-		printf("\t\t\t\t             【② 查询课程】 ───┼ 根据课余量排序所有课程\n");
-		printf("\t\t\t\t                                ├ 根据选课人数排序所有课程\n");
-		printf("\t\t\t\t                                └ 查询课程详细信息\n");
+		printf("\t\t\t\t                                 \n");
+		printf("\t\t       根据课程名查询  ┐                        ┌ 根据开课学院查询\n");
+		printf("\t\t\t\t       ├───  【② 查询课程】 ───┼ 根据课余量排序所有课程\n");
+		printf("\t\t     查询课程详细信息  ┘                        └ 根据选课人数排序所有课程\n");
+		printf("\t\t\t\t                                 \n");
 		printf("\t\t\t\t           【③ 查询选课结果】\n\n");
 		printf("\t\t\t\t           【④ 删除选课结果】\n\n");
 		printf("\t\t\t\t           【⑤ 个人信息管理】\n\n\n");
 		printf("\t\t\t\t             【⑥ 退出登录】\n\n");
 		printf(" 请输入1，2，3，4，5，6或直接点击相应标题：");
 
-		sprintf(pos, "9-9,2-17|10-14,2-44|16-16,2-21|17-17,2-21|18-18,2-21|20-20,2-17");
+		sprintf(pos, "8-8,45-56|11-11,45-56|14-14,43-58|16-16,43-58|18-18,43-58|21-21,45-56");/*10 - 12, 21 - 87*/
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option, 1, 6);
 		TerminateThread(handle, 1);
@@ -589,6 +589,8 @@ void student_select_course()
 			return;
 	} while (student_check_class_exist(classID));
 	
+	
+
 	//把学生之前选的课从表中取出，存到字符串中
 	sprintf(query, "select class1,class2,class3 from students where stuID='%s'", stuID);
 	mysql_store_result(&mysql);
@@ -669,6 +671,8 @@ void student_select_course()
 					printf("\n此课程和您已选课程时间冲突，无法选择！\n");
 				}
 				else {
+					sprintf(query, "update classes set 已选人数=已选人数+1 where 课程编号='%s'", classID);
+					mysql_query(&mysql, query);
 					if (Row[0] == NULL)//class1 == null
 					{
 						//在class1中插入选的课程编号
@@ -724,7 +728,7 @@ void student_query_course()
 		printf("\t\t\t\t       【 ⑥ 返回学生主菜单 】\n\n");
 		printf("请输入1，2，3，4，5，6或直接点击相应标题:");
 
-		sprintf(pos, "6-6,2-22|7-7,2-24|8-8,2-29|9-9,2-32|10-10,2-24|12-12,2-22");
+		sprintf(pos, "6-6,39-60|8-8,38-62|10-10,35-64|12-12,34-65|14-14,38-62|17-17,39-60");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option, 1, 6);
 		TerminateThread(handle, 1);
@@ -954,14 +958,14 @@ void student_manage_info()
 		printf("\t\t\t\t○●○●○● 个人信息管理--学生 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
-		printf("\n请选择需要修改的信息：\n");
-		printf("【 ① 电话 】\n");
-		printf("【 ② 密码 】\n");
-		printf("【 ③ 邮箱 】\n");
-		printf("【 ④ 返回学生主菜单 】\n");
+		printf("\n\t\t\t\t           请选择需要修改的信息：\n\n");
+		printf("\t\t\t\t                【 ① 电话 】\n\n");
+		printf("\t\t\t\t                【 ② 密码 】\n\n");
+		printf("\t\t\t\t                【 ③ 邮箱 】\n\n\n");
+		printf("\t\t\t\t           【 ④ 返回学生主菜单 】\n\n");
 		printf("\n请输入1，2，3，4或直接点击相应标题：");
 
-		sprintf(pos, "5-5,2-12|6-6,2-12|7-7,2-12|8-8,2-22|1--1,2-17|1--1,2-17");
+		sprintf(pos, "6-6,48-60|8-8,48-60|10-10,48-60|13-13,43-65|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option, 1, 4);
 		TerminateThread(handle, 1);
@@ -1352,24 +1356,25 @@ void teacher_mainmenu()
 		printf("\t\t\t\t    ○●○●○● 教师主菜单 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(4, 14);
-		printf("\n\t\t\t\t     登录成功，欢迎您，%s 的 %s 老师。\n", nowSchool, nowName);
+		printf("\n登录成功，欢迎您，%s的%s老师。\n", nowSchool, nowName);
 		change_color(1, 14);
-		printf("\n\t\t\t\t            请选择您需要的服务:\n");
-		printf("\t\t\t\t                                ┌ 查看开设的课程\n");
-		printf("\t\t\t\t                                ├ 查询学生信息\n");
-		printf("\t\t\t\t             【 ① 选课管理 】──┼ 删除课程(选课结束后)\n");
-		printf("\t\t\t\t                                ├ 统计课程数目\n");
-		printf("\t\t\t\t                                └ 排序课程\n\n");
-		printf("\t\t\t\t                                ┌ 查询课程\n");
-		printf("\t\t\t\t             【 ② 课程管理 】──┼ 添加课程\n");
-		printf("\t\t\t\t                                ├ 修改课程\n");
-		printf("\t\t\t\t                                └ 删除课程(选课开始前)\n\n");
-		printf("\t\t\t\t             【 ③ 信息管理 】──┬ 修改密码\n");
-		printf("\t\t\t\t                                └ 修改邮箱\n\n");
-		printf("\t\t\t\t             【 ④ 退出登录 】\n\n");
-		printf("\n  请输入1，2，3，4或直接点击相应标题:");
+		printf("\n\t\t\t\t             请选择您需要的服务:\n");
+		printf("\t\t\t\t                                  \n");
+		printf("\t\t          查看开设的课程 ┐                       ┌  查询学生信息\n");
+		printf("\t\t\t\t         ├─── 【 ① 选课管理 】──┼  删除课程(选课结束后)\n");
+		printf("\t\t                排序课程 ┘                       └  统计课程数目\n");
+		printf("\t\t\t\t                                 \n");
+		printf("\t\t                 查询课程 ┐                      ┌  添加课程\n");
+		printf("\t\t\t\t          ├── 【 ② 课程管理 】──┤\n");
+		printf("\t\t                 排序课程 ┘                      └  删除课程(选课开始前)\n");
+		printf("\t\t\t\t                                 \n");
+		printf("\t\t\t\t              【 ③ 信息管理 】──┬  修改密码\n");   //printf("\t\t\t\t 修改邮箱 ── 【 ③ 信息管理 】──  修改密码\n");
+		printf("\t\t\t\t                                 └  修改邮箱\n\n");   //printf("\t\t\t\t                                 \n\n");
+		printf("\t\t\t\t              【 ④ 退出登录 】\n\n");		
+		printf("\n  请输入1，2，3，4或直接点击相应标题:");			
 
-		sprintf(pos, "9-13,1-35|15-18,1-35|20-21,1-28|23-23,1-16|1--1,2-17|1--1,2-17");
+		sprintf(pos, "9-9,46-62|13-13,46-62|16-16,46-62|19-19,46-62|1--1,2-17|1--1,2-17");
+		/*sprintf(pos, "8-10,26-87|12-14,33-87|15-17,46-75|19-19,46-62|1--1,2-17|1--1,2-17");*/
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 
 		scanf_opt(&option2, 1, 4);
@@ -1402,19 +1407,19 @@ void teacher_select_managemenu()
 		system("title 学生选课管理系统 - 教师选课管理");
 		change_color(5, 14);
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t○●○●○● 选课菜单 ●○●○●○\n");
+		printf("\t\t\t\t  ○●○●○● 选课菜单 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
-		printf("\n请选择您需要的服务:\n");
-		printf("【 ① 查看您开设的选课情况 】\n");
-		printf("【 ② 查询选择某门课程的学生信息 】\n");
-		printf("【 ③ 删除您的课程(选课结束后) 】\n");
-		printf("【 ④ 统计您自己开设过的课程数目 】\n");
-		printf("【 ⑤ 按选课人数排序所有开设过的课程 】\n\n");
-		printf("【 ⑥ 返回上一个菜单 】\n\n");
+		printf("\n\t\t\t\t          请选择您需要的服务:\n\n");
+		printf("\t\t\t\t     【 ① 查看您开设的选课情况 】\n\n");
+		printf("\t\t\t\t  【 ② 查询选择某门课程的学生信息 】\n\n");
+		printf("\t\t\t\t   【 ③ 删除您的课程(选课结束后) 】\n\n");
+		printf("\t\t\t\t  【 ④ 统计您自己开设过的课程数目 】\n\n");
+		printf("\t\t\t\t【 ⑤ 按选课人数排序所有开设过的课程 】\n\n\n");
+		printf("\t\t\t\t        【 ⑥ 返回上一个菜单 】\n\n");
 		printf("\n请输入1,2,3,4,5，6或直接点击相应标题:");
 
-		sprintf(pos, "5-5,2-29|6-6,2-34|7-7,2-32|8-8,2-34|9-9,2-28|11-11,2-22");
+		sprintf(pos, "6-6,37-65|8-8,34-68|10-10,35-67|12-12,34-68|14-14,32-70|17-17,40-62");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 
 		scanf_opt(&option2, 1, 6);
@@ -1545,16 +1550,16 @@ void teacher_findcourse()
 	char query[500];
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 学生信息查询界面 ●○●○●○\n");
+	printf("\t\t\t\t ○●○●○● 学生信息查询界面 ●○●○●○\n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
-	printf("\n请选择您的查询方式:\n");
-	printf("【 ① 根据课程名称查询 】\n");
-	printf("【 ② 根据学生姓名查询 】\n");
-	printf("【 ③ 返回上一菜单 】\n\n");
+	printf("\n\t\t\t\t            请选择您的查询方式:\n");
+	printf("\n\t\t\t\t         【 ① 根据课程名称查询 】\n");
+	printf("\n\t\t\t\t         【 ② 根据学生姓名查询 】\n");
+	printf("\n\t\t\t\t           【 ③ 返回上一菜单 】\n\n");
 	printf("\n请输入，2，3或直接点击相应标题:");
 
-	sprintf(pos, "5-5,2-24|6-6,2-24|7-7,2-20|1--1,2-31|1--1,2-20|1--1,2-17");
+	sprintf(pos, "6-6,40-66|8-8,40-66|10-10,43-63|1--1,2-31|1--1,2-20|1--1,2-17");
 	handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 
 	scanf_opt(&option2, 1, 3);
@@ -1949,14 +1954,14 @@ void teacher_course_managemenu()
 		printf("\t\t\t\t○●○●○● 课程管理菜单 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
-		printf("\n请选择您需要的服务:\n");
-		printf("【 ① 查询相应课程 】\n");
-		printf("【 ② 添加您的课程 】\n");
-		printf("【 ③ 修改您的课程 】\n");
-		printf("【 ④ 删除您的课程(选课开始前) 】\n\n");
-		printf("【 ⑤ 返回上一个菜单 】\n\n");
+		printf("\n\t\t\t\t          请选择您需要的服务:\n\n");
+		printf("\t\t\t\t         【 ① 查询相应课程 】\n\n");
+		printf("\t\t\t\t         【 ② 添加您的课程 】\n\n");
+		printf("\t\t\t\t         【 ③ 修改您的课程 】\n\n");
+		printf("\t\t\t\t   【 ④ 删除您的课程(选课开始前) 】\n\n\n");
+		printf("\t\t\t\t        【 ⑤ 返回上一个菜单 】\n\n");
 		printf("\n请输入,2,3,4,5或直接点击相应标题:");
-		sprintf(pos, "5-5,2-20|6-6,2-20|7-7,2-20|8-8,2-33|10-10,2-22|1--1,2-17");
+		sprintf(pos, "6-6,41-61|8-8,41-61|10-10,41-61|12-12,35-67|15-15,40-62|1-1,40-62");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 
 		scanf_opt(&option2, 1, 5);
@@ -2600,7 +2605,9 @@ void teacher_course_list()
 		result = mysql_store_result(&mysql);
 		if ((int)mysql_num_rows(result) == 0)
 		{
+			change_color(4, 14);
 			printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
+			change_color(1, 14);
 			s_gets(classID, 11);
 			if (classID[0] == 17)
 			{
@@ -3204,12 +3211,13 @@ void teacher_manage_info()
 		printf("\t\t\t\t○●○●○● 信息修改界面--教师 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
-		printf("\n请选择需要修改的信息：\n");
-		printf("【 ① 密码 】\n");
-		printf("【 ② 邮箱 】\n");
-		printf("【 ③ 返回上一个菜单 】\n\n");
+		printf("\n\t\t\t\t           请选择需要修改的信息：\n\n");
+		printf("\t\t\t\t                【 ① 密码 】\n\n");
+		printf("\t\t\t\t                【 ② 邮箱 】\n\n\n");
+		printf("\t\t\t\t           【 ③ 返回上一个菜单 】\n\n");
 		printf("\n请输入1，2，3或直接点击相应标题：");
-		sprintf(pos, "5-5,2-12|6-6,2-12|7-7,2-22|1--1,2-17|1--1,2-17|1--1,2-17");
+
+		sprintf(pos, "6-6,48-60|8-8,48-60|11-11,43-65|1-1,43-65|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
 		scanf_opt(&option2, 1, 3);
 		TerminateThread(handle, 1);
