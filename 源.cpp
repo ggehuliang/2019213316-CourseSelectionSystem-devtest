@@ -364,7 +364,7 @@ void student_mainmenu()
 		printf("\t\t\t\t ○●○●○● 功能界面--学生 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(4, 14);
-		printf("\n\t\t\t\t     登录成功，欢迎您，%s 的 %s 同学。\n", nowSchool, nowName);
+		printf("\n登录成功，欢迎您，%s的%s同学。\n", nowSchool, nowName);
 		change_color(1, 14);
 		printf("\n\t\t\t\t           请选择你需要的操作：\n\n");
 		printf("\t\t\t\t             【① 学生选课】\n");
@@ -1356,7 +1356,7 @@ void teacher_mainmenu()
 		printf("\t\t\t\t    ○●○●○● 教师主菜单 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(4, 14);
-		printf("\n\t\t\t\t     登录成功，欢迎您，%s 的 %s 老师。\n", nowSchool, nowName);
+		printf("\n登录成功，欢迎您，%s的%s老师。\n", nowSchool, nowName);
 		change_color(1, 14);
 		printf("\n\t\t\t\t             请选择您需要的服务:\n");
 		printf("\t\t\t\t                                  \n");
