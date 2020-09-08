@@ -91,9 +91,8 @@ time_t currStart, selecStart, selecEnd;		// 当前学期开课时间、选课始
 
 HANDLE consoleHWnd;							//更改颜色需要用到的窗口句柄
 
-char pos[100]; 
+char pos[100]; // 8,2-13|11,2-13|15,2-17|16,2-17|17,2-17|19,2-17
 
-int menuStarted;
 int main()
 {
 	mysql_init(&mysql);		// 初始化mysql
@@ -137,7 +136,7 @@ int main_entrance()
 
 		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
-		handle = CreateThread(NULL, 0, SkipBlockThread, NULL, 0, NULL);
+
 		scanf_opt(&option, 1, 3);
 
 
@@ -183,7 +182,7 @@ void student_login()
 		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
 
 		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
-		menuStarted = 1;
+
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
 		scanf_opt(&option1, 1, 3);
@@ -4147,13 +4146,4 @@ DWORD WINAPI SelectEventThread(LPVOID pM)
 		}
 		Sleep(200);
 	}
-}
-
-DWORD WINAPI SkipBlockThread(LPVOID pM) {
-	Sleep(400);
-	if (menuStarted != 1) {
-		keybd_event(13, 0, 0, 0);
-		keybd_event(13, 0, 2, 0);
-	}
-
 }
