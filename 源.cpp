@@ -589,6 +589,8 @@ void student_select_course()
 			return;
 	} while (student_check_class_exist(classID));
 	
+	
+
 	//把学生之前选的课从表中取出，存到字符串中
 	sprintf(query, "select class1,class2,class3 from students where stuID='%s'", stuID);
 	mysql_store_result(&mysql);
@@ -669,6 +671,8 @@ void student_select_course()
 					printf("\n此课程和您已选课程时间冲突，无法选择！\n");
 				}
 				else {
+					sprintf(query, "update classes set 已选人数=已选人数+1 where 课程编号='%s'", classID);
+					mysql_query(&mysql, query);
 					if (Row[0] == NULL)//class1 == null
 					{
 						//在class1中插入选的课程编号
