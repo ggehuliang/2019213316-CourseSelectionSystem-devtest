@@ -10,7 +10,7 @@
 //==========================================
 //程序启动部分功能
 
-void config_init();				// 若配置文件存在则读取，否则进行首次运行配置程序
+void config_init();							// 若配置文件存在则读取，否则进行首次运行配置程序
 void readCFG();					
 void sql_connect();
 void table_init();
@@ -74,24 +74,24 @@ void change_color(int, int);									// 快捷更改接下来输出信息的颜�
 //==========================================
 //全局变量声明
 
-MYSQL mysql;										// 全局mysql连接
-MYSQL_RES* result;									// 查询返回结果集
-MYSQL_FIELD* field;									// 结果集取出列存放
-MYSQL_ROW Row;	// 结果集取出行存放
+MYSQL mysql;											// 全局mysql连接
+MYSQL_RES* result;										// 查询返回结果集
+MYSQL_FIELD* field;										// 结果集取出列存放
+MYSQL_ROW Row;											// 结果集取出行存放
 
 char stuID[11];	
 char teachID[20];
-char nowName[20], nowSchool[20];			//登录进来存放自己的id、名字和学院方便后续使用
+char nowName[20], nowSchool[20];						//登录进来存放自己的id、名字和学院方便后续使用
 
 char dbIP[50], dbUser[50], dbPassWd[50], dbName[50];
 int dbPort = 3306;										//数据库连接信息
 
-int currYear = 2020, currTerm = 1;			// 当前上课学期
-time_t currStart, selecStart, selecEnd;		// 当前学期开课时间、选课始终时间
+int currYear = 2020, currTerm = 1;						// 当前上课学期
+time_t currStart, selecStart, selecEnd;					// 当前学期开课时间、选课始终时间
 
-HANDLE consoleHWnd;							//更改颜色需要用到的窗口句柄
+HANDLE consoleHWnd;										//更改颜色需要用到的窗口句柄
 
-char pos[100]; // 8,2-13|11,2-13|15,2-17|16,2-17|17,2-17|19,2-17
+char pos[100]; 
 
 int main()
 {
