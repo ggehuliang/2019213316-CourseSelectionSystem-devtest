@@ -3933,7 +3933,6 @@ int scanf_pw(char* str)
 	return 1;
 }
 
-
 //字符串原地使用base64进行加密
 //来源：github开源代码
 //输入格式：字符串指针
