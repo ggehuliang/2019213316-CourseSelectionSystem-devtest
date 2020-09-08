@@ -139,6 +139,7 @@ int main_entrance()
 
 		scanf_opt(&option, 1, 3);
 
+
 		TerminateThread(handle,1);
 
 		switch (option)
