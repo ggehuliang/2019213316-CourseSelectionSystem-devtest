@@ -10,7 +10,7 @@
 //==========================================
 //程序启动部分功能
 
-void config_init();				// 若配置文件存在则读取，否则进行首次运行配置程序
+void config_init();							// 若配置文件存在则读取，否则进行首次运行配置程序
 void readCFG();					
 void sql_connect();
 void table_init();
@@ -52,7 +52,7 @@ void teacher_manage_info();					// 改信息
 //公共功能
 //用法、输入输出格式见函数定义前的详细注释
 
-DWORD WINAPI ThreadFun(LPVOID pM);
+DWORD WINAPI SelectEventThread(LPVOID pM);
 void print_class(char*);
 int check_stuId(char* );
 int check_phone(char* );
@@ -74,22 +74,22 @@ void change_color(int, int);									// 快捷更改接下来输出信息的颜�
 //==========================================
 //全局变量声明
 
-MYSQL mysql;										// 全局mysql连接
-MYSQL_RES* result;									// 查询返回结果集
-MYSQL_FIELD* field;									// 结果集取出列存放
-MYSQL_ROW Row;	// 结果集取出行存放
+MYSQL mysql;											// 全局mysql连接
+MYSQL_RES* result;										// 查询返回结果集
+MYSQL_FIELD* field;										// 结果集取出列存放
+MYSQL_ROW Row;											// 结果集取出行存放
 
 char stuID[11];	
 char teachID[20];
-char nowName[20], nowSchool[20];			//登录进来存放自己的id、名字和学院方便后续使用
+char nowName[20], nowSchool[20];						//登录进来存放自己的id、名字和学院方便后续使用
 
 char dbIP[50], dbUser[50], dbPassWd[50], dbName[50];
 int dbPort = 3306;										//数据库连接信息
 
-int currYear = 2020, currTerm = 1;			// 当前上课学期
-time_t currStart, selecStart, selecEnd;		// 当前学期开课时间、选课始终时间
+int currYear = 2020, currTerm = 1;						// 当前上课学期
+time_t currStart, selecStart, selecEnd;					// 当前学期开课时间、选课始终时间
 
-HANDLE consoleHWnd;							//更改颜色需要用到的窗口句柄
+HANDLE consoleHWnd;										//更改颜色需要用到的窗口句柄
 
 char pos[100]; // 8,2-13|11,2-13|15,2-17|16,2-17|17,2-17|19,2-17
 
@@ -135,7 +135,7 @@ int main_entrance()
 		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
 
 		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
 		scanf_opt(&option, 1, 3);
 
@@ -169,7 +169,7 @@ void student_login()
 		printf("\t\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
-		printf("\n\t\t\t\t\t\t请选择您的身份:\n\n");
+		printf("\n\t\t\t\t\t     请选择您要进行的操作:\n\n");
 		printf("\t\t\t\t\t  ┏━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 		printf("\t\t\t\t\t  ┃       ① - 登录       ┃\n");
 		printf("\t\t\t\t\t  ┗━━━━━━━━━━━━━━━━━━━━━━━┛\n\n");
@@ -183,7 +183,7 @@ void student_login()
 
 		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
 
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
 		scanf_opt(&option1, 1, 3);
 
@@ -364,7 +364,7 @@ void student_mainmenu()
 		printf("\t\t\t\t ○●○●○● 功能界面--学生 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(4, 14);
-		printf("\n登录成功，欢迎您，%s的%s同学。\n", nowSchool, nowName);
+		printf("\n 登录成功，欢迎您，%s的%s同学。\n", nowSchool, nowName);
 		change_color(1, 14);
 		printf("\n\t\t\t\t           请选择你需要的操作：\n\n");
 		printf("\t\t\t\t             【① 学生选课】\n");
@@ -380,7 +380,7 @@ void student_mainmenu()
 		printf(" 请输入1，2，3，4，5，6或直接点击相应标题：");
 
 		sprintf(pos, "8-8,45-56|11-11,45-56|14-14,43-58|16-16,43-58|18-18,43-58|21-21,45-56");/*10 - 12, 21 - 87*/
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 		scanf_opt(&option, 1, 6);
 		TerminateThread(handle, 1);
 		
@@ -729,7 +729,7 @@ void student_query_course()
 		printf("请输入1，2，3，4，5，6或直接点击相应标题:");
 
 		sprintf(pos, "6-6,39-60|8-8,38-62|10-10,35-64|12-12,34-65|14-14,38-62|17-17,39-60");
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 		scanf_opt(&option, 1, 6);
 		TerminateThread(handle, 1);
 
@@ -966,7 +966,7 @@ void student_manage_info()
 		printf("\n请输入1，2，3，4或直接点击相应标题：");
 
 		sprintf(pos, "6-6,48-60|8-8,48-60|10-10,48-60|13-13,43-65|1--1,2-17|1--1,2-17");
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 		scanf_opt(&option, 1, 4);
 		TerminateThread(handle, 1);
 
@@ -1356,7 +1356,7 @@ void teacher_mainmenu()
 		printf("\t\t\t\t    ○●○●○● 教师主菜单 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(4, 14);
-		printf("\n登录成功，欢迎您，%s的%s老师。\n", nowSchool, nowName);
+		printf("\n 登录成功，欢迎您，%s的%s老师。\n", nowSchool, nowName);
 		change_color(1, 14);
 		printf("\n\t\t\t\t             请选择您需要的服务:\n");
 		printf("\t\t\t\t                                  \n");
@@ -1375,7 +1375,7 @@ void teacher_mainmenu()
 
 		sprintf(pos, "9-9,46-62|13-13,46-62|16-16,46-62|19-19,46-62|1--1,2-17|1--1,2-17");
 		/*sprintf(pos, "8-10,26-87|12-14,33-87|15-17,46-75|19-19,46-62|1--1,2-17|1--1,2-17");*/
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
 		scanf_opt(&option2, 1, 4);
 
@@ -1420,7 +1420,7 @@ void teacher_select_managemenu()
 		printf("\n请输入1,2,3,4,5，6或直接点击相应标题:");
 
 		sprintf(pos, "6-6,37-65|8-8,34-68|10-10,35-67|12-12,34-68|14-14,32-70|17-17,40-62");
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
 		scanf_opt(&option2, 1, 6);
 
@@ -1560,7 +1560,7 @@ void teacher_findcourse()
 	printf("\n请输入，2，3或直接点击相应标题:");
 
 	sprintf(pos, "6-6,40-66|8-8,40-66|10-10,43-63|1--1,2-31|1--1,2-20|1--1,2-17");
-	handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+	handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
 	scanf_opt(&option2, 1, 3);
 	TerminateThread(handle, 1);
@@ -1962,7 +1962,7 @@ void teacher_course_managemenu()
 		printf("\t\t\t\t        【 ⑤ 返回上一个菜单 】\n\n");
 		printf("\n请输入,2,3,4,5或直接点击相应标题:");
 		sprintf(pos, "6-6,41-61|8-8,41-61|10-10,41-61|12-12,35-67|15-15,40-62|1-1,40-62");
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
 		scanf_opt(&option2, 1, 5);
 
@@ -2404,7 +2404,7 @@ void config_init() {
 	} while (flag);
 
 	FILE* outFile;
-	if ((outFile = fopen("cssystem.ini", "a+")) == NULL)
+	if ((outFile = fopen("cssystem.ini", "w")) == NULL)
 	{
 		change_color(4, 14);
 		printf("\n打开配置文件失败！请尝试手动删除cfg配置文件后重试！");
@@ -2493,7 +2493,7 @@ void teacher_login() {
 		printf("\t\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(1, 14);
-		printf("\n\t\t\t\t\t\t请选择您的身份:\n\n");
+		printf("\n\t\t\t\t\t     请选择您要进行的操作:\n\n");
 		printf("\t\t\t\t\t  ┏━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 		printf("\t\t\t\t\t  ┃       ① - 登录       ┃\n");
 		printf("\t\t\t\t\t  ┗━━━━━━━━━━━━━━━━━━━━━━━┛\n\n");
@@ -2506,7 +2506,7 @@ void teacher_login() {
 		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
 
 		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
 		scanf_opt(&option1, 1, 3);
 
@@ -3218,7 +3218,7 @@ void teacher_manage_info()
 		printf("\n请输入1，2，3或直接点击相应标题：");
 
 		sprintf(pos, "6-6,48-60|8-8,48-60|11-11,43-65|1-1,43-65|1--1,2-17|1--1,2-17");
-		handle = CreateThread(NULL, 0, ThreadFun, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 		scanf_opt(&option2, 1, 3);
 		TerminateThread(handle, 1);
 		switch (option2)
@@ -3933,7 +3933,6 @@ int scanf_pw(char* str)
 	return 1;
 }
 
-
 //字符串原地使用base64进行加密
 //来源：github开源代码
 //输入格式：字符串指针
@@ -4116,9 +4115,9 @@ void change_color(int text, int bg)
 	SetConsoleTextAttribute(consoleHWnd, bg + text);
 }
 
-DWORD WINAPI ThreadFun(LPVOID pM)
+DWORD WINAPI SelectEventThread(LPVOID pM)
 {
-	CONSOLE_SELECTION_INFO selectionInf;
+	CONSOLE_SELECTION_INFO selectionInfo;
 	char* poss = pos;
 	int p[6][4];
 	//printf("子线程的线程ID号为：%d\n", GetCurrentThreadId());
@@ -4132,19 +4131,14 @@ DWORD WINAPI ThreadFun(LPVOID pM)
 	int x, y;
 
 	while (1) {
-		GetConsoleSelectionInfo(&selectionInf);
-		//printf(" \b");
-		y = selectionInf.dwSelectionAnchor.Y;
-		x = selectionInf.dwSelectionAnchor.X;
+		GetConsoleSelectionInfo(&selectionInfo);
+		y = selectionInfo.dwSelectionAnchor.Y;
+		x = selectionInfo.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				/*mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, XBUTTON1, 0);
-				mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, XBUTTON2, 0);
-				printf(" \b");*/
-				keybd_event(49 + i, 0, 0, 0);
-				keybd_event(49 + i, 0, 2, 0);
+				PostMessageA(GetConsoleWindow(), WM_KEYUP, i + 49, 0);
 			}
 		}
-		Sleep(200);
+		Sleep(100);
 	}
 }
