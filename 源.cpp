@@ -8,7 +8,7 @@
 #include <conio.h>
 #pragma comment (lib, "libmysql.lib")
 //==========================================
-//程序启动部分功能
+// 程序启动部分功能
 
 void config_init();							// 若配置文件存在则读取，否则进行首次运行配置程序
 void readCFG();					
@@ -16,7 +16,7 @@ void sql_connect();
 void table_init();
 int main_entrance();
 //==========================================
-//学生功能
+// 学生功能
 
 void student_login();						// 学生注册模块
 void student_mainmenu();					// 学生主菜单
@@ -49,8 +49,8 @@ void teacher_course_delete();				// 未开课前删课
 void teacher_manage_info();					// 改信息
 
 //==========================================
-//公共功能
-//用法、输入输出格式见函数定义前的详细注释
+// 公共功能
+// 用法、输入输出格式见函数定义前的详细注释
 
 DWORD WINAPI SelectEventThread(LPVOID pM);
 void print_class(char*);
@@ -72,7 +72,7 @@ int scanf_opt(int*, int, int);
 char* s_gets(char*, int);										 
 void change_color(int, int);									// 快捷更改接下来输出信息的颜色
 //==========================================
-//全局变量声明
+// 全局变量声明
 
 MYSQL mysql;											// 全局mysql连接
 MYSQL_RES* result;										// 查询返回结果集
@@ -81,30 +81,30 @@ MYSQL_ROW Row;											// 结果集取出行存放
 
 char stuID[11];	
 char teachID[20];
-char nowName[20], nowSchool[20];						//登录进来存放自己的id、名字和学院方便后续使用
+char nowName[20], nowSchool[20];						// 登录进来存放自己的id、名字和学院方便后续使用
 
 char dbIP[50], dbUser[50], dbPassWd[50], dbName[50];
-int dbPort = 3306;										//数据库连接信息
+int dbPort = 3306;										// 数据库连接信息
 
 int currYear = 2020, currTerm = 1;						// 当前上课学期
 time_t currStart, selecStart, selecEnd;					// 当前学期开课时间、选课始终时间
 
-HANDLE consoleHWnd;										//更改颜色需要用到的窗口句柄
+HANDLE consoleHWnd;										// 更改颜色需要用到的窗口句柄
 
-char pos[100]; // 8,2-13|11,2-13|15,2-17|16,2-17|17,2-17|19,2-17
+char pos[100];											// 储存接收鼠标按键的坐标范围
 
 int main()
 {
-	mysql_init(&mysql);		// 初始化mysql
+	mysql_init(&mysql);									// 初始化mysql，该函数定义在mysql.h中
 
-	consoleHWnd = GetStdHandle(STD_OUTPUT_HANDLE);//初始化更改颜色
+	consoleHWnd = GetStdHandle(STD_OUTPUT_HANDLE);		// 初始化更改颜色
 	system("color e1");
 
-	config_init();
+	config_init();										// 读取或设置配置程序
 
-	sql_connect();
+	sql_connect();										// 若数据库连接出现问题，此函数可以给出具体问题信息
 
-	main_entrance();
+	main_entrance();									// 进入主界面
 
 	return 0;
 }
@@ -134,24 +134,22 @@ int main_entrance()
 		printf("\t\t\t\t\t  ┗━━━━━━━━━━━━━━━━━━━━━━━┛\n\n\n");
 		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
 
-		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
-		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
+		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");// 规定界面中需要对鼠标做出响应的坐标范围
 
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);				// 创建线程
 		scanf_opt(&option, 1, 3);
-
-
-		TerminateThread(handle,1);
+		TerminateThread(handle,1);		// 结束线程
 
 		switch (option)
 		{
 		case 1:
-			student_login();
+			student_login();			// 进入学生登录模块
 			break;
 		case 2:
-			teacher_login();
+			teacher_login();			// 进入教师登录模块
 			break;
 		case 3:
-			mysql_close(&mysql);		//正常退出，断开数据库连接
+			mysql_close(&mysql);		// 正常退出，断开数据库连接
 			exit(0);
 		}
 	} while (1);
@@ -181,13 +179,13 @@ void student_login()
 		printf("\t\t\t\t\t  ┗━━━━━━━━━━━━━━━━━━━━━━━┛\n\n\n");
 		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
 
-		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
+		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");// 规定鼠标响应的坐标范围
 
-		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
+		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);				// 创建线程
 
 		scanf_opt(&option1, 1, 3);
 
-		TerminateThread(handle, 1);
+		TerminateThread(handle, 1);														// 结束线程 
 
 		if (option1 == 1)
 		{
@@ -202,9 +200,8 @@ void student_login()
 				flag = 0;
 				change_color(1, 14);
 				printf("\n请输入学号：");
-
 				s_gets(stuID, 11);
-				if (stuID[0] == 17)//输入ctrl+q返回上一级
+				if (stuID[0] == 17)// 输入ctrl+q返回上一级
 				{
 					system("cls");
 					student_login();
@@ -221,15 +218,14 @@ void student_login()
 				strcat(query, stuID);
 				strcat(query, "'");
 				mysql_store_result(&mysql);
-				mysql_query(&mysql, query);
-				result = mysql_store_result(&mysql);
+				mysql_query(&mysql, query);				// 执行sql语句
+				result = mysql_store_result(&mysql);	
 				if ((int)mysql_num_rows(result) != 0)
 				{
 					Row = mysql_fetch_row(result);
 					sprintf(nowName, Row[0]);
 					sprintf(nowSchool, Row[1]);
 				}
-
 				if ((int)mysql_num_rows(result) == 0)
 				{
 					change_color(4, 14);
@@ -2429,7 +2425,7 @@ void readCFG() {
 	{
 		change_color(4, 14);
 		printf("\n打开配置文件失败！请尝试手动删除cfg配置文件并执行首次使用设置！");
-		getchar();
+		system("pause");
 		exit(1);
 	}
 	while (!feof(inFile)) {
@@ -4049,15 +4045,13 @@ void pw_decode(char* str)
 // 输入格式：选项option指针，最小选项，最大选项
 int scanf_opt(int* optPtr, int optMin, int optMax) {
 	int flag;
-	char in_s[10];
 	int i = 0;
 	do
 	{
 		flag = 0;
 		i = _getch();
-		i -= 48;
-		*optPtr = i;
-		if ( *optPtr > optMax || *optPtr < optMin)
+		i -= 48;				// 0的ASCII码为48
+		if (i > optMax || i < optMin)
 		{
 			change_color(4, 14);
 			printf("\n输入无效，请您重新输入：");
@@ -4065,6 +4059,8 @@ int scanf_opt(int* optPtr, int optMin, int optMax) {
 			flag = 1;
 			continue;
 		}
+		else 
+			*optPtr = i;
 	} while (flag);
 	return 1;
 }
@@ -4120,7 +4116,6 @@ DWORD WINAPI SelectEventThread(LPVOID pM)
 	CONSOLE_SELECTION_INFO selectionInfo;
 	char* poss = pos;
 	int p[6][4];
-	//printf("子线程的线程ID号为：%d\n", GetCurrentThreadId());
 	sscanf(poss, "%d-%d,%d-%d|%d-%d,%d-%d|%d-%d,%d-%d|%d-%d,%d-%d|%d-%d,%d-%d|%d-%d,%d-%d"
 		, &p[0][0], &p[0][1], &p[0][2], &p[0][3]
 		, &p[1][0], &p[1][1], &p[1][2], &p[1][3]
@@ -4134,11 +4129,9 @@ DWORD WINAPI SelectEventThread(LPVOID pM)
 		GetConsoleSelectionInfo(&selectionInfo);
 		y = selectionInfo.dwSelectionAnchor.Y;
 		x = selectionInfo.dwSelectionAnchor.X;
-		for (int i = 0; i < 6; i++) {
-			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				PostMessageA(GetConsoleWindow(), WM_KEYUP, i + 49, 0);
-			}
-		}
+		for (int i = 0; i < 6; i++)
+			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2])
+				PostMessageA(GetConsoleWindow(), 258, (WPARAM)(i + 49LL), 0);
 		Sleep(100);
 	}
 }
