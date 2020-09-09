@@ -1686,7 +1686,7 @@ void teacher_findcourse()
 				{
 					flag = 1;
 					change_color(4, 14);
-					printf("课程编号输入错误（若返回上一级，请按Ctrl+Q后回车）\n");
+					printf("课程名称输入错误（若返回上一级，请按Ctrl+Q后回车）\n");
 					printf("\n请在按任意键后重新输入...\n");
 					system("pause>nul");
 					mysql_free_result(result);
@@ -1740,6 +1740,7 @@ void teacher_findcourse()
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%18s |", field->name);
+		printf("\n");
 
 		printf("\n");
 
@@ -1792,6 +1793,7 @@ void teacher_findcourse()
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%17s |", field->name);
+		printf("\n");
 
 		printf("\n");
 
@@ -1815,6 +1817,7 @@ void teacher_findcourse()
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%17s |", field->name);
+
 
 		printf("\n");
 
@@ -1878,7 +1881,7 @@ void teacher_30delete()
 	case 1:
 		do {
 			change_color(1, 14);
-			printf("请输入您想要删除的课程的编号：");
+			printf("\n请输入您想要删除的课程的编号：");
 			s_gets(courseName, 20);
 			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
@@ -2852,7 +2855,7 @@ void teacher_course_edit() {
 	case 1:
 		do {
 			change_color(1, 14);
-			printf("请输入您想要修改的课程的编号：");
+			printf("\n请输入您想要修改的课程的编号：");
 			s_gets(courseName,20);
 			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
@@ -3240,7 +3243,7 @@ void teacher_course_delete() {
 		}
 		do {
 			change_color(1, 14);
-			printf("请输入您想要删除的课程的编号：");
+			printf("\n请输入您想要删除的课程的编号：");
 			s_gets(courseName, 20);
 			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
 			{
@@ -3282,7 +3285,7 @@ void teacher_course_delete() {
 				, courseName);
 			mysql_query(&mysql, query);
 			change_color(2, 14);
-			printf("删除成功！\n");
+			printf("\n删除成功！\n");
 			change_color(1, 14);
 			printf("按任意键返回上一菜单...\n");
 			system("pause>nul");
