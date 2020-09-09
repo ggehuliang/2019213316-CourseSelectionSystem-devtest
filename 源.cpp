@@ -1,7 +1,7 @@
 ﻿#include <stdio.h>
 #include <Windows.h>
 #include <stdlib.h>
-#include <winsock.h>
+//#include <winsock.h>
 #include <mysql.h> 
 #include <string.h>
 #include <time.h>
@@ -738,9 +738,9 @@ void student_query_course()
 			do {
 				flag = 0;
 				s_gets(class_name, 20);
-				char query10[100] = "select * from classes where 课程名称='";
+				char query10[100] = "select * from classes where 课程名称 like '%";
 				strcat(query10, class_name);
-				strcat(query10, "'");
+				strcat(query10, "%'");
 				mysql_store_result(&mysql);
 				mysql_query(&mysql, query10);
 				result = mysql_store_result(&mysql);
@@ -760,7 +760,7 @@ void student_query_course()
 			} while (flag);//若从数据库取出的结果行数为0，说明无此学院
 			change_color(1, 14);
 			printf("\n查询结果为：\n\n");
-			sprintf(query, "select * from classes where 课程名称='%s'", class_name);	// 通过sql语句从数据库中查询相应课程
+			sprintf(query, "select * from classes where 课程名称 like '%%%s%%'", class_name);	// 通过sql语句从数据库中查询相应课程
 			change_color(0, 14);
 			print_class(query);					// 输出查询结果
 			change_color(1, 14);
@@ -781,9 +781,9 @@ void student_query_course()
 			do {
 				flag = 0;
 				s_gets(school_name, 20);
-				char query9[100] = "select * from classes where 开课学院='";
+				char query9[100] = "select * from classes where 开课学院 like '%";
 				strcat(query9, school_name);
-				strcat(query9, "'");
+				strcat(query9, "%'");
 				mysql_store_result(&mysql);
 				mysql_query(&mysql, query9);
 				result = mysql_store_result(&mysql);
@@ -803,7 +803,7 @@ void student_query_course()
 			} while (flag);//若从数据库取出的结果行数为0，说明无此学院
 			change_color(1, 14);
 			printf("\n查询结果为：\n\n");
-			sprintf(query, "select * from classes where 开课学院='%s'", school_name);	// 通过sql语句从数据库中查询相应课程
+			sprintf(query, "select * from classes where 开课学院 like '%%%s%%'", school_name);	// 通过sql语句从数据库中查询相应课程
 			change_color(0, 14);
 			print_class(query);					// 输出查询结果
 			change_color(1, 14);
