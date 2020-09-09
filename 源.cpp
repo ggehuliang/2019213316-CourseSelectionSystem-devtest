@@ -364,7 +364,7 @@ void student_mainmenu()
 		printf("\t\t\t\t ○●○●○● 功能界面--学生 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(4, 14);
-		printf("\n登录成功，欢迎您，%s的%s同学。\n", nowSchool, nowName);
+		printf("\n 登录成功，欢迎您，%s的%s同学。\n", nowSchool, nowName);
 		change_color(1, 14);
 		printf("\n\t\t\t\t           请选择你需要的操作：\n\n");
 		printf("\t\t\t\t             【① 学生选课】\n");
@@ -1356,7 +1356,7 @@ void teacher_mainmenu()
 		printf("\t\t\t\t    ○●○●○● 教师主菜单 ●○●○●○\n");
 		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 		change_color(4, 14);
-		printf("\n登录成功，欢迎您，%s的%s老师。\n", nowSchool, nowName);
+		printf("\n 登录成功，欢迎您，%s的%s老师。\n", nowSchool, nowName);
 		change_color(1, 14);
 		printf("\n\t\t\t\t             请选择您需要的服务:\n");
 		printf("\t\t\t\t                                  \n");
@@ -4117,7 +4117,7 @@ void change_color(int text, int bg)
 
 DWORD WINAPI SelectEventThread(LPVOID pM)
 {
-	CONSOLE_SELECTION_INFO selectionInf;
+	CONSOLE_SELECTION_INFO selectionInfo;
 	char* poss = pos;
 	int p[6][4];
 	//printf("子线程的线程ID号为：%d\n", GetCurrentThreadId());
@@ -4131,16 +4131,14 @@ DWORD WINAPI SelectEventThread(LPVOID pM)
 	int x, y;
 
 	while (1) {
-		GetConsoleSelectionInfo(&selectionInf);
-		//printf(" \b");
-		y = selectionInf.dwSelectionAnchor.Y;
-		x = selectionInf.dwSelectionAnchor.X;
+		GetConsoleSelectionInfo(&selectionInfo);
+		y = selectionInfo.dwSelectionAnchor.Y;
+		x = selectionInfo.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				//PostMessageA(GetConsoleWindow(), WM_KEYDOWN, i + 49, 0);
 				PostMessageA(GetConsoleWindow(), WM_KEYUP, i + 49, 0);
 			}
 		}
-		Sleep(200);
+		Sleep(100);
 	}
 }
