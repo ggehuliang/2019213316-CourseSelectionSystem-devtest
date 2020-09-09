@@ -1,8 +1,9 @@
 ﻿#include <stdio.h>
 #include <Windows.h>
 #include <stdlib.h>
-//#include <winsock.h>
-#include <mysql.h> 
+#include <mysql.h>							// 内含操作数据库的相关函数
+/*mysql-8.0.21-winx64
+This software is released under version 2 of the GNU General Public License(GPLv2)*/
 #include <string.h>
 #include <time.h>
 #include <conio.h>
@@ -757,7 +758,7 @@ void student_query_course()
 						return;
 					}
 				}
-			} while (flag);//若从数据库取出的结果行数为0，说明无此学院
+			} while (flag);						// 若从数据库取出的结果行数为0，说明无此学院
 			change_color(1, 14);
 			printf("\n查询结果为：\n\n");
 			sprintf(query, "select * from classes where 课程名称 like '%%%s%%'", class_name);	// 通过sql语句从数据库中查询相应课程
@@ -781,7 +782,7 @@ void student_query_course()
 			do {
 				flag = 0;
 				s_gets(school_name, 20);
-				char query9[100] = "select * from classes where 开课学院 like '%";
+				char query9[100] = "select * from classes where 开课学院 like '%";	// 模糊查询
 				strcat(query9, school_name);
 				strcat(query9, "%'");
 				mysql_store_result(&mysql);
@@ -800,7 +801,7 @@ void student_query_course()
 						return;
 					}
 				}
-			} while (flag);//若从数据库取出的结果行数为0，说明无此学院
+			} while (flag);						// 若从数据库取出的结果行数为0，说明无此学院
 			change_color(1, 14);
 			printf("\n查询结果为：\n\n");
 			sprintf(query, "select * from classes where 开课学院 like '%%%s%%'", school_name);	// 通过sql语句从数据库中查询相应课程
@@ -849,7 +850,7 @@ void student_query_course()
 		}
 		if (option == 5)
 		{
-			student_search_specific_information();
+			student_search_specific_information();	// 查看详细信息
 			change_color(1, 14);
 			printf("请按任意键返回上一菜单\n");
 			system("pause > nul");
@@ -1189,33 +1190,13 @@ void student_search_specific_information()
 			}
 		}
 	}
-	char query1[200] = "select 教材信息 from classes where 课程编号='";	// 因教材信息内容较长，所以单独打印
-	strcat(query1, classID);
-	strcat(query1, "'");
-	mysql_query(&mysql, query1);
+	sprintf(query, "select 教材信息,课程简介 from classes where 课程编号='%s'", classID);	// 因教材信息与课程简介过长，单独显示
+	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
-	if (result)
-	{
-		change_color(0, 14);
-		printf("教材信息\n");
-		Row = mysql_fetch_row(result);
-		printf("%s\n\n", Row[0]);
-		change_color(1, 14);
-	}
-
-	char query2[200] = "select 课程简介 from classes where 课程编号='";	// 因课程简介内容较长，所以单独打印
-	strcat(query2, classID);
-	strcat(query2, "'");
-	mysql_query(&mysql, query2);
-	result = mysql_store_result(&mysql);
-	if (result)
-	{
-		change_color(0, 14);
-		printf("课程简介\n");
-		Row = mysql_fetch_row(result);
-		printf("%s\n\n", Row[0]);
-		change_color(1, 14);
-	}
+	Row = mysql_fetch_row(result);
+	change_color(0, 14);
+	printf("教材信息：\n%s\n\n课程简介：\n%s\n\n", Row[0], Row[1]);
+	change_color(1, 14);
 }
 
 // 传入查询语句打印查询结果
@@ -1499,18 +1480,38 @@ void teacher_mycourse()
 	change_color(1, 14);
 	printf("输入课程编号以查看该课程的详细信息\n");
 	s_gets(classID, 11);
-	do{
+	do {
 		do {
-		char query10[100] = "select * from classes where 课程编号='";
-		strcat(query10, classID);
-		strcat(query10, "'");
+			char query10[100] = "select * from classes where 课程编号='";
+			strcat(query10, classID);
+			strcat(query10, "'");
+			mysql_store_result(&mysql);
+			mysql_query(&mysql, query10);
+			result = mysql_store_result(&mysql);
+			if ((int)mysql_num_rows(result) == 0)	//若从数据库取出的结果行数为0，说明无此课程
+			{
+				change_color(4, 14);
+				printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
+				change_color(1, 14);
+				s_gets(classID, 11);
+				if (classID[0] == 17)
+				{
+					system("cls");
+					return;
+				}
+			}
+
+		} while ((int)mysql_num_rows(result) == 0);
+
+		char query11[100];
+		sprintf(query11, "select * from classes where 课程编号 = '%s' and 开课教师 = '%s'", classID, nowName);
 		mysql_store_result(&mysql);
-		mysql_query(&mysql, query10);
+		mysql_query(&mysql, query11);
 		result = mysql_store_result(&mysql);
 		if ((int)mysql_num_rows(result) == 0)	//若从数据库取出的结果行数为0，说明无此课程
 		{
 			change_color(4, 14);
-			printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
+			printf("此课程并非您所开设，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
 			change_color(1, 14);
 			s_gets(classID, 11);
 			if (classID[0] == 17)
@@ -1522,27 +1523,7 @@ void teacher_mycourse()
 
 	} while ((int)mysql_num_rows(result) == 0);
 
-	char query11[100];
-	sprintf(query11, "select * from classes where 课程编号 = '%s' and 开课教师 = '%s'", classID, nowName);
-	mysql_store_result(&mysql);
-	mysql_query(&mysql, query11);
-	result = mysql_store_result(&mysql);
-	if ((int)mysql_num_rows(result) == 0)	//若从数据库取出的结果行数为0，说明无此课程
-	{
-		change_color(4, 14);
-		printf("此课程并非您所开设，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
-		change_color(1, 14);
-		s_gets(classID, 11);
-		if (classID[0] == 17)
-		{
-			system("cls");
-			return;
-		}
-	}
-
-} while ((int)mysql_num_rows(result) == 0);
-
-	sprintf(query,"select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数 from classes where 课程编号='%s'", classID);
+	sprintf(query, "select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数 from classes where 课程编号='%s'", classID);
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	if (result)
@@ -1554,7 +1535,7 @@ void teacher_mycourse()
 			int row = (int)mysql_num_rows(result);
 			int column = mysql_num_fields(result);
 			for (int i = 0; field = mysql_fetch_field(result); i++)	// 获得属性名 
-			{	
+			{
 				if (i == 0 || i == 1)
 					printf("%-27s |", field->name);
 				else if (i == 2)
@@ -1565,7 +1546,7 @@ void teacher_mycourse()
 					printf(" %-20s|", field->name);
 			}
 			printf("\n");
-			while (Row = mysql_fetch_row(result)) 
+			while (Row = mysql_fetch_row(result))
 			{
 				for (int j = 0; j < column; j++)
 				{
@@ -1582,49 +1563,12 @@ void teacher_mycourse()
 			}
 		}
 	}
-	char query1[200] = "select 教材信息 from classes where 课程编号='";
-	strcat(query1, classID);
-	strcat(query1, "'");
-	mysql_query(&mysql, query1);
+	sprintf(query,"select 教材信息,课程简介 from classes where 课程编号='%s'",classID);
+	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
-	if (result)
-	{
-		change_color(0, 14);
-		int fieldCount = mysql_field_count(&mysql);
-		if (fieldCount > 0)
-		{
-			field = mysql_fetch_field(result);
-			//获得属性名 
-			printf("%s:", field->name);
-			printf("\n");
-			Row = mysql_fetch_row(result);
-			printf("%s", Row[0]);
-			printf("\n\n");
-			change_color(1, 14);
-		}
-	}
-
-	char query2[200] = "select 课程简介 from classes where 课程编号='";
-	strcat(query2, classID);
-	strcat(query2, "'");
-	mysql_query(&mysql, query2);
-	result = mysql_store_result(&mysql);
-	if (result)
-	{
-		int fieldCount = mysql_field_count(&mysql);
-		if (fieldCount > 0)
-		{
-			change_color(0, 14);
-			field = mysql_fetch_field(result);
-			//获得属性名 
-			printf("%s:", field->name);
-			printf("\n");
-			Row = mysql_fetch_row(result);
-			printf("%s", Row[0]);
-			printf("\n\n");
-			change_color(1, 14);
-		}
-	}
+	Row = mysql_fetch_row(result);
+	change_color(0, 14);
+	printf("教材信息：\n%s\n\n课程简介：\n%s\n\n", Row[0], Row[1]);
 	change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
@@ -1673,7 +1617,7 @@ void teacher_findcourse()
 				change_color(1, 14);
 				printf("\n请输入您想要查询的课程名称：");
 				s_gets(courseName, 20);
-				if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+				if (courseName[0] == 17)					// 判断若输入首字符为ctrl+q则返回上层
 				{
 					system("cls");
 					teacher_findcourse();
@@ -1681,7 +1625,7 @@ void teacher_findcourse()
 				}
 				sprintf(query, "SELECT 课程编号 FROM `classes`WHERE 课程名称 = '%s'", courseName);
 				mysql_query(&mysql, query);
-				result = mysql_store_result(&mysql);
+				result = mysql_store_result(&mysql);		
 				if ((int)mysql_num_rows(result) == 0)
 				{
 					flag = 1;
@@ -1864,7 +1808,7 @@ void teacher_30delete()
 	strcat(query, nowName);
 	strcat(query, "'");
 	change_color(0, 14);
-	print_class(query);//打印相应内容
+	print_class(query);			// 打印相应内容
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
@@ -1883,7 +1827,7 @@ void teacher_30delete()
 			change_color(1, 14);
 			printf("\n请输入您想要删除的课程的编号：");
 			s_gets(courseName, 20);
-			if (courseName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+			if (courseName[0] == 17)		// 判断若输入首字符为ctrl+q则返回上层
 			{
 				system("cls");
 				teacher_30delete();
