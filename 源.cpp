@@ -1889,7 +1889,7 @@ void teacher_30delete()
 					{
 						sprintf(query2, "update students set class1 = null where stuID='%s'"
 							, Row[0]);
-						mysql_query(&mysql, query2);//class1
+						mysql_query(&mysql, query2);	// 删除class1
 					}
 
 					sprintf(query1, "SELECT stuID FROM `students` WHERE class2 = '%s'"
@@ -1901,7 +1901,7 @@ void teacher_30delete()
 					{
 						sprintf(query2, "update students set class2 = null where stuID='%s'"
 							, Row[0]);
-						mysql_query(&mysql, query2);//class2
+						mysql_query(&mysql, query2);	// 删除class2
 					}
 
 					sprintf(query1, "SELECT stuID FROM `students` WHERE class3 = '%s'"
@@ -1913,7 +1913,7 @@ void teacher_30delete()
 					{
 						sprintf(query2, "update students set class3 = null where stuID='%s'"
 							, Row[0]);
-						mysql_query(&mysql, query2);//class3
+						mysql_query(&mysql, query2);	// 删除class3
 					}
 
 					change_color(2, 14);
@@ -3334,7 +3334,7 @@ void teacher_manage_info()
 			s_gets(email, 20);
 			while (check_email(email) == 0)
 			{
-				if (email[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+				if (email[0] == 17)	// 判断若输入首字符为ctrl+q则返回上层
 				{
 					system("cls");
 					teacher_manage_info();
@@ -3349,7 +3349,7 @@ void teacher_manage_info()
 				}
 			}
 			sprintf(query, "update teachers set email='%s' where teachID='%s'", email, teachID);
-			mysql_query(&mysql, query);	//将更改后的邮箱存至mysql数据库
+			mysql_query(&mysql, query);		// 将更改后的邮箱存至mysql数据库
 			change_color(2, 14);
 			printf("\n修改成功!\n");
 			change_color(1, 14);
