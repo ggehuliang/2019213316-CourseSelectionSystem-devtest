@@ -4137,7 +4137,7 @@ DWORD WINAPI SelectEventThread(LPVOID pM)
 		x = selectionInf.dwSelectionAnchor.X;
 		for (int i = 0; i < 6; i++) {
 			if (y >= p[i][0] && y <= p[i][1] && x <= p[i][3] && x >= p[i][2]) {
-				PostMessageA(GetConsoleWindow(), WM_KEYDOWN, i + 49, 0);
+				//PostMessageA(GetConsoleWindow(), WM_KEYDOWN, i + 49, 0);
 				PostMessageA(GetConsoleWindow(), WM_KEYUP, i + 49, 0);
 			}
 		}
