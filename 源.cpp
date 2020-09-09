@@ -1483,6 +1483,7 @@ void teacher_select_managemenu()
 void teacher_mycourse()
 {
 	char classID[100];
+	int flag = 0;
 	system("cls");
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -1517,10 +1518,30 @@ void teacher_mycourse()
 				return;
 			}
 		}
+
+		char query11[100];
+		sprintf(query11, "select * from classes where 课程编号 = '%s' and 开课教师 = '%s'",classID,nowName);
+		mysql_store_result(&mysql);
+		mysql_query(&mysql, query11);
+		result = mysql_store_result(&mysql);
+		if ((int)mysql_num_rows(result) == 0)	//若从数据库取出的结果行数为0，说明无此课程
+		{
+			change_color(4, 14);
+			printf("此课程并非您所开设，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
+			change_color(1, 14);
+			s_gets(classID, 11);
+			if (classID[0] == 17)
+			{
+				system("cls");
+				return;
+			}
+		}
+
+
+
 	} while ((int)mysql_num_rows(result) == 0);
-	sprintf(query,"select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数 from classes where 课程编号='");
-	strcat(query, classID);
-	strcat(query, "'");
+
+	sprintf(query,"select 开课时间,结课时间,上课时间段,上课地点,限制人数,已选人数 from classes where 课程编号='%s'", classID);
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	if (result)
@@ -1558,6 +1579,49 @@ void teacher_mycourse()
 				}
 				printf("\n");
 			}
+		}
+	}
+	char query1[200] = "select 教材信息 from classes where 课程编号='";
+	strcat(query1, classID);
+	strcat(query1, "'");
+	mysql_query(&mysql, query1);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		change_color(0, 14);
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			field = mysql_fetch_field(result);
+			//获得属性名 
+			printf("%s:", field->name);
+			printf("\n");
+			Row = mysql_fetch_row(result);
+			printf("%s", Row[0]);
+			printf("\n\n");
+			change_color(1, 14);
+		}
+	}
+
+	char query2[200] = "select 课程简介 from classes where 课程编号='";
+	strcat(query2, classID);
+	strcat(query2, "'");
+	mysql_query(&mysql, query2);
+	result = mysql_store_result(&mysql);
+	if (result)
+	{
+		int fieldCount = mysql_field_count(&mysql);
+		if (fieldCount > 0)
+		{
+			change_color(0, 14);
+			field = mysql_fetch_field(result);
+			//获得属性名 
+			printf("%s:", field->name);
+			printf("\n");
+			Row = mysql_fetch_row(result);
+			printf("%s", Row[0]);
+			printf("\n\n");
+			change_color(1, 14);
 		}
 	}
 	change_color(1, 14);
