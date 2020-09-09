@@ -1687,6 +1687,8 @@ void teacher_findcourse()
 					flag = 1;
 					change_color(4, 14);
 					printf("课程编号输入错误（若返回上一级，请按Ctrl+Q后回车）\n");
+					printf("\n请在按任意键后重新输入...\n");
+					system("pause>nul");
 					mysql_free_result(result);
 				}
 				else
@@ -1708,6 +1710,8 @@ void teacher_findcourse()
 				flag = 1;
 				change_color(4, 14);
 				printf("该课程暂无学生选课（若返回上一级，请按Ctrl+Q后回车）\n");
+				printf("\n请在按任意键后重新输入...\n");
+				system("pause>nul");
 				mysql_free_result(result);
 			}
 			else
@@ -1778,6 +1782,8 @@ void teacher_findcourse()
 				flag = 1;
 				change_color(4, 14);
 				printf("无结果，请重新输入（若返回上一级，请按Ctrl+Q后回车）\n");
+				printf("\n请在按任意键后重新输入...\n");
+				system("pause>nul");
 				mysql_free_result(result);
 			}
 			else
@@ -1830,6 +1836,8 @@ void teacher_findcourse()
 	default:
 		change_color(4, 14);
 		printf("无效，请重新输入!\n");
+		printf("\n请在按任意键后重新输入...\n");
+		system("pause>nul");
 	}
 }
 
