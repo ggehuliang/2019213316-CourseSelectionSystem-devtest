@@ -1195,7 +1195,7 @@ void student_search_specific_information()
 	result = mysql_store_result(&mysql);
 	Row = mysql_fetch_row(result);
 	change_color(0, 14);
-	printf("教材信息：\n%s\n\n课程简介：\n%s\n\n", Row[0], Row[1]);
+	printf("\n教材信息：\n%s\n\n课程简介：\n%s\n\n", Row[0], Row[1]);
 	change_color(1, 14);
 }
 
@@ -1568,7 +1568,7 @@ void teacher_mycourse()
 	result = mysql_store_result(&mysql);
 	Row = mysql_fetch_row(result);
 	change_color(0, 14);
-	printf("教材信息：\n%s\n\n课程简介：\n%s\n\n", Row[0], Row[1]);
+	printf("\n教材信息：\n%s\n\n课程简介：\n%s\n\n", Row[0], Row[1]);
 	change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
