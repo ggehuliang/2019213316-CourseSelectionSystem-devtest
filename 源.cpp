@@ -26,7 +26,7 @@ void student_query_course();				// 学生查课模块
 void student_query_result();				// 学生查询选课结果
 void student_delete_course();				// 学生删课模块
 void student_manage_info();					// 学生个人信息管理模块
-void student_search_specific_imformation();	// 学生查询课程详细信息
+void student_search_specific_information();	// 学生查询课程详细信息
 int student_check_class_exist(char* );		// 判断课程是否存在
 
 //==========================================
@@ -849,7 +849,7 @@ void student_query_course()
 		}
 		if (option == 5)
 		{
-			student_search_specific_imformation();
+			student_search_specific_information();
 			change_color(1, 14);
 			printf("请按任意键返回上一菜单\n");
 			system("pause > nul");
@@ -1123,7 +1123,7 @@ void student_manage_info()
 	}while (1);
 }
 
-void student_search_specific_imformation()
+void student_search_specific_information()
 {
 	char classID[100];
 	system("cls");
