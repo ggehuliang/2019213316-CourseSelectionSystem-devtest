@@ -44,7 +44,7 @@ void teacher_sortcourse();					// 排序选课信息
 void teacher_course_managemenu();			// 课程管理选单-4个小功能
 void teacher_course_list();					// 课程查询详情
 void teacher_course_add();					// 加课
-void teacher_course_edit();					// 改课选单
+void teacher_course_edit();					// 修改课程选单
 void teacher_course_delete();				// 未开课前删课
 void teacher_manage_info();					// 改信息
 
@@ -2863,7 +2863,7 @@ void teacher_course_edit() {
 				teacher_course_edit();
 				return;
 			}
-			sprintf(query, "SELECT 课程编号,课程名称,开课教师,限制人数 FROM `classes`WHERE 课程编号 = '%s'", courseName);
+			sprintf(query, "SELECT 课程编号,课程名称,开课教师,限制人数 FROM `classes`WHERE 课程编号 = '%s' and 开课教师 = '%s'", courseName,nowName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			if ((int)mysql_num_rows(result) == 0)
@@ -2963,7 +2963,7 @@ void teacher_course_edit() {
 			{
 			case 1:
 				change_color(1, 14);
-				printf("教材信息修改\n");
+				printf("\n教材信息修改\n");
 				printf("请输入您的修改内容：");
 				s_gets(content, 20);
 				sprintf(query, "UPDATE `classes` SET `教材信息`='%s' WHERE`课程编号`='%s'"
@@ -2980,7 +2980,7 @@ void teacher_course_edit() {
 
 			case 2:
 				change_color(1, 14);
-				printf("课程简介修改\n");
+				printf("\n课程简介修改\n");
 				printf("请输入您的修改内容：");
 				s_gets(content,499);
 				sprintf(query, "UPDATE `classes` SET `课程简介`='%s' WHERE`课程编号`='%s'"
