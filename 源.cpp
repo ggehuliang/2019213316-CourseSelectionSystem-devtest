@@ -1858,9 +1858,9 @@ void teacher_30delete()
 	int option2 = 0;
 	char courseName[200] = "niconiconi";
 	char studentName[200] = "niconiconi";
-	char query[200] = "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes`WHERE 开课教师 = '";
 	char query1[200];
 	char query2[200];
+	char query[200] = "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes`WHERE 开课教师 = '";
 	strcat(query, nowName);
 	strcat(query, "'");
 	change_color(0, 14);
@@ -2039,7 +2039,7 @@ void teacher_totalcourse() {
 }
 
 void teacher_sortcourse() {
-	char query4[100];
+	char query4[300];
 	system("cls");
 	change_color(5, 14);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
@@ -2047,7 +2047,7 @@ void teacher_sortcourse() {
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	change_color(1, 14);
 	printf("\n以下是您开设课程的排序结果\n");
-	sprintf(query4, "select * from `classes` where `开课教师` = '%s' order by `已选人数` "
+	sprintf(query4, "select 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 from `classes` where `开课教师` = '%s' order by `已选人数` "
 		, nowName);
 	change_color(0, 14);
 	print_class(query4);
