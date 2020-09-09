@@ -18,7 +18,7 @@ int main_entrance();
 //==========================================
 //学生功能
 
-void student_login();						// 学生注册模块
+void student_login();						// 学生登录模块
 void student_mainmenu();					// 学生主菜单
 void student_register();					// 学生注册模块
 void student_select_course();				// 学生选课模块
