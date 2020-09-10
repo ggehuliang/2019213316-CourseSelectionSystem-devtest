@@ -1684,10 +1684,7 @@ void teacher_findcourse()
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%18s |", field->name);
-		printf("\n");
-
-		printf("\n");
-
+		printf("\n\n");
 		while (Row = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column + 1; j++)
@@ -1737,10 +1734,7 @@ void teacher_findcourse()
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%17s |", field->name);
-		printf("\n");
-
-		printf("\n");
-
+		printf("\n\n");
 		while (Row = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column; j++)
@@ -1761,8 +1755,6 @@ void teacher_findcourse()
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%17s |", field->name);
-
-
 		printf("\n");
 
 		while (Row = mysql_fetch_row(result))
