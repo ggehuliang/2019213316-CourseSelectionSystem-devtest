@@ -579,7 +579,13 @@ void student_select_course()
 	change_color(0, 14);
 	print_class(query);			// 从数据库中提取相关信息并将其打印，为了界面美观避免分行，该函数打印表时会去除表的后八列。
 	change_color(1, 14);
-	
+	if (getState_selecting() != 1) {
+		change_color(4, 14);
+		printf("当前不在选课时间内！无法选课\n按任意键返回主菜单...");
+		change_color(1, 14);
+		system("pause>nul");
+		return;
+	}
 	do 
 	{
 		printf("\n请输入您想选的课程编号（若返回上一级，请按Ctrl+Q后回车）：");
