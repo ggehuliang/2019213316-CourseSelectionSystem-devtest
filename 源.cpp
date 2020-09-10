@@ -919,7 +919,7 @@ void student_delete_course()
 	result = mysql_store_result(&mysql);			// 取出学生想删除课的开课时间和上课时间段
 	if (result)
 		Row = mysql_fetch_row(result);
-
+	//printf("==%d=", getState_starting(Row[0], Row[1]));
 	while (getState_starting(Row[0], Row[1]) == 1)	// 判断该课程是否已开课
 	{
 		change_color(4, 14);
@@ -1054,7 +1054,7 @@ void student_manage_info()
 			scanf_pw(passwd);
 			printf("请再次确认新的密码：");
 			scanf_pw(passwd1);
-			do {
+			while(strcmp(passwd, passwd1) != 0){
 				change_color(4, 14);
 				printf("两次输入的密码不一致，请重新确认：（若返回上一级，请按Ctrl+Q后回车）");
 				s_gets(passwd1, 20);
@@ -1063,7 +1063,7 @@ void student_manage_info()
 					system("cls");
 					return;
 				}
-			} while (strcmp(passwd, passwd1) != 0);
+			}
 			pw_encode(passwd);					// 将密码加密
 			char query1[200] = "update students set passwd='";
 			strcat(query1, passwd);
@@ -1684,7 +1684,7 @@ void teacher_findcourse()
 		change_color(0, 14);
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%18s |", field->name);
-		printf("\n\n");
+		printf("\n");
 		while (Row = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column + 1; j++)
@@ -1735,6 +1735,7 @@ void teacher_findcourse()
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%17s |", field->name);
 		printf("\n\n");
+
 		while (Row = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column; j++)
@@ -1825,8 +1826,8 @@ void teacher_30delete()
 				teacher_30delete();
 				return;
 			}
-			sprintf(query, "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes`WHERE 课程编号 = '%s'"
-				, courseName);
+			sprintf(query, "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes` WHERE 课程编号 = '%s' AND 开课教师 = '%s'"
+				, courseName,nowName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			if ((int)mysql_num_rows(result) == 0)
@@ -3187,7 +3188,7 @@ void teacher_course_delete() {
 				teacher_course_delete();
 				return;
 			}
-			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s'", courseName);
+			sprintf(query, "SELECT * FROM `classes`WHERE 课程编号 = '%s' AND 开课教师='%s'", courseName,nowName);
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			if ((int)mysql_num_rows(result) == 0)
