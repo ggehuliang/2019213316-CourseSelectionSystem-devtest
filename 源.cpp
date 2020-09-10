@@ -133,7 +133,7 @@ int main_entrance()
 		printf("\t\t\t\t\t  ┏━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 		printf("\t\t\t\t\t  ┃     ③ - 退出程序     ┃\n");
 		printf("\t\t\t\t\t  ┗━━━━━━━━━━━━━━━━━━━━━━━┛\n\n\n");
-		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
+		printf("\t\t\t\t\t 请点击相应标题（或输入1,2,3）:");
 
 		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");// 规定界面中需要对鼠标做出响应的坐标范围
 
@@ -178,7 +178,7 @@ void student_login()
 		printf("\t\t\t\t\t  ┏━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 		printf("\t\t\t\t\t  ┃     ③ - 返回上层     ┃\n");
 		printf("\t\t\t\t\t  ┗━━━━━━━━━━━━━━━━━━━━━━━┛\n\n\n");
-		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
+		printf("\t\t\t\t\t 请点击相应标题（或输入1,2,3）:");
 
 		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");// 规定鼠标响应的坐标范围
 
@@ -376,7 +376,7 @@ void student_mainmenu()
 		printf("\t\t\t\t           【④ 删除选课结果】\n\n");
 		printf("\t\t\t\t           【⑤ 个人信息管理】\n\n\n");
 		printf("\t\t\t\t             【⑥ 退出登录】\n\n");
-		printf(" 请输入1，2，3，4，5，6或直接点击相应标题：");
+		printf(" 请点击相应标题（或输入1,2,3,4,5,6）：");
 
 		sprintf(pos, "8-8,45-56|11-11,45-56|14-14,43-58|16-16,43-58|18-18,43-58|21-21,45-56");	// 设置界面中须对鼠标点击做出响应的坐标范围
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);						// 创建线程
@@ -725,7 +725,7 @@ void student_query_course()
 		printf("\t\t\t\t  【 ④ 根据选课人数排序所有课程 】\n\n");
 		printf("\t\t\t\t      【 ⑤ 查看课程详细信息 】\n\n\n");
 		printf("\t\t\t\t       【 ⑥ 返回学生主菜单 】\n\n");
-		printf("请输入1，2，3，4，5，6或直接点击相应标题:");
+		printf("请点击相应标题（或输入1,2,3,4,5,6）:");
 
 		sprintf(pos, "6-6,39-60|8-8,38-62|10-10,35-64|12-12,34-65|14-14,38-62|17-17,39-60");	// 设置界面中需对鼠标点击做出相应的坐标范围
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);						// 创建线程
@@ -741,7 +741,7 @@ void student_query_course()
 			printf("\t\t\t\t○●○●○● 查询课程--课程名查询 ●○●○●○\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			change_color(1, 14);
-			printf("\n请输入课程名称：");
+			printf("\n请输入课程名称：（支持模糊查询）");
 			do {
 				flag = 0;
 				s_gets(class_name, 20);
@@ -784,7 +784,7 @@ void student_query_course()
 			printf("\t\t\t\t○●○●○● 查询课程--开课学院查询 ●○●○●○\n");
 			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 			change_color(1, 14);
-			printf("\n请输入开课学院名称：");
+			printf("\n请输入开课学院名称：（支持模糊查询）");
 			do {
 				flag = 0;
 				s_gets(school_name, 20);
@@ -1003,7 +1003,7 @@ void student_manage_info()
 		printf("\t\t\t\t                【 ② 密码 】\n\n");
 		printf("\t\t\t\t                【 ③ 邮箱 】\n\n\n");
 		printf("\t\t\t\t           【 ④ 返回学生主菜单 】\n\n");
-		printf("\n请输入1，2，3，4或直接点击相应标题：");
+		printf("\n请点击相应标题（或输入1,2,3,4）：");
 
 		sprintf(pos, "6-6,48-60|8-8,48-60|10-10,48-60|13-13,43-65|1--1,2-17|1--1,2-17");	// 设置界面中需要对鼠标点击做出相应的坐标范围
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);					// 创建线程
@@ -1389,7 +1389,7 @@ void teacher_mainmenu()
 		printf("\t\t\t\t              【 ③ 信息管理 】──┬  修改密码\n");
 		printf("\t\t\t\t                                 └  修改邮箱\n\n");
 		printf("\t\t\t\t              【 ④ 退出登录 】\n\n");		
-		printf("\n  请输入1，2，3，4或直接点击相应标题:");			
+		printf("\n  请点击相应标题（或输入1,2,3,4）:");			
 
 		sprintf(pos, "9-9,46-62|13-13,46-62|16-16,46-62|19-19,46-62|1--1,2-17|1--1,2-17");	// 规定界面中需要对鼠标点击做出响应的坐标范围
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);					// 创建线程
@@ -1434,7 +1434,7 @@ void teacher_select_managemenu()
 		printf("\t\t\t\t  【 ④ 统计您自己开设过的课程数目 】\n\n");
 		printf("\t\t\t\t【 ⑤ 按选课人数排序所有开设过的课程 】\n\n\n");
 		printf("\t\t\t\t        【 ⑥ 返回上一个菜单 】\n\n");
-		printf("\n请输入1,2,3,4,5，6或直接点击相应标题:");
+		printf("\n请点击相应标题（或输入1,2,3,4,5,6）:");
 
 		sprintf(pos, "6-6,37-65|8-8,34-68|10-10,35-67|12-12,34-68|14-14,32-70|17-17,40-62");	// 规定界面中需要对鼠标点击做出响应的坐标范围
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
@@ -1601,7 +1601,7 @@ void teacher_findcourse()
 	printf("\n\t\t\t\t         【 ① 根据课程名称查询 】\n");
 	printf("\n\t\t\t\t         【 ② 根据学生姓名查询 】\n");
 	printf("\n\t\t\t\t           【 ③ 返回上一菜单 】\n\n");
-	printf("\n请输入，2，3或直接点击相应标题:");
+	printf("\n请点击相应标题（或输入1,2,3）:");
 
 	sprintf(pos, "6-6,40-66|8-8,40-66|10-10,43-63|1--1,2-31|1--1,2-20|1--1,2-17");
 	handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
@@ -2018,7 +2018,7 @@ void teacher_course_managemenu()
 		printf("\t\t\t\t         【 ③ 修改您的课程 】\n\n");
 		printf("\t\t\t\t   【 ④ 删除您的课程(选课开始前) 】\n\n\n");
 		printf("\t\t\t\t        【 ⑤ 返回上一个菜单 】\n\n");
-		printf("\n请输入,2,3,4,5或直接点击相应标题:");
+		printf("\n请点击相应标题（或输入1,2,3,4,5）:");
 		sprintf(pos, "6-6,41-61|8-8,41-61|10-10,41-61|12-12,35-67|15-15,40-62|1-1,40-62");
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 
@@ -2561,7 +2561,7 @@ void teacher_login() {
 		printf("\t\t\t\t\t  ┏━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 		printf("\t\t\t\t\t  ┃     ③ - 返回上层     ┃\n");
 		printf("\t\t\t\t\t  ┗━━━━━━━━━━━━━━━━━━━━━━━┛\n\n\n");
-		printf("\t\t\t\t\t 请输入1,2,3或直接点击相应标题:");
+		printf("\t\t\t\t\t 请点击相应标题（或输入1,2,3）:");
 
 		sprintf(pos, "6-8,44-67|10-12,44-67|14-16,44-67|1--1,2-17|1--1,2-17|1--1,2-17");
 		handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
