@@ -72,6 +72,7 @@ void pw_decode(char* );
 int scanf_opt(int*, int, int);
 char* s_gets(char*, int);										 
 void change_color(int, int);									// 快捷更改接下来输出信息的颜色
+void print_title(const char*);
 //==========================================
 // 全局变量声明
 
@@ -110,19 +111,13 @@ int main()
 	return 0;
 }
 
-
 int main_entrance()
 {
 	HANDLE handle;
 	do {
 		int option;
-		system("cls");
 		system("title 学生选课管理系统 - 入口");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("欢迎登录学生选课管理系统");
 		printf("\n\t\t\t\t\t\t请选择您的身份:\n\n");
 		printf("\t\t\t\t\t  ┏━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 		printf("\t\t\t\t\t  ┃       ① - 学生       ┃\n");
@@ -160,14 +155,9 @@ void student_login()
 {
 	HANDLE handle;
 	do {
-		system("cls");
 		int option1, flag;
 		system("title 学生选课管理系统 - 学生登录");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("欢迎登录学生选课管理系统");
 		printf("\n\t\t\t\t\t     请选择您要进行的操作:\n\n");
 		printf("\t\t\t\t\t  ┏━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 		printf("\t\t\t\t\t  ┃       ① - 登录       ┃\n");
@@ -192,10 +182,7 @@ void student_login()
 		{
 			system("cls");
 			char stu_passwd[100];
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 登陆界面--学生 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			print_title("登陆界面--学生");
 			do
 			{
 				flag = 0;
@@ -355,13 +342,9 @@ void student_mainmenu()
 {
 	HANDLE handle;
 	do {
-		system("cls");
 		int option;
 		system("title 学生选课管理系统 - 学生主菜单");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t ○●○●○● 功能界面--学生 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		print_title("功能界面--学生");
 		change_color(4, 14);
 		printf("\n 登录成功，欢迎您，%s的%s同学。\n", nowSchool, nowName);
 		change_color(1, 14);
@@ -419,16 +402,11 @@ void student_mainmenu()
 void student_register()
 {
 	int contflag = 0;
-	system("cls");
 	char school[50], major[50], name[50], sexual[5]
 		, phone[100], passwd[100], email[100];
 	char query[400];
 	system("title 学生选课管理系统 - 学生注册");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 注册 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("注册");
 	printf("请输入学号:");
 	s_gets(stuID, 11);
 
@@ -564,14 +542,9 @@ void student_select_course()
 {
 	MYSQL_RES* result1, * result2, * result3, * result4, * result5;			// 定义该模块需要用到的结果集
 	MYSQL_ROW Row1 = Row, Row2 = Row, Row3 = Row, Row4 = Row, Row5 = Row;	// 为了去除warnings必须先初始化
-	system("cls");
 	system("title 学生选课管理系统 - 学生选课");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 学生选课 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	print_title("学生选课");
 	char classID[20];
-	change_color(1, 14);
 	printf("\n课程信息如下：\n");
 	char query[200];
 	sprintf(query, "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,"
@@ -710,14 +683,9 @@ void student_query_course()
 	HANDLE handle;
 	do {
 		char query[500];
-		system("cls");
 		int option;
 		system("title 学生选课管理系统 - 学生查课");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t  ○●○●○● 查询课程 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("查询课程");
 		printf("\n\t\t\t\t           请选择查询方式：\n\n");
 		printf("\t\t\t\t       【 ① 根据课程名查询 】\n\n");
 		printf("\t\t\t\t      【 ② 根据开课学院查询 】\n\n");
@@ -734,13 +702,8 @@ void student_query_course()
 
 		if (option == 1)
 		{
-			system("cls");
 			char class_name[20];
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 查询课程--课程名查询 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("查询课程--课程名查询");
 			printf("\n请输入课程名称：（支持模糊查询）");
 			do {
 				flag = 0;
@@ -777,22 +740,17 @@ void student_query_course()
 		}
 		if (option == 2)
 		{
-			system("cls");
 			char school_name[20];
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 查询课程--开课学院查询 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("查询课程--开课学院查询");
 			printf("\n请输入开课学院名称：（支持模糊查询）");
 			do {
 				flag = 0;
 				s_gets(school_name, 20);
-				char query9[100] = "select * from classes where 开课学院 like '%";	// 模糊查询
-				strcat(query9, school_name);
-				strcat(query9, "%'");
+				char query[100] = "select * from classes where 开课学院 like '%";	// 模糊查询
+				strcat(query, school_name);
+				strcat(query, "%'");
 				mysql_store_result(&mysql);
-				mysql_query(&mysql, query9);
+				mysql_query(&mysql, query);
 				result = mysql_store_result(&mysql);
 				change_color(4, 14);
 				if ((int)mysql_num_rows(result) == 0)
@@ -820,12 +778,7 @@ void student_query_course()
 		}
 		if (option == 3)
 		{
-			system("cls");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 查询课程--课余量排序所有课程 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("查询课程--课余量排序所有课程");
 			printf("\n按课余量排序的所有课程如下：\n\n");
 			sprintf(query, "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,(限制人数-已选人数) 余课量,学分,");
 			strcat(query, "学分,学分,学分,学分,学分,学分,学分 from classes order by 余课量 desc");
@@ -838,12 +791,7 @@ void student_query_course()
 		}
 		if (option == 4)
 		{
-			system("cls");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 查询课程--选课人数排序所有课程 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("查询课程--选课人数排序所有课程");
 			printf("\n根据选课人数排序的所有课程如下：\n\n");
 			sprintf(query, "select 课程编号,开课学院,课程名称,学分,课程性质,开课教师,已选人数,教材信息,课程简介,已选人数,限制人数,");
 			strcat(query, "上课地点,上课时间段,开课时间,结课时间 from classes order by 已选人数 desc");
@@ -872,7 +820,6 @@ void student_query_course()
 
 void student_query_result()
 {
-	system("cls");
 	char query[500] = "select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=";
 	strcat(query, stuID);
 	strcat(query, ")or c.`课程编号`=(select s.class2 from students s where stuID=");
@@ -880,11 +827,7 @@ void student_query_result()
 	strcat(query, ")or c.`课程编号`=(select s.class3 from students s where stuID=");
 	strcat(query, stuID);
 	strcat(query, ")");				// 通过子查询取出相应课程的信息
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 查询选课结果 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("查询选课结果");
 	printf("\n您的选课结果如下：\n\n");
 	change_color(0, 14);
 	print_class(query);
@@ -892,15 +835,10 @@ void student_query_result()
 
 void student_delete_course()
 {
-	system("cls");
 	char classID[100];
 	char query[300];
 	system("title 学生选课管理系统 - 学生删课");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 删除选课结果 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("删除选课结果");
 	char query1[500] = "select c.* from classes c where c.`课程编号`=(select s.class1 from students s where stuID=";
 	strcat(query1, stuID);
 	strcat(query1, ")or c.`课程编号`=(select s.class2 from students s where stuID=");
@@ -986,18 +924,13 @@ void student_manage_info()
 {
 	HANDLE handle;
 	do {
-		system("cls");
 		int option;
 		char phone[20];
 		char passwd[20];
 		char passwd1[20];
 		char email[50];
 		system("title 学生选课管理系统 - 学生个人信息管理");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t○●○●○● 个人信息管理--学生 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("个人信息管理--学生");
 		printf("\n\t\t\t\t           请选择需要修改的信息：\n\n");
 		printf("\t\t\t\t                【 ① 电话 】\n\n");
 		printf("\t\t\t\t                【 ② 密码 】\n\n");
@@ -1014,12 +947,7 @@ void student_manage_info()
 		{
 		case 1:
 		{
-			system("cls");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 个人信息管理--学生--电话 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("个人信息管理--学生--电话");
 			printf("\n请输入新的电话：");
 			s_gets(phone, 11);
 			while (check_phone(phone) == 0)					// 检查输入是否符合规范
@@ -1050,12 +978,7 @@ void student_manage_info()
 		}
 		case 2:
 		{
-			system("cls");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 个人信息管理--学生--密码 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("个人信息管理--学生--密码");
 			printf("\n请输入新的密码：");
 			scanf_pw(passwd);
 			printf("请再次确认新的密码：");
@@ -1087,12 +1010,7 @@ void student_manage_info()
 		}
 		case 3:
 		{
-			system("cls");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 个人信息管理--学生--邮箱 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("个人信息管理--学生--邮箱");
 			printf("\n请输入新的邮箱：");
 			s_gets(email, 30);
 			while (check_email(email) == 0)		// 判断邮箱是否符合规范
@@ -1133,12 +1051,7 @@ void student_manage_info()
 void student_search_specific_information()
 {
 	char classID[100];
-	system("cls");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 查看课程详细信息--学生 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("查看课程详细信息--学生");
 	printf("\n全部课程如下：\n\n");
 	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
 	strcat(query3, "课程简介,已选人数,限制人数,上课地点,上课时间段,开课时间,结课时间 from classes");
@@ -1346,11 +1259,11 @@ int check_timeClash(char* time1_sweek, char* time1_eweek, char* time1_day, char*
 // 若存在返回0，不存在返回1
 int student_check_class_exist(char* classID)
 {
-	char query10[100] = "select * from classes where 课程编号='";
-	strcat(query10, classID);
-	strcat(query10, "'");
+	char query[100] = "select * from classes where 课程编号='";
+	strcat(query, classID);
+	strcat(query, "'");
 	mysql_store_result(&mysql);
-	mysql_query(&mysql, query10);
+	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
 	if ((int)mysql_num_rows(result) == 0)
 	{
@@ -1366,13 +1279,9 @@ void teacher_mainmenu()
 {
 	HANDLE handle;
 	do {
-		system("cls");
 		int option2 = 0;
 		system("title 学生选课管理系统 - 教师主菜单");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t    ○●○●○● 教师主菜单 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+		print_title("教师主菜单");
 		change_color(4, 14);
 		printf("\n 登录成功，欢迎您，%s的%s老师。\n", nowSchool, nowName);
 		change_color(1, 14);
@@ -1419,14 +1328,9 @@ void teacher_select_managemenu()
 {
 	HANDLE handle;
 	do {
-		system("cls");
 		int option2 = 0;
 		system("title 学生选课管理系统 - 教师选课管理");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t  ○●○●○● 选课菜单 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("  选课菜单  ");
 		printf("\n\t\t\t\t          请选择您需要的服务:\n\n");
 		printf("\t\t\t\t     【 ① 查看您开设的选课情况 】\n\n");
 		printf("\t\t\t\t  【 ② 查询选择某门课程的学生信息 】\n\n");
@@ -1471,12 +1375,7 @@ void teacher_mycourse()
 {
 	char classID[100];
 	int flag = 0;
-	system("cls");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 开设课程查询界面 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("开设课程查询界面");
 	printf("\n以下是您开设的课程\n");
 	char query[200] = "SELECT * FROM `classes`WHERE 开课教师 = '";
 	strcat(query, nowName);
@@ -1584,7 +1483,6 @@ void teacher_mycourse()
 void teacher_findcourse()
 {
 	HANDLE handle;
-	system("cls");
 	int column;
 	int flag = 0;
 	int option2 = 0;
@@ -1592,11 +1490,7 @@ void teacher_findcourse()
 	char courseName[200] = "";
 	char studentName[200] = "";
 	char query[500];
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t ○●○●○● 学生信息查询界面 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("学生信息查询界面");
 	printf("\n\t\t\t\t            请选择您的查询方式:\n");
 	printf("\n\t\t\t\t         【 ① 根据课程名称查询 】\n");
 	printf("\n\t\t\t\t         【 ② 根据学生姓名查询 】\n");
@@ -1615,12 +1509,7 @@ void teacher_findcourse()
 		{
 			do
 			{
-				system("cls");
-				change_color(5, 14);
-				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-				printf("\t\t\t\t ○●○●○● 学生信息查询界面 ●○●○●○\n");
-				printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-				change_color(1, 14);
+				print_title("学生信息查询界面");
 				printf("\n请输入您想要查询的课程名称：");
 				s_gets(courseName, 20);
 				if (courseName[0] == 17)					// 判断若输入首字符为ctrl+q则返回上层
@@ -1705,12 +1594,7 @@ void teacher_findcourse()
 		break;
 	case 2:
 		do {
-			system("cls");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t ○●○●○● 学生信息查询界面 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("学生信息查询界面");
 			printf("\n请输入您想要查询的学生名称：");
 			s_gets(studentName, 20);
 			if (studentName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
@@ -1789,12 +1673,7 @@ void teacher_findcourse()
 
 void teacher_30delete()
 {
-	system("cls");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 开设课程删除界面 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("开设课程删除界面");
 	printf("\n以下是您开设的课程\n");
 	int stu_num;
 	int flag = 0;
@@ -1965,16 +1844,11 @@ void teacher_30delete()
 }
 
 void teacher_totalcourse() {
-	system("cls");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 开设课程统计界面 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	print_title("开设课程统计界面");
 	char query[100];
 	sprintf(query, "select * from `classes` where `开课教师` = '%s' ", nowName);
 	mysql_query(&mysql, query);
 	result = mysql_store_result(&mysql);
-	change_color(1, 14);
 	printf("\n您总共开设了%d门课程\n", (int)mysql_num_rows(result));
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
@@ -1982,18 +1856,13 @@ void teacher_totalcourse() {
 }
 
 void teacher_sortcourse() {
-	char query4[300];
-	system("cls");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 开设课程排序界面 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	char query[300];
+	print_title("开设课程排序界面");
 	printf("\n以下是您开设课程的排序结果\n");
-	sprintf(query4, "select 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 from `classes` where `开课教师` = '%s' order by `已选人数` "
+	sprintf(query, "select 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 from `classes` where `开课教师` = '%s' order by `已选人数` "
 		, nowName);
 	change_color(0, 14);
-	print_class(query4);
+	print_class(query);
 	change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
@@ -2004,14 +1873,9 @@ void teacher_course_managemenu()
 {
 	HANDLE handle;
 	do {
-		system("cls");
 		int option2 = 0;
 		system("title 学生选课管理系统 - 教师课程管理");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t○●○●○● 课程管理菜单 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("课程管理菜单");
 		printf("\n\t\t\t\t          请选择您需要的服务:\n\n");
 		printf("\t\t\t\t         【 ① 查询相应课程 】\n\n");
 		printf("\t\t\t\t         【 ② 添加您的课程 】\n\n");
@@ -2226,11 +2090,7 @@ void config_init() {
 		sprintf(dbPassWd, "");
 		sprintf(in, "");
 		system("title 学生选课管理系统 - 首次使用设置系统");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t○●○●○● 欢迎使用学生选课管理系统 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("欢迎使用学生选课管理系统");
 		printf("在开始使用之前，请先对系统进行设置。\n\n\n数据库部分（将在全部输入后检查连接可用性）——\n");
 		printf("\n请输入MySQL数据库地址（留空默认为127.0.0.1）：");
 
@@ -2542,15 +2402,10 @@ void teacher_login() {
 	char password[100];
 	HANDLE handle;
 	do {
-		system("cls");
 		mysql_store_result(&mysql);
 		int option1;
 		system("title 学生选课管理系统 - 教师登录");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("欢迎登录学生选课管理系统");
 		printf("\n\t\t\t\t\t     请选择您要进行的操作:\n\n");
 		printf("\t\t\t\t\t  ┏━━━━━━━━━━━━━━━━━━━━━━━┓\n");
 		printf("\t\t\t\t\t  ┃       ① - 登录       ┃\n");
@@ -2572,12 +2427,8 @@ void teacher_login() {
 		if (option1 == 1)
 		{
 			int flag = 0;
-			system("cls");			// 清屏，保证重复输入时美观
 			system("title 学生选课管理系统 - 教师登录");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 欢迎登录学生选课管理系统 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+			print_title("欢迎登录学生选课管理系统");
 			do {
 				flag = 0;
 				change_color(1, 14);
@@ -2642,10 +2493,7 @@ void teacher_login() {
 void teacher_course_list()
 {
 	char classID[100];
-	system("cls");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 课程查询 - 教师 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	print_title("课程查询 - 教师");
 	printf("\n全部课程如下：\n");
 	char query3[200] = "select 课程编号,开课学院,课程名称,学分,学时,课程性质,开课教师,教材信息,";
 	strcat(query3, "学分,学分,学分,学分,学分,学分,学分 from classes");
@@ -2767,12 +2615,7 @@ void teacher_course_list()
 }
 
 void teacher_course_edit() {
-	system("cls");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 开设课程修改界面 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("开设课程修改界面");
 	printf("以下是您开设的课程\n\n");
 	char query[600];
 	int stu_num;
@@ -3145,12 +2988,7 @@ void teacher_course_edit() {
 }
 
 void teacher_course_delete() {
-	system("cls");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 开设课程删除界面 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("开设课程删除界面");
 	printf("以下是您开设的课程\n");
 	int flag = 0;
 	int option2 = 0;
@@ -3257,18 +3095,13 @@ void teacher_manage_info()
 {
 	HANDLE handle;
 	do {
-		system("cls");
 		int option2;
 		char passwd[20];
 		char passwd1[20];
 		char email[50];
 		char query[200];
 		system("title 学生选课管理系统 - 教师信息修改");
-		change_color(5, 14);
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		printf("\t\t\t\t○●○●○● 信息修改界面--教师 ●○●○●○\n");
-		printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-		change_color(1, 14);
+		print_title("信息修改界面--教师");
 		printf("\n\t\t\t\t           请选择需要修改的信息：\n\n");
 		printf("\t\t\t\t                【 ① 密码 】\n\n");
 		printf("\t\t\t\t                【 ② 邮箱 】\n\n\n");
@@ -3283,12 +3116,7 @@ void teacher_manage_info()
 		{
 		case 1:
 		{
-			system("cls");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 信息修改界面--教师--密码 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("信息修改界面--教师--密码");
 			printf("\n请输入新的密码：");
 			scanf_pw(passwd);
 			printf("请再次确认新的密码：");
@@ -3323,12 +3151,7 @@ void teacher_manage_info()
 		}
 		case 2:
 		{
-			system("cls");
-			change_color(5, 14);
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			printf("\t\t\t\t○●○●○● 信息修改界面--学生--邮箱 ●○●○●○\n");
-			printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-			change_color(1, 14);
+			print_title("信息修改界面--学生--邮箱");
 			printf("\n请输入新的邮箱：");
 			s_gets(email, 20);
 			while (check_email(email) == 0)
@@ -3403,11 +3226,7 @@ int check_classClash(char* query) {
 //加课
 void teacher_course_add()
 {
-	system("cls");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 课程添加界面 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	print_title("课程添加界面");
 	char classId[20], name[21], credit[10], learnTime[10], property[10]
 		, startTime[100], endTime[100], time[100], classroom[20]
 		, limit[5], intro[500], book[21];
@@ -3838,15 +3657,10 @@ int check_classId(char* str)
 
 void teacher_reg()
 {
-	system("cls");
 	char school[50], name[50], phone[100], passwd[100], email[100];
 	char query[300];
 	system("title 学生选课管理系统 - 教师注册");
-	change_color(5, 14);
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	printf("\t\t\t\t○●○●○● 注册 ●○●○●○\n");
-	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-	change_color(1, 14);
+	print_title("注册");
 	printf("请输入教师工号:");
 	s_gets(teachID, 12);
 	do {
@@ -4196,4 +4010,14 @@ DWORD WINAPI SelectEventThread(LPVOID pM)
 				PostMessageA(GetConsoleWindow(), 258, (WPARAM)(i + 49LL), 0);// 258表示传递一个先按下再松开的信息
 		Sleep(100);
 	}
+}
+
+void print_title(const char * str)
+{
+	system("cls");
+	change_color(5, 14);
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("\t\t\t\t ○●○●○● %s ●○●○●○\n",str);
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	change_color(1, 14);
 }
