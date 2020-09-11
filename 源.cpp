@@ -3087,15 +3087,15 @@ int check_classClash(char* query)
 //加课
 void teacher_course_add()
 {
-	print_title("课程添加界面");
 	char classId[20], name[21], credit[10], learnTime[10], property[10]
 		, startTime[100], endTime[100], time[100], classroom[20]
 		, limit[5], intro[500], book[21], term[50];
 	char query[1000];
 	float in_f;
 	int in, in1,ret, reflag = 0;
-	int numClass1, numClass2;		//[1]为必修，[2]为选修课数量
+	int numClass1, numClass2;		// [1]为必修，[2]为选修课数量
 	char in_s[20];
+	print_title("课程添加界面");
 	change_color(1, 14);
 	printf("\n请选择开课时间——\n");
 	do 
@@ -3118,7 +3118,7 @@ void teacher_course_add()
 			reflag=1;
 			continue;
 		}
-	} while (reflag);
+	} while (reflag);				// 若学年部分无效重新输入，若有效则格式化输出到startTime中
 	do
 	{
 		reflag = 0;
@@ -3145,7 +3145,7 @@ void teacher_course_add()
 			change_color(4, 14);
 			printf("\n无效，请重新输入！");
 		}
-	} while (reflag);
+	} while (reflag);			// 若学期部分无效重新输入，若有效则格式化输出到startTime中
 	mysql_store_result(&mysql);				//清除数据防止出错
 	sprintf(query, "select 课程编号,课程性质 from classes where "
 		"开课教师='%s' and 课程性质='必修' and 开课时间 like '%s"
@@ -3830,6 +3830,7 @@ DWORD WINAPI SelectEventThread(LPVOID pM)
 	}
 }
 
+//传入页面标题打印输出页头
 void print_title(const char * str)
 {
 	system("cls");
