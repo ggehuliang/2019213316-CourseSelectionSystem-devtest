@@ -60,9 +60,9 @@ int check_phone(char* );
 int check_email(char* );
 int check_classId(char* );
 int check_classClash(char*);
-int getState_selecting();										// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
-int getState_starting(char*, char*);							// 获取开课状态 0为未开课，1为已开课
-int check_password(int, char*, char*);							// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
+int getState_selecting();								// 获取选课状态 0为未开始选课，1为正在选课时间内，2为选课时间已结束
+int getState_starting(char*, char*);					// 获取开课状态 0为未开课，1为已开课
+int check_password(int, char*, char*);					// 第一个参数学生为0，教师为1；登录失败返回0，成功返回1
 int check_teachId(char*);
 int check_timeClash(char*, char*, char*, char*, char*, char*);
 time_t convert_dateToTT(int, int, int, int, int, int);
@@ -71,7 +71,7 @@ void pw_encode(char* );
 void pw_decode(char* );
 int scanf_opt(int*, int, int);
 char* s_gets(char*, int);										 
-void change_color(int, int);									// 快捷更改接下来输出信息的颜色
+void change_color(int, int);							// 快捷更改接下来输出信息的颜色
 void print_title(const char*);
 //==========================================
 // 全局变量声明
@@ -1304,7 +1304,7 @@ void teacher_mycourse()
 			mysql_store_result(&mysql);
 			mysql_query(&mysql, query10);
 			result = mysql_store_result(&mysql);
-			if ((int)mysql_num_rows(result) == 0)	//若从数据库取出的结果行数为0，说明无此课程
+			if ((int)mysql_num_rows(result) == 0)	// 若从数据库取出的结果行数为0，说明无此课程
 			{
 				change_color(4, 14);
 				printf("无此课程，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
@@ -1317,7 +1317,7 @@ void teacher_mycourse()
 		sprintf(query, "select * from classes where 课程编号 = '%s' and 开课教师 = '%s'", classID, nowName);
 		mysql_query(&mysql, query);
 		result = mysql_store_result(&mysql);
-		if ((int)mysql_num_rows(result) == 0)	//若从数据库取出的结果行数为0，说明无此课程
+		if ((int)mysql_num_rows(result) == 0)		// 若从数据库取出的结果行数为0，说明无此课程
 		{
 			change_color(4, 14);
 			printf("此课程并非您所开设，请重新输入！(若返回上一级，请按Ctrl+Q后回车)\n");
@@ -1351,7 +1351,7 @@ void teacher_mycourse()
 					printf(" %-20s|", field->name);
 			}
 			printf("\n");
-			while (Row = mysql_fetch_row(result))
+			while (Row = mysql_fetch_row(result))					// 打印具体内容
 			{
 				for (int j = 0; j < column; j++)
 				{
@@ -1373,7 +1373,7 @@ void teacher_mycourse()
 	result = mysql_store_result(&mysql);
 	Row = mysql_fetch_row(result);
 	change_color(0, 14);
-	printf("\n教材信息：\n%s\n\n课程简介：\n%s\n\n", Row[0], Row[1]);
+	printf("\n教材信息：\n%s\n\n课程简介：\n%s\n\n", Row[0], Row[1]);		// 因教材信息与课程简介内容过多，单独分行打印
 	change_color(1, 14);
 	printf("\n按任意键返回上一菜单...\n");
 	system("pause>nul");
@@ -1398,6 +1398,7 @@ void teacher_findcourse()
 	handle = CreateThread(NULL, 0, SelectEventThread, NULL, 0, NULL);
 	scanf_opt(&option2, 1, 3);
 	TerminateThread(handle, 1);
+
 	switch (option2)
 	{
 	case 1:
@@ -1416,7 +1417,7 @@ void teacher_findcourse()
 				sprintf(query, "SELECT 课程编号 FROM `classes`WHERE 课程名称 = '%s'", courseName);
 				mysql_query(&mysql, query);
 				result = mysql_store_result(&mysql);		
-				if ((int)mysql_num_rows(result) == 0)
+				if ((int)mysql_num_rows(result) == 0)		// 判断课程是否存在
 				{
 					flag = 1;
 					change_color(4, 14);
@@ -1438,7 +1439,7 @@ void teacher_findcourse()
 			mysql_query(&mysql, query);
 			result = mysql_store_result(&mysql);
 			column = mysql_num_fields(result);
-			if ((int)mysql_num_rows(result) == 0)
+			if ((int)mysql_num_rows(result) == 0)			// 判断是否有学生选课
 			{
 				flag = 1;
 				change_color(4, 14);
@@ -1473,6 +1474,7 @@ void teacher_findcourse()
 		for (int i = 0; field = mysql_fetch_field(result); i++)
 			printf("%18s |", field->name);
 		printf("\n");
+
 		while (Row = mysql_fetch_row(result))
 		{
 			for (int j = 0; j < column + 1; j++)
@@ -1491,7 +1493,7 @@ void teacher_findcourse()
 			print_title("学生信息查询界面");
 			printf("\n请输入您想要查询的学生名称：");
 			s_gets(studentName, 20);
-			if (studentName[0] == 17)//判断若输入首字符为ctrl+q则返回上层
+			if (studentName[0] == 17)	// 判断若输入首字符为ctrl+q则返回上层
 			{
 				teacher_findcourse();
 				return;
@@ -3705,8 +3707,7 @@ void pw_decode(char* str)
 					22,23,24,25,0,0,0,0,0,0,26,
 					27,28,29,30,31,32,33,34,35,
 					36,37,38,39,40,41,42,43,44,
-					45,46,47,48,49,50,51
-	};
+					45,46,47,48,49,50,51 };
 	//计算解码后的字符串长度  
 	lenth = (long)strlen(str);
 
