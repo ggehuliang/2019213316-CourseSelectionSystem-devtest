@@ -1571,7 +1571,7 @@ void teacher_30delete()
 	printf("\n以下是您开设的课程\n");
 	int stu_num;
 	int flag = 0, option2 = 0;
-	char studentName[200],courseName[200];
+	char courseName[200];
 	char query[300] = "SELECT 课程编号,开课学院,课程名称,课程性质,开课教师,限制人数,已选人数,学分,学分,学分,学分,学分,学分,学分,学分 FROM `classes`WHERE 开课教师 = '";
 	strcat(query, nowName);
 	strcat(query, "'");
